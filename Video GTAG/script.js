@@ -261,7 +261,7 @@ function buildScene2(cam) {
         .to("#matrix-graph-panel .cell-high", { scale: 1.15, duration: 0.3, yoyo: true, repeat: 3, transformOrigin: "center center" }, 5.8)
 
         // 3. TERCER ELEMENTO: Tabla de 12 Riesgos Priorizados (aparición limpia y única con slide)
-        .to(cam, { scale: 1.30, x: 0, y: -260, duration: 1.5, ease: "power2.inOut" }, 7.0)
+        .to(cam, { scale: 1.10, x: 0, y: -130, duration: 1.5, ease: "power2.inOut" }, 7.0)
         .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.9, ease: "back.out(1.2)" }, 7.0)
         .call(() => SFX.slide(), null, 7.0)
         .fromTo("#risks-table-box", {
@@ -273,7 +273,7 @@ function buildScene2(cam) {
 
         // Desplazamiento progresivo de filas de la tabla (desplazamiento continuo suave sin clics repetidos)
         .to("#risks-rows-track", {
-            y: -580,
+            y: -420,
             duration: 8.5,
             ease: "power1.inOut"
         }, 7.5)
@@ -338,13 +338,13 @@ function buildScene3(cam) {
         .from("#scene3 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
         // OneTake: Cámara desciende y hace zoom directamente en el cuadro de Controles Esperados
-        .to(cam, { scale: 1.25, x: 0, y: -70, duration: 1.6, ease: "power2.inOut" }, 2.2)
+        .to(cam, { scale: 1.05, x: 0, y: -30, duration: 1.6, ease: "power2.inOut" }, 2.2)
         .call(() => SFX.slide(), null, 2.4)
         .from("#controls-table-box", { opacity: 0, y: 40, duration: 0.8, ease: "power2.out" }, 2.2)
 
         // Desplazamiento progresivo de filas: van subiendo paulatinamente
         .to("#controls-rows-track", {
-            y: -540,
+            y: -440,
             duration: 10.0,
             ease: "power1.inOut"
         }, 3.4)
@@ -447,14 +447,14 @@ function buildScene4(cam) {
         }, 8.0)
         // La tabla se desplaza suavemente hacia el gran bloque de inspección documental (E6 - E13)
         .to("#evidence-rows-grid", {
-            y: -230,
+            y: -180,
             duration: 2.3,
             ease: "power1.inOut"
         }, 8.2)
         .call(() => SFX.slide(), null, 8.3)
 
         // Activación del ENFOQUE DESTACADO EN INSPECCIÓN DOCUMENTAL (la cámara encuadra)
-        .to(cam, { scale: 1.10, x: 0, y: -40, duration: 0.8, ease: "power2.inOut" }, 10.5)
+        .to(cam, { scale: 1.04, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 10.5)
         // Justo al asentarse la cámara (11.3s), suena el ting y resalta el bloque documental
         .call(() => SFX.ting(), null, 11.3)
         .to("#pill-inspeccion", {
@@ -479,14 +479,14 @@ function buildScene4(cam) {
         .to(".row-tech-inspeccion", { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, 14.5)
         // Recorrido continuo que llega al bloque de indagación final
         .to("#evidence-rows-grid", {
-            y: -490,
+            y: -380,
             duration: 2.5,
             ease: "power1.inOut"
         }, 14.7)
         .call(() => SFX.slide(), null, 14.8)
 
         // La cámara encuadra
-        .to(cam, { scale: 1.10, x: 0, y: -40, duration: 0.8, ease: "power2.inOut" }, 17.2)
+        .to(cam, { scale: 1.04, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 17.2)
         // Justo al asentarse (18.0s), suena el ting y resalta ÚNICAMENTE Indagación (Pill e instrumentos E14 y E17, sin marcar E18 ni E19)
         .call(() => SFX.ting(), null, 18.0)
         .to("#pill-indagacion", {
@@ -592,7 +592,7 @@ function buildScene5(cam) {
         // Se atenúa Componente B para ceder el turno a Componente C
         .to("#scene5 .test-row-comp-b", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 10.8)
         // Desplazamiento sincronizado de la tabla hacia arriba para centrar Componente C en el viewport
-        .to("#tests-rows-grid-5", { y: -120, duration: 0.9, ease: "power2.inOut" }, 10.8)
+        .to("#tests-rows-grid-5", { y: -90, duration: 0.9, ease: "power2.inOut" }, 10.8)
         .to(cam, { scale: 1.08, x: 0, y: -30, duration: 0.9, ease: "power2.inOut" }, 10.8)
         // Al asentarse el scroll y la cámara (11.7s), suena el ting y resalta el Componente C
         .call(() => SFX.ting(), null, 11.7)
@@ -901,7 +901,7 @@ function buildScene8(cam) {
         // FOCO 3: COMPONENTE E - OPERACIONES TI, CAÍDAS SGF Y DEPENDENCIA HUMANA (R09, R24, R28)
         // Se atenúa Componente D para ceder el turno exclusivo a Componente E
         .to("#scene8 .dev-row-comp-d", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 10.4)
-        .to("#dev-rows-grid-8", { y: -110, duration: 0.9, ease: "power2.inOut" }, 10.4)
+        .to("#dev-rows-grid-8", { y: -90, duration: 0.9, ease: "power2.inOut" }, 10.4)
         .to(cam, { scale: 1.08, x: 0, y: -30, duration: 0.9, ease: "power2.inOut" }, 10.4)
         .call(() => SFX.ting(), null, 11.3)
         // Se resalta el Componente E y SE MANTIENE resaltado durante toda su duración
@@ -937,7 +937,7 @@ function setConcl3DCard(index) {
 }
 
 // ==============================================================
-// ESCENA 9: CONCLUSIONES, DICTAMEN DE AUDITORÍA Y CIERRE (PASO 6)
+// ESCENA 9: CONCLUSIONES, DICTAMEN DE AUDITORÍA Y APERTURA ELÁSTICA
 // ==============================================================
 function buildScene9(cam) {
     const tl = gsap.timeline();
@@ -949,11 +949,15 @@ function buildScene9(cam) {
         // Reset inicial explícito para garantizar efecto de aparición limpio sin parpadeos
         .set("#scene9", { opacity: 0 }, 0)
         .set("#dictum-hero-box", { opacity: 0, y: -25, scale: 0.94 }, 0)
-        .set("#concl-3d-viewport", { opacity: 0, y: 45, scale: 0.88 }, 0)
+        .set("#concl-elastic-viewport", { opacity: 0, y: 35 }, 0)
         .set("#concl-3d-dots", { opacity: 0, y: 15 }, 0)
-        .set("#concl-carousel-ring", { rotationY: 0 }, 0)
+        // Las tres tarjetas nacen unidas en el centro exacto (x: 513 y -513 para coincidir con Card 1)
+        .set("#concl-3d-card-0", { x: 513, scale: 0.94, opacity: 0, zIndex: 5 }, 0)
+        .set("#concl-3d-card-1", { x: 0, scale: 0.94, opacity: 0, zIndex: 10 }, 0)
+        .set("#concl-3d-card-2", { x: -513, scale: 0.94, opacity: 0, zIndex: 5 }, 0)
+        .set(["#ligament-left", "#ligament-right"], { opacity: 0, strokeWidth: 14 }, 0)
 
-        // 1. Aparición del Escenario y Encabezado (sin ting en título para no duplicar con la primera tarjeta)
+        // 1. Aparición del Escenario y Encabezado
         .to("#scene9", { opacity: 1, duration: 0.5 }, 0.1)
         .from("#scene9 .section-tag", { y: -20, opacity: 0, duration: 0.5, ease: "power2.out" }, 0.25)
         .add(typeHeadingText("#scene9 .title-hero", "Conclusiones y Dictamen de Control Interno", 0.024, false), 0.35)
@@ -969,69 +973,75 @@ function buildScene9(cam) {
         }, 1.8)
         .call(() => SFX.slide(), null, 1.8)
 
-        // 3. Efecto de Aparición del Carrusel 3D
-        .to("#concl-3d-viewport", {
-            opacity: 1,
-            y: 0,
+        // 3. APARICIÓN DE LA MASA MONOLÍTICA CENTRAL (Los 3 expedientes unidos en el centro)
+        .to("#concl-elastic-viewport", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 2.3)
+        .to(["#concl-3d-card-0", "#concl-3d-card-1", "#concl-3d-card-2"], { opacity: 1, duration: 0.6 }, 2.3)
+        .to("#concl-3d-dots", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 2.5)
+        .call(() => SFX.slide(), null, 2.3)
+
+        // 4. APERTURA DE EXPEDIENTES POR TENSIÓN ELÁSTICA
+        .call(() => SFX.whoosh(), null, 2.9)
+        // Estiramiento de cuellos conectivos adhesivos (tether ligaments)
+        .to(["#ligament-left", "#ligament-right"], { opacity: 0.85, strokeWidth: 12, duration: 0.2 }, 2.9)
+        .to("#ligament-left", { strokeWidth: 3, duration: 0.7, ease: "power2.inOut" }, 3.0)
+        .to("#ligament-right", { strokeWidth: 3, duration: 0.7, ease: "power2.inOut" }, 3.0)
+
+        // Separación física elástica: Card 0 a la izquierda, Card 2 a la derecha, con rebote de inercia
+        .to("#concl-3d-card-0", {
+            x: 0,
             scale: 1.0,
-            duration: 0.8,
-            ease: "power3.out"
-        }, 2.5)
-        .to("#concl-3d-dots", {
-            opacity: 1,
-            y: 0,
+            duration: 0.95,
+            ease: "elastic.out(1.15, 0.45)"
+        }, 2.9)
+        .to("#concl-3d-card-1", {
+            scale: 1.0,
             duration: 0.5,
             ease: "power2.out"
-        }, 2.8)
-        .call(() => SFX.whoosh(), null, 2.5)
-
-        // 4. POSICIÓN 1: EJE I - GOBERNANZA Y OPERACIONES TI (Frente: 0°)
-        .call(() => setConcl3DCard(0), null, 3.2)
-        .call(() => SFX.ting(), null, 3.2)
-        .to("#concl-3d-card-0", {
-            scale: 1.03,
-            duration: 0.35,
-            yoyo: true,
-            repeat: 1,
-            ease: "power2.out"
-        }, 3.2)
-
-        // 5. POSICIÓN 2: GIRO 3D A CARD 1: EJE II - SEGURIDAD FÍSICA Y CENTRO DE CÓMPUTO (Frente: 120°)
-        .call(() => SFX.whoosh(), null, 7.5)
-        .to("#concl-carousel-ring", {
-            rotationY: -120,
-            duration: 1.2,
-            ease: "power2.inOut"
-        }, 7.5)
-        .call(() => setConcl3DCard(1), null, 8.6)
-        .call(() => SFX.ting(), null, 8.6)
-        .to("#concl-3d-card-1", {
-            scale: 1.03,
-            duration: 0.35,
-            yoyo: true,
-            repeat: 1,
-            ease: "power2.out"
-        }, 8.6)
-
-        // 6. POSICIÓN 3: GIRO 3D A CARD 2: EJE III - RESPALDO Y SEGURIDAD LÓGICA (Frente: 240°) - Y AHÍ TERMINA
-        .call(() => SFX.whoosh(), null, 13.0)
-        .to("#concl-carousel-ring", {
-            rotationY: -240,
-            duration: 1.2,
-            ease: "power2.inOut"
-        }, 13.0)
-        .call(() => setConcl3DCard(2), null, 14.1)
-        .call(() => SFX.ting(), null, 14.1)
+        }, 2.9)
         .to("#concl-3d-card-2", {
-            scale: 1.03,
-            duration: 0.35,
-            yoyo: true,
-            repeat: 1,
-            ease: "power2.out"
-        }, 14.1)
+            x: 0,
+            scale: 1.0,
+            duration: 0.95,
+            ease: "elastic.out(1.15, 0.45)"
+        }, 2.9)
 
-        // 7. CIERRE ESTABLE: Se mantiene fija en la 3ra tarjeta para concluir sin vueltas repetidas
-        .to("#scene9", { opacity: 1, duration: 4.5 }, 14.5);
+        // Ruptura elástica suave (SNAP): los cuellos adhesivos se sueltan suavemente al llegar a destino
+        .call(() => SFX.pop(), null, 3.65)
+        .to(["#ligament-left", "#ligament-right"], { opacity: 0, strokeWidth: 0, duration: 0.3 }, 3.65)
+
+        // 5. FOCO EN EJE I - GOBERNANZA Y OPERACIONES TI
+        .call(() => setConcl3DCard(0), null, 3.9)
+        .call(() => SFX.ting(), null, 3.9)
+        .to("#concl-3d-card-0", { scale: 1.04, opacity: 1.0, zIndex: 20, duration: 0.4, ease: "power2.out" }, 3.9)
+        .to(["#concl-3d-card-1", "#concl-3d-card-2"], { scale: 0.98, opacity: 0.65, zIndex: 5, duration: 0.4 }, 3.9)
+
+        // 6. FOCO EN EJE II - SEGURIDAD FÍSICA Y CENTRO DE CÓMPUTO
+        .call(() => setConcl3DCard(1), null, 8.0)
+        .call(() => SFX.ting(), null, 8.0)
+        .to("#concl-3d-card-1", { scale: 1.04, opacity: 1.0, zIndex: 20, duration: 0.4, ease: "power2.out" }, 8.0)
+        .to(["#concl-3d-card-0", "#concl-3d-card-2"], { scale: 0.98, opacity: 0.65, zIndex: 5, duration: 0.4 }, 8.0)
+
+        // 7. FOCO EN EJE III - RESPALDO Y SEGURIDAD LÓGICA
+        .call(() => setConcl3DCard(2), null, 12.5)
+        .call(() => SFX.ting(), null, 12.5)
+        .to("#concl-3d-card-2", { scale: 1.04, opacity: 1.0, zIndex: 20, duration: 0.4, ease: "power2.out" }, 12.5)
+        .to(["#concl-3d-card-0", "#concl-3d-card-1"], { scale: 0.98, opacity: 0.65, zIndex: 5, duration: 0.4 }, 12.5)
+
+        // 8. VEREDICTO FINAL UNIFICADO: Las 3 conclusiones brillan al 100% como módulos independientes consolidados
+        .call(() => {
+            for (let i = 0; i < 3; i++) {
+                document.getElementById(`concl-3d-card-${i}`)?.classList.add('is-active');
+                document.getElementById(`concl-dot-${i}`)?.classList.add('active');
+            }
+        }, null, 16.0)
+        .to(["#concl-3d-card-0", "#concl-3d-card-1", "#concl-3d-card-2"], {
+            scale: 1.0,
+            opacity: 1.0,
+            zIndex: 10,
+            duration: 0.6,
+            ease: "power2.out"
+        }, 16.0)
+        .to("#scene9", { opacity: 1, duration: 4.5 }, 16.5);
 
     return tl;
 }

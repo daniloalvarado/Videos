@@ -1283,9 +1283,26 @@
                         </div>
                     </div>
 
-                    <!-- CARRUSEL 3D: LOS 3 EJES CONCLUSIVOS DE AUDITORÍA -->
-                    <div class="concl-3d-viewport" id="concl-3d-viewport">
-                        <div class="concl-3d-ring" id="concl-carousel-ring">
+                    <!-- APERTURA DE EXPEDIENTES POR TENSIÓN ELÁSTICA: LOS 3 EJES CONCLUSIVOS -->
+                    <div class="concl-elastic-viewport" id="concl-elastic-viewport">
+                        <!-- SVG de Ligamentos Elásticos Conectivos (Tensión, Estiramiento y Ruptura) -->
+                        <svg class="elastic-ligaments-svg" id="elastic-ligaments-svg" viewBox="0 0 1560 520">
+                            <defs>
+                                <linearGradient id="tether-grad-left" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#39c5cf" stop-opacity="0.9" />
+                                    <stop offset="100%" stop-color="#d2a8ff" stop-opacity="0.9" />
+                                </linearGradient>
+                                <linearGradient id="tether-grad-right" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#d2a8ff" stop-opacity="0.9" />
+                                    <stop offset="100%" stop-color="#f1e05a" stop-opacity="0.9" />
+                                </linearGradient>
+                            </defs>
+                            <path id="ligament-left" d="M 520 260 C 650 260, 700 260, 755 260" fill="none" stroke="url(#tether-grad-left)" stroke-width="14" stroke-linecap="round" opacity="0" />
+                            <path id="ligament-right" d="M 755 260 C 810 260, 860 260, 990 260" fill="none" stroke="url(#tether-grad-right)" stroke-width="14" stroke-linecap="round" opacity="0" />
+                        </svg>
+
+                        <!-- Pista Horizontal de los 3 Expedientes Desacoplados -->
+                        <div class="concl-cards-track" id="concl-cards-track">
                             <!-- Card 0: Eje I - Gobernanza y Operaciones -->
                             <div class="concl-3d-card concl-3d-0 is-active" id="concl-3d-card-0">
                                 <div>
