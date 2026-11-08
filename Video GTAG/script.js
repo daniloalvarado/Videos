@@ -136,6 +136,15 @@ function typeHeadingText(selector, text, speed = 0.028, playTing = true) {
     });
 }
 
+// Función para calcular desplazamiento dinámico a una fila según su posición real en pantalla
+function getScrollTargetY(elementId, fallbackY, padding = 20) {
+    const el = document.getElementById(elementId);
+    if (el && typeof el.offsetTop === 'number' && el.offsetTop > 0) {
+        return -(Math.max(0, el.offsetTop - padding));
+    }
+    return fallbackY;
+}
+
 // --- 3. MÓDULOS DE ESCENA (GRAMÁTICA ONETAKE: CÁMARA CONTINUA A CONTENEDORES) ---
 
 // ==========================================
@@ -275,7 +284,10 @@ function buildScene2(cam) {
 
         // Desplazamiento progresivo de filas de la tabla a través de los 12 riesgos
         .to("#risks-rows-track", {
-            y: -340,
+            y: () => {
+                const track = document.getElementById('risks-rows-track');
+                return track && track.scrollHeight > 650 ? -(track.scrollHeight - 620) : -450;
+            },
             duration: 8.5,
             ease: "power1.inOut"
         }, 7.5)
@@ -346,7 +358,10 @@ function buildScene3(cam) {
 
         // Desplazamiento progresivo de filas: van subiendo paulatinamente
         .to("#controls-rows-track", {
-            y: -440,
+            y: () => {
+                const track = document.getElementById('controls-rows-track');
+                return track && track.scrollHeight > 580 ? -(track.scrollHeight - 550) : -500;
+            },
             duration: 10.0,
             ease: "power1.inOut"
         }, 3.4)
@@ -412,7 +427,7 @@ function buildScene4(cam) {
         .to("#evidence-scan-beam", { opacity: 0, duration: 0.2 }, 5.1)
 
         // ==============================================================
-        // 1. FOCO EN OBSERVACIÓN DIRECTA (E4 y E18 - Inspección Física)
+        // 1. FOCO EN OBSERVACIÓN DIRECTA (E4 - Ficha de Observación Directa In Situ)
         // ==============================================================
         // Cámara se desplaza y encuadra primero
         .to(cam, { scale: 1.08, x: 0, y: -25, duration: 0.8, ease: "power2.inOut" }, 5.2)
@@ -424,7 +439,7 @@ function buildScene4(cam) {
             boxShadow: "0 0 25px rgba(188, 140, 255, 0.5)",
             duration: 0.35
         }, 6.0)
-        .to(".row-tech-observacion", {
+        .to("#row-ev-4", {
             backgroundColor: "rgba(188, 140, 255, 0.22)",
             boxShadow: "0 0 16px rgba(188, 140, 255, 0.4)",
             duration: 0.35,
@@ -435,21 +450,21 @@ function buildScene4(cam) {
         // ==============================================================
         // 2. RECORRIDO PROGRESIVO Y FOCO PRINCIPAL EN INSPECCIÓN DOCUMENTAL
         // ==============================================================
-        // Retiro del foco de observación (se apagan el pill de observación y sus filas de forma idéntica a los otros dos)
+        // Retiro del foco de observación (se apagan el pill de observación y su fila)
         .to("#pill-observacion", {
             scale: 1.0,
             borderColor: "rgba(255, 255, 255, 0.12)",
             boxShadow: "none",
             duration: 0.35
         }, 8.0)
-        .to(".row-tech-observacion", {
+        .to("#row-ev-4", {
             backgroundColor: "transparent",
             boxShadow: "none",
             duration: 0.35
         }, 8.0)
-        // La tabla se desplaza suavemente hacia el gran bloque de inspección documental (E6 - E13)
+        // La tabla se desplaza dinámicamente para centrar el bloque de inspección documental (E6+) en el viewport
         .to("#evidence-rows-grid", {
-            y: -180,
+            y: () => getScrollTargetY('row-ev-6', -380, 25),
             duration: 2.3,
             ease: "power1.inOut"
         }, 8.2)
@@ -457,7 +472,7 @@ function buildScene4(cam) {
 
         // Activación del ENFOQUE DESTACADO EN INSPECCIÓN DOCUMENTAL (la cámara encuadra)
         .to(cam, { scale: 1.04, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 10.5)
-        // Justo al asentarse la cámara (11.3s), suena el ting y resalta el bloque documental
+        // Justo al asentarse la cámara y el scroll (11.3s), suena el ting y resaltan las evidencias documentales visibles
         .call(() => SFX.ting(), null, 11.3)
         .to("#pill-inspeccion", {
             scale: 1.08,
@@ -465,7 +480,7 @@ function buildScene4(cam) {
             boxShadow: "0 0 28px rgba(210, 153, 34, 0.6)",
             duration: 0.35
         }, 11.3)
-        .to(".row-tech-inspeccion", {
+        .to(["#row-ev-6", "#row-ev-7", "#row-ev-8", "#row-ev-9", "#row-ev-10"], {
             backgroundColor: "rgba(210, 153, 34, 0.20)",
             boxShadow: "0 0 16px rgba(210, 153, 34, 0.4)",
             duration: 0.35,
@@ -478,10 +493,10 @@ function buildScene4(cam) {
         // ==============================================================
         // Retiro del foco de inspección
         .to("#pill-inspeccion", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.35 }, 14.5)
-        .to(".row-tech-inspeccion", { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, 14.5)
-        // Recorrido continuo que llega al bloque de indagación final
+        .to(["#row-ev-6", "#row-ev-7", "#row-ev-8", "#row-ev-9", "#row-ev-10"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, 14.5)
+        // Recorrido dinámico que desplaza la tabla exactamente hasta centrar E14 y E17 en el viewport
         .to("#evidence-rows-grid", {
-            y: -380,
+            y: () => getScrollTargetY('row-ev-14', -920, 25),
             duration: 2.5,
             ease: "power1.inOut"
         }, 14.7)
@@ -489,7 +504,7 @@ function buildScene4(cam) {
 
         // La cámara encuadra
         .to(cam, { scale: 1.04, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 17.2)
-        // Justo al asentarse (18.0s), suena el ting y resalta ÚNICAMENTE Indagación (Pill e instrumentos E14 y E17, sin marcar E18 ni E19)
+        // Justo al asentarse (18.0s), suena el ting y resalta ÚNICAMENTE Indagación (Pill e instrumentos E14 y E17 plenamente visibles)
         .call(() => SFX.ting(), null, 18.0)
         .to("#pill-indagacion", {
             scale: 1.08,
@@ -510,6 +525,7 @@ function buildScene4(cam) {
         // ==============================================================
         .to(["#row-ev-14", "#row-ev-17"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 21.0)
         .to(".tech-pill", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.4 }, 21.0)
+        .to("#evidence-rows-grid", { y: 0, duration: 1.4, ease: "power2.inOut" }, 21.0)
         .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, 21.0)
         .to("#scene4", { opacity: 0, duration: 0.6 }, "+=2.0");
 
@@ -578,8 +594,14 @@ function buildScene5(cam) {
         // ==============================================================
         // Se atenúa Componente A para ceder el turno a Componente B
         .to("#scene5 .test-row-comp-a", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 7.2)
-        .to(cam, { scale: 1.08, x: 0, y: -50, duration: 0.8, ease: "power2.inOut" }, 7.2)
-        // Al asentarse la cámara (8.0s), suena el ting y resalta el Componente B
+        // Desplazamiento dinámico sincronizado para centrar Componente B
+        .to("#tests-rows-grid-5", {
+            y: () => getScrollTargetY('row-test-3', -160, 20),
+            duration: 0.8,
+            ease: "power2.inOut"
+        }, 7.2)
+        .to(cam, { scale: 1.08, x: 0, y: -35, duration: 0.8, ease: "power2.inOut" }, 7.2)
+        // Al asentarse el scroll y la cámara (8.0s), suena el ting y resalta el Componente B
         .call(() => SFX.ting(), null, 8.0)
         .to("#scene5 .test-row-comp-b", {
             backgroundColor: "rgba(210, 153, 34, 0.22)",
@@ -593,8 +615,12 @@ function buildScene5(cam) {
         // ==============================================================
         // Se atenúa Componente B para ceder el turno a Componente C
         .to("#scene5 .test-row-comp-b", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 10.8)
-        // Desplazamiento sincronizado de la tabla hacia arriba para centrar Componente C en el viewport
-        .to("#tests-rows-grid-5", { y: -90, duration: 0.9, ease: "power2.inOut" }, 10.8)
+        // Desplazamiento sincronizado dinámico para centrar Componente C en el viewport
+        .to("#tests-rows-grid-5", {
+            y: () => getScrollTargetY('row-test-5', -380, 20),
+            duration: 0.9,
+            ease: "power2.inOut"
+        }, 10.8)
         .to(cam, { scale: 1.08, x: 0, y: -30, duration: 0.9, ease: "power2.inOut" }, 10.8)
         // Al asentarse el scroll y la cámara (11.7s), suena el ting y resalta el Componente C
         .call(() => SFX.ting(), null, 11.7)
@@ -827,9 +853,15 @@ function buildScene7(cam) {
         // FOCO 2: COMPONENTE B - RESPALDO, RECUPERACIÓN Y CUSTODIA (R01, R07, R17)
         // Se atenúa Componente A para ceder el turno exclusivo a Componente B
         .to("#scene7 .dev-row-comp-a", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 7.5)
-        .to(cam, { scale: 1.08, x: 0, y: -45, duration: 0.8, ease: "power2.inOut" }, 7.5)
+        // Desplazamiento sincronizado de la tabla para centrar las 3 filas del Componente B en el viewport
+        .to("#dev-rows-grid-7", {
+            y: () => getScrollTargetY('row-dev-3', -300, 20),
+            duration: 0.8,
+            ease: "power2.inOut"
+        }, 7.5)
+        .to(cam, { scale: 1.08, x: 0, y: -35, duration: 0.8, ease: "power2.inOut" }, 7.5)
         .call(() => SFX.ting(), null, 8.3)
-        // Se resalta el Componente B y SE MANTIENE resaltado durante toda su duración
+        // Se resalta el Componente B cuando TODAS sus filas están visibles en pantalla
         .to("#scene7 .dev-row-comp-b", {
             backgroundColor: "rgba(210, 153, 34, 0.22)",
             boxShadow: "0 0 22px rgba(210, 153, 34, 0.45)",
@@ -839,6 +871,7 @@ function buildScene7(cam) {
 
         // Retorno panorámico y fade out (Componente B se desvanece suavemente durante el retorno)
         .to("#scene7 .dev-row-comp-b", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, 12.0)
+        .to("#dev-rows-grid-7", { y: 0, duration: 1.2, ease: "power2.inOut" }, 12.0)
         .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 12.0)
         .to("#scene7", { opacity: 0, duration: 0.6 }, 14.0);
 
@@ -923,10 +956,15 @@ function buildScene8(cam) {
         // FOCO 3: COMPONENTE E - OPERACIONES TI, CAÍDAS SGF Y DEPENDENCIA HUMANA (R09, R24, R28)
         // Se atenúa Componente D para ceder el turno exclusivo a Componente E
         .to("#scene8 .dev-row-comp-d", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 10.4)
-        .to("#dev-rows-grid-8", { y: -90, duration: 0.9, ease: "power2.inOut" }, 10.4)
+        // Desplazamiento dinámico sincronizado para centrar las 3 filas del Componente E en el viewport
+        .to("#dev-rows-grid-8", {
+            y: () => getScrollTargetY('row-dev-9', -380, 20),
+            duration: 0.9,
+            ease: "power2.inOut"
+        }, 10.4)
         .to(cam, { scale: 1.08, x: 0, y: -30, duration: 0.9, ease: "power2.inOut" }, 10.4)
         .call(() => SFX.ting(), null, 11.3)
-        // Se resalta el Componente E y SE MANTIENE resaltado durante toda su duración
+        // Se resalta el Componente E cuando TODAS sus 3 filas están plenamente visibles en el viewport
         .to("#scene8 .dev-row-comp-e", {
             backgroundColor: "rgba(57, 197, 207, 0.24)",
             boxShadow: "0 0 22px rgba(57, 197, 207, 0.45)",
