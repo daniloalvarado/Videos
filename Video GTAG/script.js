@@ -508,7 +508,7 @@ function buildScene4(cam) {
 
         // Activación del ENFOQUE DESTACADO EN INSPECCIÓN DOCUMENTAL (la cámara encuadra)
         .to(cam, { scale: 1.04, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 10.5)
-        // Justo al asentarse la cámara y el scroll (11.3s), suena el ting y resaltan las evidencias documentales visibles
+        // Justo al asentarse la cámara y el scroll (11.3s), suena el ting y resaltan TODAS las evidencias de inspección documental
         .call(() => SFX.ting(), null, 11.3)
         .to("#pill-inspeccion", {
             scale: 1.08,
@@ -516,9 +516,9 @@ function buildScene4(cam) {
             boxShadow: "0 0 28px rgba(210, 153, 34, 0.6)",
             duration: 0.35
         }, 11.3)
-        .to(["#row-ev-6", "#row-ev-7", "#row-ev-8", "#row-ev-9", "#row-ev-10"], {
-            backgroundColor: "rgba(210, 153, 34, 0.20)",
-            boxShadow: "0 0 16px rgba(210, 153, 34, 0.4)",
+        .to("#scene4 .row-tech-inspeccion", {
+            backgroundColor: "rgba(210, 153, 34, 0.22)",
+            boxShadow: "0 0 16px rgba(210, 153, 34, 0.45)",
             duration: 0.35,
             yoyo: true,
             repeat: 2
@@ -527,9 +527,9 @@ function buildScene4(cam) {
         // ==============================================================
         // 3. RECORRIDO Y FOCO EXCLUSIVO EN INDAGACIÓN (E14 Y E17 ÚNICAMENTE)
         // ==============================================================
-        // Retiro del foco de inspección
+        // Retiro del foco de inspección (se apaga el pill y TODAS las filas de inspección documental)
         .to("#pill-inspeccion", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.35 }, 14.5)
-        .to(["#row-ev-6", "#row-ev-7", "#row-ev-8", "#row-ev-9", "#row-ev-10"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, 14.5)
+        .to("#scene4 .row-tech-inspeccion", { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, 14.5)
         // Recorrido dinámico que desplaza la tabla exactamente hasta centrar E14 y E17 en el viewport
         .to("#evidence-rows-grid", {
             y: () => getScrollTargetY('row-ev-14', -340, 20),
@@ -728,24 +728,27 @@ function buildScene6(cam) {
             clearProps: "transform"
         }, 2.6)
 
-        // 2. DESPLAZAMIENTO TOTAL: LA TOPOLOGÍA DE RED DESPLAZA POR COMPLETO A LA TABLA Y OCUPA SU LUGAR
-        .call(() => SFX.whoosh(), null, 3.8)
+        // Permanencia y lectura de la tabla de pruebas (demora intencional para lectura completa)
+        .to(cam, { scale: 1.03, x: 0, y: -15, duration: 1.8, ease: "power1.out" }, 3.2)
+
+        // 2. DESPLAZAMIENTO TOTAL: TRAS LA LECTURA, LA TOPOLOGÍA DE RED DESPLAZA POR COMPLETO A LA TABLA Y OCUPA SU LUGAR
+        .call(() => SFX.whoosh(), null, 7.2)
         .to("#tests-table-box-6", {
             x: -1600,
             opacity: 0,
             duration: 0.85,
             ease: "power3.inOut"
-        }, 3.8)
+        }, 7.2)
         .to("#network-topology-hud", {
             x: 0,
             opacity: 1,
             duration: 0.85,
             ease: "power3.inOut"
-        }, 3.8)
+        }, 7.2)
 
         // FOCO 1: COMPONENTE D - REDES Y TELECOMUNICACIONES (R16 - Enlaces de Sedes Caídos)
-        .to(cam, { scale: 1.02, x: 0, y: -10, duration: 0.8, ease: "power2.inOut" }, 3.8)
-        .call(() => SFX.ting(), null, 4.4)
+        .to(cam, { scale: 1.02, x: 0, y: -10, duration: 0.8, ease: "power2.inOut" }, 7.8)
+        .call(() => SFX.ting(), null, 8.5)
         // DISPARO DE TELEMETRÍA EN VIVO: ALERTA R16 EN LA TOPOLOGÍA DE RED
         .call(() => {
             const statusPill = document.getElementById('hud-live-status');
@@ -767,22 +770,22 @@ function buildScene6(cam) {
             if (dBul) dBul.style.color = '#f85149';
             if (dTit) { dTit.textContent = 'Riesgo Crítico R16 Identificado'; dTit.style.color = '#ff8b85'; }
             if (dDesc) dDesc.textContent = 'Falta de enlaces redundantes y nulo monitoreo proactivo hacia fiscalías provinciales.';
-        }, null, 4.4)
+        }, null, 8.5)
         // HALOS CONCÉNTRICOS ALERTA R16 (CENTRADO EXACTO EN EL NODO ORIGEN)
         .fromTo(["#halo-requena", "#halo-datem"],
             { attr: { r: 14 }, opacity: 1, strokeWidth: 2.5 },
             { attr: { r: 44 }, opacity: 0, strokeWidth: 0.5, duration: 0.85, repeat: 3, ease: "power1.out" },
-            4.4
+            8.5
         )
         .fromTo(["#halo-requena-2", "#halo-datem-2"],
             { attr: { r: 14 }, opacity: 0.7, strokeWidth: 2 },
             { attr: { r: 44 }, opacity: 0, strokeWidth: 0.5, duration: 0.85, repeat: 3, ease: "power1.out" },
-            4.7
+            8.8
         )
 
         // FOCO 2: COMPONENTE E - OPERACIONES DE TI Y MESA DE AYUDA (R09 Mesa de Ayuda, R24 Caídas SGF, R28 Suplencia)
-        .to(cam, { scale: 1.02, x: 0, y: -15, duration: 0.8, ease: "power2.inOut" }, 7.5)
-        .call(() => SFX.ting(), null, 8.3)
+        .to(cam, { scale: 1.02, x: 0, y: -15, duration: 0.8, ease: "power2.inOut" }, 12.6)
+        .call(() => SFX.ting(), null, 13.4)
         // ACTUALIZACIÓN DE TOPOLOGÍA: MESA DE AYUDA Y SGF
         .call(() => {
             const statusPill = document.getElementById('hud-live-status');
@@ -803,22 +806,22 @@ function buildScene6(cam) {
             if (dBul) dBul.style.color = 'var(--accent-blue)';
             if (dTit) { dTit.textContent = 'Operaciones TI y Mesa de Ayuda'; dTit.style.color = '#ffffff'; }
             if (dDesc) dDesc.textContent = 'Carencia de catálogo de servicios, sin medición de tiempos ni pruebas de continuidad.';
-        }, null, 8.3)
+        }, null, 13.4)
         // HALOS CONCÉNTRICOS MESA DE AYUDA (CENTRADO EXACTO EN EL NODO ORIGEN)
         .fromTo("#halo-sgf",
             { attr: { r: 13 }, opacity: 1, strokeWidth: 2.5 },
             { attr: { r: 40 }, opacity: 0, strokeWidth: 0.5, duration: 0.85, repeat: 3, ease: "power1.out" },
-            8.3
+            13.4
         )
         .fromTo("#halo-sgf-2",
             { attr: { r: 13 }, opacity: 0.7, strokeWidth: 2 },
             { attr: { r: 40 }, opacity: 0, strokeWidth: 0.5, duration: 0.85, repeat: 3, ease: "power1.out" },
-            8.6
+            13.7
         )
 
         // Retorno panorámico y fade out
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 12.0)
-        .to("#scene6", { opacity: 0, duration: 0.6 }, 14.0);
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 17.5)
+        .to("#scene6", { opacity: 0, duration: 0.6 }, 19.5);
 
     return tl;
 }
