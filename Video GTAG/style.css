@@ -2194,24 +2194,42 @@ body {
    ESCENA 6: TOPOLOGÍA DE RED VIVIENTE Y LAYOUT DIVIDIDO (SEDE IQUITOS)
    ========================================================================== */
 .scene6-split-layout {
-    display: grid;
-    grid-template-columns: 1.12fr 0.88fr;
-    gap: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
     width: 100%;
     max-width: 1560px;
     margin: 0 auto;
-    align-items: stretch;
+    position: relative;
+    gap: 0px;
+    transition: gap 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scene6-split-layout.split-active {
+    gap: 22px;
 }
 
 #tests-table-box-6 {
-    max-width: 100% !important;
+    width: 100%;
+    max-width: 1560px;
+    flex: 1 1 100%;
+    transition: flex 0.75s cubic-bezier(0.16, 1, 0.3, 1), width 0.75s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-#tests-table-box-6 .tests-header-bar {
-    grid-template-columns: 200px 90px 1fr 130px;
+.scene6-split-layout.split-active #tests-table-box-6 {
+    flex: 1 1 58%;
+    width: 58%;
 }
 
+#tests-table-box-6 .tests-header-bar,
 #tests-table-box-6 .test-row-item {
+    display: grid;
+    grid-template-columns: 280px 130px 1fr 220px;
+    transition: grid-template-columns 0.75s ease;
+}
+
+.scene6-split-layout.split-active #tests-table-box-6 .tests-header-bar,
+.scene6-split-layout.split-active #tests-table-box-6 .test-row-item {
     grid-template-columns: 200px 90px 1fr 130px;
 }
 
@@ -2224,9 +2242,24 @@ body {
     box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
-    padding: 16px 20px;
+    padding: 0;
     overflow: hidden;
     position: relative;
+    flex: 0 0 0%;
+    width: 0%;
+    opacity: 0;
+    transform: translateX(100px);
+    pointer-events: none;
+    transition: flex 0.75s cubic-bezier(0.16, 1, 0.3, 1), width 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease, transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), padding 0.75s ease;
+}
+
+.scene6-split-layout.split-active .network-topology-hud {
+    flex: 0 0 40%;
+    width: 40%;
+    opacity: 1;
+    transform: translateX(0);
+    padding: 16px 20px;
+    pointer-events: auto;
 }
 
 .hud-top-bar {

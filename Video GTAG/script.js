@@ -240,29 +240,30 @@ function buildScene2(cam) {
         .call(() => SFX.slide(), null, 2.2)
 
         // ANIMACIÓN: DESPRENDIMIENTO CELULAR LÍQUIDO (METABALL GOOEY FILTER)
-        // Estiramiento viscoso de la masa de 32 riesgos iniciales
-        .to("#blob-mother", { scaleX: 1.45, scaleY: 0.82, duration: 0.45, ease: "power2.inOut" }, 2.2)
+        // Pausa intencional para permitir ver la masa madre de 32 riesgos asentada y los contadores
+        // Comienza el estiramiento viscoso tras la pausa
+        .to("#blob-mother", { scaleX: 1.45, scaleY: 0.82, duration: 0.5, ease: "power2.inOut" }, 3.5)
         // Separación elástica con puente viscoso conectivo
-        .to("#blob-filtered", { cx: 90, scale: 1, duration: 0.7, ease: "power3.inOut" }, 2.4)
-        .to("#blob-critical", { cx: 290, scale: 1, duration: 0.7, ease: "power3.inOut" }, 2.4)
-        .to("#blob-mother", { scale: 0.35, opacity: 0, duration: 0.4, ease: "power2.in" }, 2.8)
-        .to("#blob-txt-mother", { opacity: 0, scale: 0.5, duration: 0.3 }, 2.75)
+        .to("#blob-filtered", { cx: 90, scale: 1, duration: 0.75, ease: "power3.inOut" }, 3.7)
+        .to("#blob-critical", { cx: 290, scale: 1, duration: 0.75, ease: "power3.inOut" }, 3.7)
+        .to("#blob-mother", { scale: 0.35, opacity: 0, duration: 0.4, ease: "power2.in" }, 4.1)
+        .to("#blob-txt-mother", { opacity: 0, scale: 0.5, duration: 0.3 }, 4.05)
         // Snap elástico con pop sonoro sincronizado
-        .call(() => SFX.pop(), null, 2.95)
-        .to("#blob-filtered", { scale: 1.14, duration: 0.35, yoyo: true, repeat: 1, ease: "elastic.out(1.2, 0.4)" }, 2.95)
-        .to("#blob-critical", { scale: 1.18, duration: 0.35, yoyo: true, repeat: 1, ease: "elastic.out(1.2, 0.4)" }, 2.95)
-        .to(["#blob-txt-filtered", "#blob-txt-critical"], { opacity: 1, duration: 0.35 }, 3.0)
+        .call(() => SFX.pop(), null, 4.25)
+        .to("#blob-filtered", { scale: 1.14, duration: 0.35, yoyo: true, repeat: 1, ease: "elastic.out(1.2, 0.4)" }, 4.25)
+        .to("#blob-critical", { scale: 1.18, duration: 0.35, yoyo: true, repeat: 1, ease: "elastic.out(1.2, 0.4)" }, 4.25)
+        .to(["#blob-txt-filtered", "#blob-txt-critical"], { opacity: 1, duration: 0.35 }, 4.3)
 
-        // 2. SEGUNDO ELEMENTO: Matriz 5x5 a la derecha (aparición con zoom y escala)
-        .to(cam, { scale: 1.25, x: -340, y: 70, duration: 1.3, ease: "power2.inOut" }, 3.8)
-        .to("#matrix-graph-panel", { opacity: 1, scale: 1.0, duration: 0.8, ease: "back.out(1.2)" }, 3.8)
-        .call(() => SFX.ting(), null, 4.6)
-        .to("#matrix-graph-panel .cell-high", { scale: 1.15, duration: 0.3, yoyo: true, repeat: 3, transformOrigin: "center center" }, 4.6)
+        // 2. SEGUNDO ELEMENTO: Matriz 5x5 a la derecha (aparición con zoom y escala tras contemplar la división celular)
+        .to(cam, { scale: 1.25, x: -340, y: 70, duration: 1.3, ease: "power2.inOut" }, 5.0)
+        .to("#matrix-graph-panel", { opacity: 1, scale: 1.0, duration: 0.8, ease: "back.out(1.2)" }, 5.0)
+        .call(() => SFX.ting(), null, 5.8)
+        .to("#matrix-graph-panel .cell-high", { scale: 1.15, duration: 0.3, yoyo: true, repeat: 3, transformOrigin: "center center" }, 5.8)
 
         // 3. TERCER ELEMENTO: Tabla de 12 Riesgos Priorizados (aparición limpia y única con slide)
-        .to(cam, { scale: 1.30, x: 0, y: -260, duration: 1.5, ease: "power2.inOut" }, 5.8)
-        .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.9, ease: "back.out(1.2)" }, 5.8)
-        .call(() => SFX.slide(), null, 5.8)
+        .to(cam, { scale: 1.30, x: 0, y: -260, duration: 1.5, ease: "power2.inOut" }, 7.0)
+        .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.9, ease: "back.out(1.2)" }, 7.0)
+        .call(() => SFX.slide(), null, 7.0)
         .fromTo("#risks-table-box", {
             boxShadow: "0 0 45px rgba(88, 166, 255, 0.65)"
         }, {
@@ -625,7 +626,9 @@ function buildScene6(cam) {
         .set("#tests-rows-grid-6", { y: 0 }, 0)
         .set("#scene6 .test-row-item", { clearProps: "all" }, 0)
         .set("#scene6 .test-stat-card", { clearProps: "all" }, 0)
-        .set("#network-topology-hud", { opacity: 0, x: 50 }, 0)
+        .call(() => {
+            document.querySelector('.scene6-split-layout')?.classList.remove('split-active');
+        }, null, 0)
         .set(["#halo-requena", "#halo-datem", "#halo-sgf"], { opacity: 0, scale: 1 }, 0)
         .to("#scene6", { opacity: 1, duration: 0.5 }, 0.1)
         .from("#scene6 .section-tag", { y: -20, opacity: 0, duration: 0.5 }, 0.3)
@@ -644,12 +647,11 @@ function buildScene6(cam) {
             onStart: () => SFX.pop()
         }, 2.0)
 
-        // Entrada del contenedor de la tabla y del HUD de Topología de Red
+        // 1. LA TABLA ENTRA A ANCHO COMPLETO (100% Full Width inicial)
         .from("#tests-table-box-6", { opacity: 0, y: 30, duration: 0.7, ease: "power2.out" }, 2.4)
-        .to("#network-topology-hud", { opacity: 1, x: 0, duration: 0.8, ease: "back.out(1.2)" }, 2.4)
         .call(() => SFX.slide(), null, 2.4)
 
-        // Cascada de las 4 filas de pruebas (alineación estrictamente recta y uniforme)
+        // Cascada de las 4 filas de pruebas sobre el ancho completo
         .from("#scene6 .test-row-item", {
             y: 14,
             opacity: 0,
@@ -659,8 +661,14 @@ function buildScene6(cam) {
             clearProps: "transform"
         }, 2.6)
 
+        // 2. DESPLAZAMIENTO: SALE LA TOPOLOGÍA DE RED DESPLAZANDO LA TABLA Y OCUPANDO SU LUGAR
+        .call(() => {
+            document.querySelector('.scene6-split-layout')?.classList.add('split-active');
+            SFX.whoosh();
+        }, null, 3.8)
+
         // FOCO 1: COMPONENTE D - REDES Y TELECOMUNICACIONES (R16 - Enlaces de Sedes Caídos)
-        .to(cam, { scale: 1.05, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 3.6)
+        .to(cam, { scale: 1.05, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 3.8)
         .call(() => SFX.ting(), null, 4.4)
         .to("#scene6 .test-row-comp-d", {
             backgroundColor: "rgba(248, 81, 73, 0.22)",
