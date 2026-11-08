@@ -961,7 +961,10 @@ function initMasterTimeline() {
             if (isLoopingScene) {
                 jumpToScene(currentSceneIndex);
             } else {
-                jumpToScene(1);
+                // Al finalizar todo el video, queda varado/fijo en la última escena (sin regresar a la Escena 1)
+                masterTimeline.pause();
+                const icon = document.getElementById('play-icon');
+                if (icon) icon.textContent = '▶';
             }
         }
     });
