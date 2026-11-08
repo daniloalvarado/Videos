@@ -197,10 +197,10 @@ function buildScene2(cam) {
         .set(cam, { scale: 1.0, x: 0, y: 0 }, 0)
         .set("#risks-rows-track", { y: 0 }, 0)
         .set("#scene2 .scene-header-box", { opacity: 1 }, 0)
-        .set("#scene2 .matrix-container", { opacity: 1, filter: "none" }, 0)
+        .set("#scene2 .matrix-container", { opacity: 1, y: 0, filter: "none", pointerEvents: "auto" }, 0)
         .set("#scene2 .risk-kpi-panel", { opacity: 0, x: -60 }, 0)
         .set("#matrix-graph-panel", { opacity: 0, scale: 0.88 }, 0)
-        .set("#risks-table-box", { opacity: 0, y: 50, scale: 0.96, filter: "none" }, 0)
+        .set("#risks-table-box", { opacity: 0, y: 40, scale: 0.98, filter: "none", pointerEvents: "none" }, 0)
         .set("#risk-carousel-3d-overlay", { opacity: 0, visibility: "hidden", scale: 0.85 }, 0)
         .set("#carousel-ring", { rotationY: 0 }, 0)
         .set("#blob-mother", { scale: 1, cx: 190, cy: 45, opacity: 1 }, 0)
@@ -260,20 +260,22 @@ function buildScene2(cam) {
         .call(() => SFX.ting(), null, 5.8)
         .to("#matrix-graph-panel .cell-high", { scale: 1.15, duration: 0.3, yoyo: true, repeat: 3, transformOrigin: "center center" }, 5.8)
 
-        // 3. TERCER ELEMENTO: Tabla de 12 Riesgos Priorizados (aparición limpia y única con slide)
-        .to(cam, { scale: 1.05, x: 0, y: -70, duration: 1.5, ease: "power2.inOut" }, 7.0)
-        .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.9, ease: "back.out(1.2)" }, 7.0)
+        // 3. TERCER ELEMENTO: Tabla de 12 Riesgos Priorizados (aparición limpia a altura completa de 650px)
+        // Desvanecemos la matriz para ceder todo el escenario a la tabla y centramos la cámara
+        .to("#scene2 .matrix-container", { opacity: 0, y: -25, duration: 0.65, ease: "power2.inOut", pointerEvents: "none" }, 6.7)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.0, ease: "power2.inOut" }, 6.7)
+        .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.85, ease: "power2.out", pointerEvents: "auto" }, 7.0)
         .call(() => SFX.slide(), null, 7.0)
         .fromTo("#risks-table-box", {
             boxShadow: "0 0 45px rgba(88, 166, 255, 0.65)"
         }, {
             boxShadow: "0 16px 45px rgba(0, 0, 0, 0.55)",
             duration: 0.9
-        }, 5.8)
+        }, 7.0)
 
-        // Desplazamiento progresivo de filas de la tabla (desplazamiento continuo suave sin clics repetidos)
+        // Desplazamiento progresivo de filas de la tabla a través de los 12 riesgos
         .to("#risks-rows-track", {
-            y: -320,
+            y: -340,
             duration: 8.5,
             ease: "power1.inOut"
         }, 7.5)

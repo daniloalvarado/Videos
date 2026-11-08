@@ -29,6 +29,17 @@
     --font-heading: 'DM Serif Display', Georgia, serif;
     --font-serif: 'DM Serif Display', Georgia, serif;
     --font-sans: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+
+    /* ==========================================================================
+       CONFIGURACIÓN DE TIPOGRAFÍA DE TABLAS (AJUSTABLE POR EL USUARIO)
+       Modifica aquí los tamaños (en px) según tu agrado para todas las tablas:
+       ========================================================================== */
+    --tbl-th-size: 16px;         /* Encabezados de columna (CÓD, DESCRIPCIÓN, COMPONENTE...) */
+    --tbl-desc-size: 17.5px;     /* Texto de descripciones principales y hallazgos */
+    --tbl-badge-size: 15.5px;    /* Códigos de identificación (R01, C01, E01, P01, D01...) */
+    --tbl-level-size: 14px;      /* Badges de nivel o técnica (Alto, Muy Alto, Inspección...) */
+    --tbl-meta-size: 16px;       /* Componentes GTAG, categorías y dominios */
+    --tbl-row-padding-y: 16px;   /* Relleno vertical de cada fila para mayor legibilidad */
 }
 
 /* --- RESET Y ESTRUCTURA BASE --- */
@@ -542,13 +553,23 @@ body {
     align-items: center;
 }
 
+.scene2-content-stage {
+    position: relative;
+    width: 100%;
+    max-width: 1560px;
+    height: 740px;
+    margin: 15px auto 0 auto;
+}
+
 .matrix-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1.35fr;
     gap: 28px;
-    margin: 15px auto 0 auto;
-    width: 100%;
-    max-width: 1560px;
+    margin: 0;
     align-items: stretch;
     z-index: 10;
 }
@@ -1042,9 +1063,11 @@ body {
 
 /* --- TABLA DE LOS 12 RIESGOS PRIORIZADOS (GTAG) CENTRADA --- */
 .risks-table-container {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 1560px;
-    margin: 18px auto 35px auto;
+    margin: 0;
     background: rgba(18, 24, 38, 0.62);
     backdrop-filter: blur(18px) saturate(140%);
     -webkit-backdrop-filter: blur(18px) saturate(140%);
@@ -1054,7 +1077,7 @@ body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    z-index: 10;
+    z-index: 12;
 }
 
 .table-header-bar {
@@ -1062,9 +1085,9 @@ body {
     grid-template-columns: 110px 1fr 180px 280px;
     background: rgba(13, 17, 23, 0.88);
     border-bottom: 2px solid rgba(88, 166, 255, 0.35);
-    padding: 14px 28px;
+    padding: 16px 28px;
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: var(--tbl-th-size);
     font-weight: 800;
     letter-spacing: 1.2px;
     color: var(--accent-blue);
@@ -1088,11 +1111,11 @@ body {
 }
 
 .table-scroll-viewport {
-    height: 560px;
+    height: 650px;
     overflow: hidden;
     position: relative;
-    mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
 }
 
 .table-rows-track {
@@ -1104,7 +1127,7 @@ body {
 .table-row-item {
     display: grid;
     grid-template-columns: 110px 1fr 180px 280px;
-    padding: 15px 28px;
+    padding: var(--tbl-row-padding-y) 28px;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     transition: background 0.2s ease;
@@ -1134,19 +1157,19 @@ body {
 .table-row-item .risk-gtag-component {
     padding-left: 16px;
     font-family: var(--font-sans);
-    font-size: 14px;
+    font-size: var(--tbl-meta-size);
     font-weight: 600;
     color: #79c0ff;
 }
 
 .risk-cod-badge {
     font-family: var(--font-sans);
-    font-size: 14px;
+    font-size: var(--tbl-badge-size);
     font-weight: 800;
     color: var(--accent-blue);
     background: rgba(88, 166, 255, 0.12);
     border: 1px solid var(--accent-blue);
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 8px;
     display: inline-block;
     width: fit-content;
@@ -1162,18 +1185,18 @@ body {
 
 .risk-desc-text {
     font-family: var(--font-sans);
-    font-size: 15px;
+    font-size: var(--tbl-desc-size);
     font-weight: 500;
     color: #f0f6fc;
-    line-height: 1.4;
+    line-height: 1.45;
 }
 
 .risk-level-badge {
     font-family: var(--font-sans);
-    font-size: 12px;
+    font-size: var(--tbl-level-size);
     font-weight: 800;
     letter-spacing: 1px;
-    padding: 4px 14px;
+    padding: 5px 14px;
     border-radius: 12px;
     display: inline-block;
     width: fit-content;
@@ -1196,7 +1219,7 @@ body {
 
 .risk-gtag-component {
     font-family: var(--font-sans);
-    font-size: 14px;
+    font-size: var(--tbl-meta-size);
     font-weight: 600;
     color: #79c0ff;
 }
@@ -1223,9 +1246,9 @@ body {
     grid-template-columns: 340px 110px 1fr;
     background: rgba(13, 17, 23, 0.88);
     border-bottom: 2px solid rgba(88, 166, 255, 0.35);
-    padding: 14px 28px;
+    padding: 16px 28px;
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: var(--tbl-th-size);
     font-weight: 800;
     letter-spacing: 1.2px;
     color: var(--accent-blue);
@@ -1264,7 +1287,7 @@ body {
 .controls-row-item {
     display: grid;
     grid-template-columns: 340px 110px 1fr;
-    padding: 16px 28px;
+    padding: var(--tbl-row-padding-y) 28px;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     transition: background 0.2s ease;
@@ -1280,7 +1303,7 @@ body {
 
 .controls-row-item .component-name-cell {
     font-family: var(--font-serif);
-    font-size: 16px;
+    font-size: var(--tbl-meta-size);
     font-weight: 600;
     color: #79c0ff;
     padding-left: 6px;
@@ -1293,7 +1316,7 @@ body {
 
 .controls-row-item .control-desc-cell {
     font-family: var(--font-sans);
-    font-size: 15px;
+    font-size: var(--tbl-desc-size);
     font-weight: 500;
     color: #f0f6fc;
     line-height: 1.45;
@@ -1515,9 +1538,9 @@ body {
     grid-template-columns: 110px 1fr 240px;
     background: rgba(13, 17, 23, 0.90);
     border-bottom: 2px solid rgba(88, 166, 255, 0.35);
-    padding: 14px 28px;
+    padding: 16px 28px;
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: var(--tbl-th-size);
     font-weight: 800;
     letter-spacing: 1.2px;
     color: var(--accent-blue);
@@ -1555,7 +1578,7 @@ body {
 .evidence-row-item {
     display: grid;
     grid-template-columns: 110px 1fr 240px;
-    padding: 10px 28px;
+    padding: 13px 28px;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     transition: background 0.25s ease, box-shadow 0.25s ease;
@@ -1567,12 +1590,12 @@ body {
 
 .evidence-cod-badge {
     font-family: var(--font-sans);
-    font-size: 14px;
+    font-size: var(--tbl-badge-size);
     font-weight: 800;
     color: var(--accent-blue);
     background: rgba(88, 166, 255, 0.12);
     border: 1px solid var(--accent-blue);
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 8px;
     justify-self: center;
     text-align: center;
@@ -1587,17 +1610,17 @@ body {
 
 .evidence-desc-cell {
     font-family: var(--font-sans);
-    font-size: 15px;
+    font-size: var(--tbl-desc-size);
     font-weight: 500;
     color: #f0f6fc;
-    line-height: 1.4;
+    line-height: 1.45;
     padding-left: 14px;
     padding-right: 20px;
 }
 
 .tech-badge {
     font-family: var(--font-sans);
-    font-size: 12px;
+    font-size: var(--tbl-level-size);
     font-weight: 800;
     letter-spacing: 0.8px;
     padding: 5px 14px;
@@ -2059,9 +2082,9 @@ body {
     grid-template-columns: 280px 130px 1fr 220px;
     background: rgba(13, 17, 23, 0.90);
     border-bottom: 2px solid rgba(88, 166, 255, 0.35);
-    padding: 14px 28px;
+    padding: 16px 28px;
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: var(--tbl-th-size);
     font-weight: 800;
     letter-spacing: 1.2px;
     color: var(--accent-blue);
@@ -2091,7 +2114,7 @@ body {
 .test-row-item {
     display: grid;
     grid-template-columns: 280px 130px 1fr 220px;
-    padding: 16px 28px;
+    padding: var(--tbl-row-padding-y) 28px;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     transition: background 0.3s ease, box-shadow 0.3s ease;
@@ -2103,7 +2126,7 @@ body {
 
 .comp-badge {
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: var(--tbl-meta-size);
     font-weight: 700;
     color: #79c0ff;
     background: rgba(88, 166, 255, 0.12);
@@ -2124,9 +2147,9 @@ body {
 
 .risk-code-badge {
     font-family: var(--font-sans);
-    font-size: 14px;
+    font-size: var(--tbl-badge-size);
     font-weight: 800;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 8px;
     text-align: center;
     min-width: 58px;
@@ -2148,7 +2171,7 @@ body {
 
 .proc-cell {
     font-family: var(--font-sans);
-    font-size: 15px;
+    font-size: var(--tbl-desc-size);
     font-weight: 500;
     color: #f0f6fc;
     line-height: 1.45;
@@ -2165,9 +2188,9 @@ body {
 
 .ev-badge {
     font-family: var(--font-sans);
-    font-size: 12px;
+    font-size: var(--tbl-level-size);
     font-weight: 800;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 8px;
     text-align: center;
 }
@@ -2505,9 +2528,9 @@ body {
     grid-template-columns: 320px 140px 1fr;
     background: rgba(13, 17, 23, 0.94);
     border-bottom: 2px solid rgba(248, 81, 73, 0.4);
-    padding: 15px 30px;
+    padding: 16px 30px;
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: var(--tbl-th-size);
     font-weight: 800;
     letter-spacing: 1.2px;
     color: #ff7b72;
@@ -2538,7 +2561,7 @@ body {
 .deviation-row-item {
     display: grid;
     grid-template-columns: 320px 140px 1fr;
-    padding: 18px 30px;
+    padding: var(--tbl-row-padding-y) 30px;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     position: relative;
@@ -2578,7 +2601,7 @@ body {
 
 .dev-comp-badge {
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: var(--tbl-meta-size);
     font-weight: 700;
     padding: 6px 14px;
     border-radius: 10px;
@@ -2634,7 +2657,7 @@ body {
 
 .finding-callout {
     font-family: var(--font-sans);
-    font-size: 15px;
+    font-size: var(--tbl-desc-size);
     font-weight: 500;
     color: #f0f6fc;
     line-height: 1.5;
