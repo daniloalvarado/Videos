@@ -1,0 +1,348 @@
+/* ========================================== */
+/* CORE / BASE STYLES                         */
+/* ========================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, sans-serif;
+}
+
+body {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#start-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(13, 17, 23, 0.95);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+}
+
+#start-overlay h1 {
+    font-size: 40px;
+    color: #58a6ff;
+    padding: 20px 40px;
+    border: 2px solid #58a6ff;
+    border-radius: 50px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(88, 166, 255, 0.7);
+    }
+
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 20px rgba(88, 166, 255, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(88, 166, 255, 0);
+    }
+}
+
+#container {
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+    transform-origin: center center;
+    flex-shrink: 0;
+    background-color: #0d1117;
+    overflow: hidden;
+}
+
+#camera-rig {
+    width: 1920px;
+    height: 1080px;
+    position: absolute;
+    transform-origin: center center;
+    will-change: transform;
+}
+
+#svg-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 50;
+    pointer-events: none;
+    overflow: visible;
+}
+
+/* Trazos Whiteboard ocultos inicialmente */
+#scene4-whiteboard * {
+    stroke-dasharray: 3000;
+    stroke-dashoffset: 3000;
+}
+
+/* ========================================== */
+/* COMPONENTES REUTILIZABLES                  */
+/* ========================================== */
+
+/* Personajes */
+.char-wrapper {
+    position: absolute;
+    bottom: -50px;
+    width: 800px;
+    height: 800px;
+    opacity: 0;
+    z-index: 10;
+    border-radius: 0%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: transparent;
+    transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.char-wrapper.circle-avatar {
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    bottom: 300px;
+    background-color: #161b22;
+    border: 8px solid #58a6ff;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.char-wrapper.circle-avatar .character {
+    height: 550px;
+    transform: translateY(20px);
+}
+
+.character {
+    height: 800px;
+    transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#wrap-duda {
+    left: -100px;
+}
+
+#wrap-1 {
+    right: -100px;
+}
+
+#wrap-3 {
+    left: -100px;
+}
+
+.scene {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    z-index: 20;
+}
+
+.title {
+    font-size: 80px;
+    font-weight: 800;
+    color: #58a6ff;
+    margin-bottom: 20px;
+    text-align: center;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+.subtitle {
+    font-size: 48px;
+    font-weight: 400;
+    color: #8b949e;
+    text-align: center;
+}
+
+/* ========================================== */
+/* ESTILOS ESPECÍFICOS POR ESCENA             */
+/* ========================================== */
+
+/* Escena 1 */
+#scene1 .text-content {
+    position: absolute;
+    right: 285px;
+    top: 40%;
+    width: 800px;
+    text-align: left;
+}
+
+#scene1 .title,
+#scene1 .subtitle {
+    text-align: left;
+}
+
+/* Escena 2 */
+#scene2 {
+    align-items: flex-start;
+}
+
+.cards-container {
+    position: absolute;
+    left: 250px;
+    top: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 600px;
+}
+
+.card {
+    background: rgba(22, 27, 34, 0.85);
+    border: 1px solid #30363d;
+    border-left: 6px solid #3fb950;
+    border-radius: 16px;
+    padding: 40px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateX(-50px);
+}
+
+.card h2 {
+    font-size: 36px;
+    color: #3fb950;
+    margin-bottom: 15px;
+}
+
+.card p {
+    font-size: 26px;
+    line-height: 1.5;
+}
+
+/* Escena 3 */
+#scene3 {
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 200px;
+}
+
+.final-content {
+    width: 800px;
+    text-align: left;
+}
+
+.final-text {
+    font-size: 55px;
+    font-weight: 700;
+    color: #e6edf3;
+    line-height: 1.4;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.8);
+    margin-top: 30px;
+}
+
+/* ========================================== */
+/* CONTROLES DE REPRODUCCIÓN                  */
+/* ========================================== */
+#playback-controls {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(13, 17, 23, 0.85);
+    border: 1px solid #30363d;
+    padding: 15px 25px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 10000;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    opacity: 0; /* Oculto hasta que inicie */
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+#playback-controls.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+#playback-controls button {
+    background: #238636;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+#playback-controls button:hover {
+    background: #2ea043;
+}
+
+#playback-controls #hide-controls-btn {
+    background: transparent;
+    border: 1px solid #f85149;
+    color: #f85149;
+}
+#playback-controls #hide-controls-btn:hover {
+    background: rgba(248, 81, 73, 0.2);
+}
+
+#timeline-scrubber {
+    width: 300px;
+    cursor: pointer;
+    accent-color: #58a6ff;
+}
+
+#time-display {
+    font-size: 14px;
+    font-family: monospace;
+    color: #8b949e;
+    min-width: 90px;
+    text-align: center;
+}
+
+/* Escena 4 */
+.wb-text-station {
+    position: absolute;
+    top: 30%;
+    width: 700px;
+    text-align: left;
+    opacity: 0;
+}
+.wb-text-station .title, .wb-text-station .subtitle {
+    text-align: left;
+}
+
+.wb-text-station h2 {
+    font-size: 60px;
+    color: #58a6ff;
+    margin-bottom: 20px;
+}
+
+.wb-text-station p {
+    font-size: 40px;
+    color: #e6edf3;
+    line-height: 1.5;
+}

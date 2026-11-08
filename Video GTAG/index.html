@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0">
+    <title>S10 GTAG: Auditoría de Infraestructura y Operaciones de TI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <!-- OVERLAY DE INICIO (Activación de Audio en Navegadores Modernos) -->
+    <div id="start-overlay" onclick="startMasterPlayback()">
+        <button class="pulse-btn">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Iniciar Video GTAG (Full HD)
+        </button>
+        <p>Tipografía: DM Serif Display & Roboto • 6 Escenas (Portada • Matriz • Controles • Evidencias • Pruebas E5 y E6)</p>
+    </div>
+
+    <!-- CONTENEDOR MAESTRO DE VIDEO (1920 x 1080) -->
+    <div id="container">
+
+        <!-- FONDO INSTITUCIONAL CON BLUR Y GLASSMORPHISM (SEDE LORETO) -->
+        <div id="bg-photo"></div>
+
+        <!-- RIG DE CÁMARA (Control de Paneos y Zooms Cinemáticos) -->
+        <div id="camera-rig">
+
+            <!-- ======================================================== -->
+            <!-- ESCENA 1: PORTADA & MARCO GTAG S10                      -->
+            <!-- ======================================================== -->
+            <div id="scene1" class="scene active-scene">
+                <div class="hero-box">
+                    <span class="section-tag tag-blue">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        SESIÓN 10 • PRÁCTICA GLOBAL IIA
+                    </span>
+                    <h1 class="title-hero">AUDITORÍA DE INFRAESTRUCTURA Y OPERACIONES DE TI</h1>
+                    <h2 class="subtitle-hero">GTAG: Auditing Computing Infrastructure and IT Operations</h2>
+
+                    <div class="meta-badges">
+                        <div class="meta-badge">
+                            <strong>Entidad Auditada:</strong> Ministerio Público - Distrito Fiscal de Loreto
+                        </div>
+                        <div class="meta-badge">
+                            <strong>Sede:</strong> Sede Central Iquitos
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- ESCENA 2: PASO 1 - IDENTIFICACIÓN Y EVALUACIÓN DE RIESGO-->
+            <!-- ======================================================== -->
+            <div id="scene2" class="scene">
+                <div class="scene-header-box">
+                    <span class="section-tag tag-crimson">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        APLICACIÓN PRÁCTICA • PASO 1
+                    </span>
+                    <h2 class="title-hero" style="font-size: 50px;">Identificación y Valoración de Riesgos</h2>
+                    <p class="subtitle-hero" style="font-size: 24px;">Metodología Magerit v3 y Matriz 5x5: Universo total de 32 riesgos inherentes evaluados.</p>
+                </div>
+
+                <div class="matrix-container">
+                    <div class="risk-kpi-panel">
+                        <div class="kpi-row">
+                            <span style="color: var(--text-secondary); font-size: 19px;">Universo Auditable:</span>
+                            <span class="kpi-number" id="kpi-total-risks" style="color: var(--accent-blue);">32</span>
+                        </div>
+                        <div class="kpi-row">
+                            <span style="color: var(--text-secondary); font-size: 19px;">Fórmula de Valoración:</span>
+                            <span style="font-family: var(--font-sans); font-size: 19px; font-weight: 700; color: #fff;">Probabilidad × Impacto</span>
+                        </div>
+                        <div class="kpi-row">
+                            <span style="color: var(--text-secondary); font-size: 19px;">Riesgos Descartados (Bajo/Medio):</span>
+                            <span class="kpi-number" id="kpi-filtered-risks" style="color: var(--accent-amber);">20</span>
+                        </div>
+                        <div class="kpi-row" style="border-bottom: none;">
+                            <span style="color: #ff9b96; font-size: 20px; font-weight: 700;">Riesgos Priorizados (Alto/Muy Alto):</span>
+                            <span class="kpi-number" id="kpi-prioritized-risks" style="color: var(--accent-crimson);">12</span>
+                        </div>
+                    </div>
+
+                    <!-- Representación Gráfica de la Matriz 5x5 (Impacto y Probabilidad) -->
+                    <div class="matrix-graph-panel" id="matrix-graph-panel">
+                        <div class="matrix-visual-wrapper">
+                            <!-- Área de Gráfica: Eje Y + Grilla + Eje X -->
+                            <div class="matrix-plot-area">
+                                <!-- Eje Y: Título 'Probabilidad' + Escala 5 a 1 -->
+                                <div class="matrix-y-axis">
+                                    <span class="matrix-axis-title-y">Probabilidad</span>
+                                    <div class="matrix-y-ticks">
+                                        <span>5</span>
+                                        <span>4</span>
+                                        <span>3</span>
+                                        <span>2</span>
+                                        <span>1</span>
+                                    </div>
+                                </div>
+
+                                <!-- Grilla 5x5 y Eje X -->
+                                <div class="matrix-grid-col">
+                                    <div class="matrix-board" id="matrix-board">
+                                        <!-- Fila 5: P=5 -->
+                                        <div class="m-cell c-bajo">5</div>
+                                        <div class="m-cell c-medio">10</div>
+                                        <div class="m-cell c-alto cell-high">15</div>
+                                        <div class="m-cell c-muy-alto cell-high">20</div>
+                                        <div class="m-cell c-muy-alto cell-high">25</div>
+
+                                        <!-- Fila 4: P=4 -->
+                                        <div class="m-cell c-muy-bajo">4</div>
+                                        <div class="m-cell c-bajo">8</div>
+                                        <div class="m-cell c-medio">12</div>
+                                        <div class="m-cell c-alto cell-high">16</div>
+                                        <div class="m-cell c-muy-alto cell-high">20</div>
+
+                                        <!-- Fila 3: P=3 -->
+                                        <div class="m-cell c-muy-bajo">3</div>
+                                        <div class="m-cell c-bajo">6</div>
+                                        <div class="m-cell c-bajo">9</div>
+                                        <div class="m-cell c-medio">12</div>
+                                        <div class="m-cell c-alto cell-high">15</div>
+
+                                        <!-- Fila 2: P=2 -->
+                                        <div class="m-cell c-muy-bajo">2</div>
+                                        <div class="m-cell c-muy-bajo">4</div>
+                                        <div class="m-cell c-bajo">6</div>
+                                        <div class="m-cell c-bajo">8</div>
+                                        <div class="m-cell c-medio">10</div>
+
+                                        <!-- Fila 1: P=1 -->
+                                        <div class="m-cell c-muy-bajo">1</div>
+                                        <div class="m-cell c-muy-bajo">2</div>
+                                        <div class="m-cell c-muy-bajo">3</div>
+                                        <div class="m-cell c-muy-bajo">4</div>
+                                        <div class="m-cell c-bajo">5</div>
+                                    </div>
+
+                                    <!-- Eje X: Escala 1 a 5 + Título 'Impacto' -->
+                                    <div class="matrix-x-axis">
+                                        <div class="matrix-x-ticks">
+                                            <span>1</span>
+                                            <span>2</span>
+                                            <span>3</span>
+                                            <span>4</span>
+                                            <span>5</span>
+                                        </div>
+                                        <span class="matrix-axis-title-x">Impacto</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Leyenda Lateral Derecha -->
+                            <div class="matrix-legend-column">
+                                <div class="matrix-legend-row">
+                                    <span class="legend-swatch c-muy-bajo"></span>
+                                    <span class="legend-text">Muy bajo (1–4)</span>
+                                </div>
+                                <div class="matrix-legend-row">
+                                    <span class="legend-swatch c-bajo"></span>
+                                    <span class="legend-text">Bajo (5–9)</span>
+                                </div>
+                                <div class="matrix-legend-row">
+                                    <span class="legend-swatch c-medio"></span>
+                                    <span class="legend-text">Medio (10–14)</span>
+                                </div>
+                                <div class="matrix-legend-row">
+                                    <span class="legend-swatch c-alto"></span>
+                                    <span class="legend-text">Alto (15–19)</span>
+                                </div>
+                                <div class="matrix-legend-row">
+                                    <span class="legend-swatch c-muy-alto"></span>
+                                    <span class="legend-text">Muy alto (20–25)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABLA DE LOS 12 RIESGOS PRIORIZADOS (GTAG) -->
+                <div class="risks-table-container" id="risks-table-box">
+                    <div class="table-header-bar">
+                        <div class="th-col th-cod">CÓD</div>
+                        <div class="th-col th-desc">DESCRIPCIÓN DEL RIESGO (INFRAESTRUCTURA Y OPERACIONES TI)</div>
+                        <div class="th-col th-level">NIVEL DE RIESGO</div>
+                        <div class="th-col th-gtag">COMPONENTE GTAG</div>
+                    </div>
+                    <div class="table-scroll-viewport">
+                        <div class="table-rows-track" id="risks-rows-track">
+                            <div class="table-row-item">
+                                <span class="risk-cod-badge">R01</span>
+                                <span class="risk-desc-text">Pérdida de la información de las fiscalías ante una falla, porque no se ha comprobado que las copias de respaldo puedan restaurarse.</span>
+                                <span class="risk-level-badge badge-level-alto">Alto</span>
+                                <span class="risk-gtag-component">Respaldo y Recuperación</span>
+                            </div>
+                            <div class="table-row-item">
+                                <span class="risk-cod-badge">R02</span>
+                                <span class="risk-desc-text">Acceso o manipulación de las bases de datos por personas no autorizadas que ingresan al cuarto de servidores.</span>
+                                <span class="risk-level-badge badge-level-alto">Alto</span>
+                                <span class="risk-gtag-component">Infraestructura Física</span>
+                            </div>
+                            <div class="table-row-item">
+                                <span class="risk-cod-badge">R07</span>
+                                <span class="risk-desc-text">Pérdida de información si falla la sede, porque la copia fuera del local no está actualizada.</span>
+                                <span class="risk-level-badge badge-level-alto">Alto</span>
+                                <span class="risk-gtag-component">Respaldo y Recuperación</span>
+                            </div>
+                            <div class="table-row-item">
+                                <span class="risk-cod-badge">R09</span>
+                                <span class="risk-desc-text">Incidentes que se pierden o se atienden tarde, sin datos para medir la carga de trabajo ni detectar problemas recurrentes.</span>
+                                <span class="risk-level-badge badge-level-alto">Alto</span>
+                                <span class="risk-gtag-component">Operaciones de TI</span>
+                            </div>
+                            <div class="table-row-item">
+                                <span class="risk-cod-badge">R12</span>
+                                <span class="risk-desc-text">Falla de los servidores por sobrecalentamiento o humedad en el cuarto.</span>
+                                <span class="risk-level-badge badge-level-alto">Alto</span>
+                                <span class="risk-gtag-component">Centro de Datos</span>
+                            </div>
+                            <div class="table-row-item row-critical">
+                                <span class="risk-cod-badge badge-cod-muy-alto">R16</span>
+                                <span class="risk-desc-text">Pérdida de acceso a los sistemas en las sedes por caída o lentitud de los enlaces de comunicación.</span>
+                                <span class="risk-level-badge badge-level-muy-alto">Muy Alto</span>
+                                <span class="risk-gtag-component">Dispositivos de Red</span>
+                            </div>
+                            <div class="table-row-item">
+                                <span class="risk-cod-badge">R17</span>
+                                <span class="risk-desc-text">Sustracción de medios con copias de la información fiscal y pérdida del respaldo.</span>
+                                <span class="risk-level-badge badge-level-alto">Alto</span>
+                                <span class="risk-gtag-component">Respaldo y Recuperación</span>
+                            </div>
+                            <div class="table-row-item row-critical">
+                                <span class="risk-cod-badge badge-cod-muy-alto">R20</span>
+                                <span class="risk-desc-text">Manipulación, desconexión o daño de los servidores por personas que ingresan al cuarto para imprimir.</span>
+                                <span class="risk-level-badge badge-level-muy-alto">Muy Alto</span>
+                                <span class="risk-gtag-component">Infraestructura Física</span>
+                            </div>
+                            <div class="table-row-item row-critical">
+                                <span class="risk-cod-badge badge-cod-muy-alto">R24</span>
+                                <span class="risk-desc-text">Paralización del registro de casos fiscales cuando falla alguno de los componentes de los que depende el SGF.</span>
+                                <span class="risk-level-badge badge-level-muy-alto">Muy Alto</span>
+                                <span class="risk-gtag-component">Operaciones de TI</span>
+                            </div>
+                            <div class="table-row-item">
+                                <span class="risk-cod-badge">R26</span>
+                                <span class="risk-desc-text">Explotación de vulnerabilidades sin corrección en estaciones con un sistema operativo sin soporte.</span>
+                                <span class="risk-level-badge badge-level-alto">Alto</span>
+                                <span class="risk-gtag-component">Gestión de Parches</span>
+                            </div>
+                            <div class="table-row-item row-critical">
+                                <span class="risk-cod-badge badge-cod-muy-alto">R27</span>
+                                <span class="risk-desc-text">Infección de equipos y propagación de software malicioso en la red del distrito.</span>
+                                <span class="risk-level-badge badge-level-muy-alto">Muy Alto</span>
+                                <span class="risk-gtag-component">Software y Antivirus</span>
+                            </div>
+                            <div class="table-row-item">
+                                <span class="risk-cod-badge">R28</span>
+                                <span class="risk-desc-text">Paralización de la gestión de accesos y de la recuperación de servicios ante la ausencia del coordinador.</span>
+                                <span class="risk-level-badge badge-level-alto">Alto</span>
+                                <span class="risk-gtag-component">Operaciones de TI</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- CARRUSEL 3D: EVIDENCIAS EN CAMPO (DESPUÉS DEL 3° ELEMENTO, POR ARRIBA DE LOS DEMÁS) -->
+                <!-- ======================================================== -->
+                <div id="risk-carousel-3d-overlay" class="carousel-3d-overlay">
+                    <div class="carousel-3d-header">
+                        <span class="carousel-tag">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                            EVIDENCIA EN CAMPO • 4 DOMINIOS CRÍTICOS
+                        </span>
+                        <h3 class="carousel-title">Inspección Física y Lógica en Sede Central Iquitos</h3>
+                    </div>
+
+                    <div class="carousel-3d-viewport">
+                        <div class="carousel-3d-ring" id="carousel-ring">
+                            <!-- Card 0: Cuarto de Servidores -->
+                            <div class="carousel-3d-card card-3d-0 is-active" id="c3d-card-0">
+                                <div class="c3d-img-box">
+                                    <img src="./img/saladeservidores.jpg" alt="Cuarto de Servidores">
+                                    <span class="c3d-badge">R02 • R12 • R20</span>
+                                </div>
+                                <div class="c3d-body">
+                                    <span class="c3d-domain">A. Seguridad Física y Ambiental</span>
+                                    <h4>Cuarto de Servidores</h4>
+                                    <p>Acceso no restringido para imprimir, sin llave durante la jornada y sin climatización monitoreada ni extintores.</p>
+                                </div>
+                            </div>
+
+                            <!-- Card 1: Bases de Datos -->
+                            <div class="carousel-3d-card card-3d-1" id="c3d-card-1">
+                                <div class="c3d-img-box">
+                                    <img src="./img/gestordebasededatos.jpg" alt="Bases de Datos Fiscales">
+                                    <span class="c3d-badge">R01 • R07 • R17</span>
+                                </div>
+                                <div class="c3d-body">
+                                    <span class="c3d-domain">B. Respaldo y Recuperación</span>
+                                    <h4>Bases de Datos Fiscales</h4>
+                                    <p>Copias de respaldo sin pruebas periódicas de restauración, falta de custodia bajo llave y omisión de resguardo off-site.</p>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Endpoints y Antivirus -->
+                            <div class="carousel-3d-card card-3d-2" id="c3d-card-2">
+                                <div class="c3d-img-box">
+                                    <img src="./img/antivirus.jpg" alt="Seguridad Endpoint y Antivirus">
+                                    <span class="c3d-badge">R26 • R27</span>
+                                </div>
+                                <div class="c3d-body">
+                                    <span class="c3d-domain">C. Software y Parches Lógicos</span>
+                                    <h4>Endpoints & Antivirus</h4>
+                                    <p>Estaciones operando con Windows 10 sin soporte de seguridad, antimalware inactivo y ausencia de bloqueo por inactividad.</p>
+                                </div>
+                            </div>
+
+                            <!-- Card 3: Mesa de Ayuda y SGF -->
+                            <div class="carousel-3d-card card-3d-3" id="c3d-card-3">
+                                <div class="c3d-img-box">
+                                    <img src="./img/mesadeayuda.png" alt="Mesa de Ayuda y SGF">
+                                    <span class="c3d-badge">R09 • R24 • R28</span>
+                                </div>
+                                <div class="c3d-body">
+                                    <span class="c3d-domain">E. Operaciones TI e Incidentes</span>
+                                    <h4>Mesa de Ayuda & SGF</h4>
+                                    <p>Falta de registro formal de peticiones e incidentes, caídas del SGF sin diagnóstico local y dependencia de un solo coordinador.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-3d-dots">
+                        <span class="c3d-dot active" id="c3d-dot-0"></span>
+                        <span class="c3d-dot" id="c3d-dot-1"></span>
+                        <span class="c3d-dot" id="c3d-dot-2"></span>
+                        <span class="c3d-dot" id="c3d-dot-3"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- ESCENA 3: PASO 2 - CONTROLES ESPERADOS (PARÁMETROS GTAG) -->
+            <!-- ======================================================== -->
+            <div id="scene3" class="scene">
+                <div class="scene-header-box">
+                    <span class="section-tag tag-blue">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        APLICACIÓN PRÁCTICA • PASO 2
+                    </span>
+                    <h2 class="title-hero" style="font-size: 50px;">Identificación de Controles Esperados</h2>
+                    <p class="subtitle-hero" style="font-size: 24px;">Parámetros de Evaluación GTAG: El parámetro técnico preventivo, detectivo y correctivo para mitigar los 12 riesgos priorizados.</p>
+                </div>
+
+                <!-- TABLA DE CONTROLES ESPERADOS GTAG -->
+                <div class="controls-table-container" id="controls-table-box">
+                    <div class="controls-header-bar">
+                        <div class="cth-col cth-component">COMPONENTE GTAG</div>
+                        <div class="cth-col cth-risk">RIESGO</div>
+                        <div class="cth-col cth-control">CONTROL ESPERADO (PARÁMETRO DE EVALUACIÓN)</div>
+                    </div>
+                    <div class="controls-scroll-viewport">
+                        <div class="controls-rows-track" id="controls-rows-track">
+                            <div class="controls-row-item">
+                                <span class="component-name-cell">A. Controles Ambientales y de Seguridad Física</span>
+                                <span class="risk-cod-badge">R02</span>
+                                <span class="control-desc-cell">Existencia de mecanismos de restricción de acceso físico en el cuarto de servidores, bajo llave, uso exclusivo para personal autorizado y registro documentado de ingresos.</span>
+                            </div>
+                            <div class="controls-row-item">
+                                <span class="component-name-cell">A. Controles Ambientales y de Seguridad Física</span>
+                                <span class="risk-cod-badge">R12</span>
+                                <span class="control-desc-cell">Cuarto de servidores con condiciones ambientales controladas, incluyendo sistema de climatización, monitoreo de temperatura, ventanas cerradas (protección perimetral) y presencia de extintor de incendios.</span>
+                            </div>
+                            <div class="controls-row-item row-critical">
+                                <span class="component-name-cell">A. Controles Ambientales y de Seguridad Física</span>
+                                <span class="risk-cod-badge badge-cod-muy-alto">R20</span>
+                                <span class="control-desc-cell">Políticas y controles de acceso que prohíban estrictamente el ingreso de personal de otras áreas (no técnico) al cuarto de servidores para el uso de equipos periféricos comunes (como impresoras).</span>
+                            </div>
+                            <div class="controls-row-item">
+                                <span class="component-name-cell">B. Respaldo y Recuperación</span>
+                                <span class="risk-cod-badge">R01</span>
+                                <span class="control-desc-cell">Dado que la administración de bases de datos recae en la Oficina Central (proveedor interno), el control local consiste en solicitar formalmente al DBA nacional y registrar los resultados de las pruebas de restauración periódicas.</span>
+                            </div>
+                            <div class="controls-row-item">
+                                <span class="component-name-cell">B. Respaldo y Recuperación</span>
+                                <span class="risk-cod-badge">R07</span>
+                                <span class="control-desc-cell">Ejecución de copias de respaldo programadas según calendario, con almacenamiento seguro fuera del local principal (off-site) y pruebas de restauración documentadas.</span>
+                            </div>
+                            <div class="controls-row-item">
+                                <span class="component-name-cell">B. Respaldo y Recuperación</span>
+                                <span class="risk-cod-badge">R17</span>
+                                <span class="control-desc-cell">Medios físicos de respaldo debidamente inventariados, cifrados para proteger la confidencialidad de la información y custodiados bajo llave con salvaguardas físicas.</span>
+                            </div>
+                            <div class="controls-row-item">
+                                <span class="component-name-cell">C. Software, Gestión de Parches y Seguridad Lógica</span>
+                                <span class="risk-cod-badge">R26</span>
+                                <span class="control-desc-cell">Estaciones de trabajo operando con sistemas con soporte vigente del fabricante, actualizaciones de seguridad aplicadas, configuración segura (incluyendo bloqueo automático por inactividad) y cifrado de información.</span>
+                            </div>
+                            <div class="controls-row-item row-critical">
+                                <span class="component-name-cell">C. Software, Gestión de Parches y Seguridad Lógica</span>
+                                <span class="risk-cod-badge badge-cod-muy-alto">R27</span>
+                                <span class="control-desc-cell">Despliegue centralizado de software antimalware activo y con firmas actualizadas, filtrado de tráfico web de entrada y programas de capacitación a usuarios en seguridad de la información.</span>
+                            </div>
+                            <div class="controls-row-item row-critical">
+                                <span class="component-name-cell">D. Redes y Telecomunicaciones</span>
+                                <span class="risk-cod-badge badge-cod-muy-alto">R16</span>
+                                <span class="control-desc-cell">Uso de herramientas y procedimientos de monitoreo proactivo para medir y reportar la disponibilidad y capacidad de los enlaces de comunicaciones, escalando informes a la Oficina Central.</span>
+                            </div>
+                            <div class="controls-row-item">
+                                <span class="component-name-cell">E. Operaciones de TI y Gestión de Incidentes</span>
+                                <span class="risk-cod-badge">R09</span>
+                                <span class="control-desc-cell">Sistema formal de mesa de ayuda que registre la totalidad de peticiones e incidentes locales, clasificándolos por prioridad con tiempos de respuesta definidos.</span>
+                            </div>
+                            <div class="controls-row-item row-critical">
+                                <span class="component-name-cell">E. Operaciones de TI y Gestión de Incidentes</span>
+                                <span class="risk-cod-badge badge-cod-muy-alto">R24</span>
+                                <span class="control-desc-cell">Procedimiento documentado de diagnóstico local ante caídas del Sistema de Gestión Fiscal (SGF), registrando las causas y evidenciando el escalamiento oportuno y seguimiento al equipo nacional (proveedor central).</span>
+                            </div>
+                            <div class="controls-row-item">
+                                <span class="component-name-cell">E. Operaciones de TI y Gestión de Incidentes</span>
+                                <span class="risk-cod-badge">R28</span>
+                                <span class="control-desc-cell">Existencia de personal técnico de respaldo debidamente designado, acompañado de manuales o procedimientos operativos documentados que permitan mantener la operatividad ante la ausencia del coordinador.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- ESCENA 4: PASO 3 - SOLICITUD DE EVIDENCIA (E1 - E19)   -->
+            <!-- ======================================================== -->
+            <div id="scene4" class="scene">
+                <div class="scene-header-box">
+                    <span class="section-tag tag-blue">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        APLICACIÓN PRÁCTICA • PASO 3
+                    </span>
+                    <h2 class="title-hero" style="font-size: 50px;">Solicitud de Evidencias e Instrumentos</h2>
+                    <p class="subtitle-hero" style="font-size: 24px;">Triangulación Metodológica: 17 evidencias documentadas mediante Indagación, Observación Directa e Inspección.</p>
+                </div>
+
+                <!-- TABS / PILLS RESUMEN DE LAS 3 TÉCNICAS -->
+                <div class="evidence-techniques-pills">
+                    <div class="tech-pill pill-indagacion" id="pill-indagacion">
+                        <div class="tech-pill-icon-box icon-indagacion">
+                            <svg class="svg-anim-indagacion" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                <circle class="voice-dot dot-1" cx="9" cy="10" r="1" fill="currentColor"></circle>
+                                <circle class="voice-dot dot-2" cx="12" cy="10" r="1" fill="currentColor"></circle>
+                                <circle class="voice-dot dot-3" cx="15" cy="10" r="1" fill="currentColor"></circle>
+                            </svg>
+                        </div>
+                        <div class="tech-pill-info">
+                            <strong>INDAGACIÓN (4)</strong>
+                            <small>Cuestionarios y Entrevistas</small>
+                        </div>
+                    </div>
+                    <div class="tech-pill pill-observacion" id="pill-observacion">
+                        <div class="tech-pill-icon-box icon-observacion">
+                            <svg class="svg-anim-observacion" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path>
+                                <circle class="eye-pupil" cx="12" cy="12" r="3" fill="currentColor"></circle>
+                            </svg>
+                        </div>
+                        <div class="tech-pill-info">
+                            <strong>OBSERVACIÓN DIRECTA (2)</strong>
+                            <small>Inspección Física In Situ</small>
+                        </div>
+                    </div>
+                    <div class="tech-pill pill-inspeccion" id="pill-inspeccion">
+                        <div class="tech-pill-icon-box icon-inspeccion">
+                            <svg class="svg-anim-inspeccion" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line class="doc-line line-1" x1="16" y1="13" x2="8" y2="13"></line>
+                                <line class="doc-line line-2" x1="16" y1="17" x2="8" y2="17"></line>
+                                <line class="doc-line line-3" x1="10" y1="9" x2="8" y2="9"></line>
+                            </svg>
+                        </div>
+                        <div class="tech-pill-info">
+                            <strong>INSPECCIÓN DOCUMENTAL (11)</strong>
+                            <small>Planes, ROF, Leyes y Registros</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABLA DE LAS 17 EVIDENCIAS GTAG -->
+                <div class="evidence-table-container" id="evidence-table-box">
+                    <div class="scan-laser-beam" id="evidence-scan-beam"></div>
+
+                    <div class="evidence-header-bar">
+                        <div class="eth-col eth-cod">CÓDIGO</div>
+                        <div class="eth-col eth-desc">DESCRIPCIÓN DE LA EVIDENCIA</div>
+                        <div class="eth-col eth-tech">TÉCNICA DE AUDITORÍA</div>
+                    </div>
+                    <div class="evidence-scroll-viewport">
+                        <div class="evidence-rows-grid" id="evidence-rows-grid">
+                            <div class="evidence-row-item row-tech-indagacion" data-tech="indagacion">
+                                <span class="evidence-cod-badge">E1</span>
+                                <span class="evidence-desc-cell">Cuestionario al Analista Coordinador de TI 18/09/2026</span>
+                                <span class="tech-badge tech-badge-indagacion">Indagación</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-inspeccion" data-tech="inspeccion">
+                                <span class="evidence-cod-badge">E2</span>
+                                <span class="evidence-desc-cell">Plan de mantenimiento preventivo 2022</span>
+                                <span class="tech-badge tech-badge-inspeccion">Inspección documental</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-inspeccion" data-tech="inspeccion">
+                                <span class="evidence-cod-badge">E3</span>
+                                <span class="evidence-desc-cell">Reglamento de Organización y Funciones 001-2018-MP-FN v3.0</span>
+                                <span class="tech-badge tech-badge-inspeccion">Inspección documental</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-observacion" data-tech="observacion">
+                                <span class="evidence-cod-badge badge-cod-obs">E4</span>
+                                <span class="evidence-desc-cell">Ficha de observación directa del área de informática, 18/09/2026</span>
+                                <span class="tech-badge tech-badge-observacion">Observación directa</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-indagacion" data-tech="indagacion">
+                                <span class="evidence-cod-badge">E5</span>
+                                <span class="evidence-desc-cell">Entrevista complementaria al Analista Coordinador de TI, setiembre 2026</span>
+                                <span class="tech-badge tech-badge-indagacion">Indagación</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-inspeccion" data-tech="inspeccion">
+                                <span class="evidence-cod-badge">E6</span>
+                                <span class="evidence-desc-cell">Plan de Continuidad Operativa, R.J. 0506-2025-ANC-MP-J</span>
+                                <span class="tech-badge tech-badge-inspeccion">Inspección documental</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-inspeccion" data-tech="inspeccion">
+                                <span class="evidence-cod-badge">E7</span>
+                                <span class="evidence-desc-cell">Inventario de equipos 2025</span>
+                                <span class="tech-badge tech-badge-inspeccion">Inspección documental</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-inspeccion" data-tech="inspeccion">
+                                <span class="evidence-cod-badge">E8</span>
+                                <span class="evidence-desc-cell">Plan de mantenimiento preventivo 2026 (en elaboración)</span>
+                                <span class="tech-badge tech-badge-inspeccion">Inspección documental</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-inspeccion" data-tech="inspeccion">
+                                <span class="evidence-cod-badge">E9</span>
+                                <span class="evidence-desc-cell">Directorio telefónico del Distrito Fiscal de Loreto</span>
+                                <span class="tech-badge tech-badge-inspeccion">Inspección documental</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-inspeccion" data-tech="inspeccion">
+                                <span class="evidence-cod-badge">E10</span>
+                                <span class="evidence-desc-cell">Ley N.° 29733 - Protección de Datos Personales</span>
+                                <span class="tech-badge tech-badge-inspeccion">Inspección documental</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-inspeccion" data-tech="inspeccion">
+                                <span class="evidence-cod-badge">E11</span>
+                                <span class="evidence-desc-cell">Resolución SGTD N.° 003-2023-PCM/SGTD - Lineamientos de SGSI para entidades públicas</span>
+                                <span class="tech-badge tech-badge-inspeccion">Inspección documental</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-inspeccion" data-tech="inspeccion">
+                                <span class="evidence-cod-badge">E12</span>
+                                <span class="evidence-desc-cell">Decreto Legislativo N.° 1412 - Ley de Gobierno Digital</span>
+                                <span class="tech-badge tech-badge-inspeccion">Inspección documental</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-inspeccion" data-tech="inspeccion">
+                                <span class="evidence-cod-badge">E13</span>
+                                <span class="evidence-desc-cell">Código Procesal Penal, art. 324 - Reserva de la investigación preparatoria</span>
+                                <span class="tech-badge tech-badge-inspeccion">Inspección documental</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-indagacion" data-tech="indagacion" id="row-ev-14">
+                                <span class="evidence-cod-badge">E14</span>
+                                <span class="evidence-desc-cell">Indagación informal a personal del área de informática, setiembre 2026</span>
+                                <span class="tech-badge tech-badge-indagacion">Indagación</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-indagacion" data-tech="indagacion" id="row-ev-17">
+                                <span class="evidence-cod-badge">E17</span>
+                                <span class="evidence-desc-cell">Cuestionario de auditoría al Analista Coordinador de TI, 01/10/2026</span>
+                                <span class="tech-badge tech-badge-indagacion">Indagación</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-observacion" data-tech="observacion">
+                                <span class="evidence-cod-badge badge-cod-obs">E18</span>
+                                <span class="evidence-desc-cell">Ficha de observación directa del área de informática y del cuarto de servidores, 01/10/2026</span>
+                                <span class="tech-badge tech-badge-observacion">Observación directa</span>
+                            </div>
+                            <div class="evidence-row-item row-tech-inspeccion" data-tech="inspeccion">
+                                 <span class="evidence-cod-badge">E19</span>
+                                <span class="evidence-desc-cell">Directiva N.° 006-2019-CG/INTEG - Implementación del Sistema de Control Interno en las entidades del Estado</span>
+                                <span class="tech-badge tech-badge-inspeccion">Inspección documental</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- ESCENA 5: PASO 4 (PARTE 1) - PRUEBAS DE CUMPLIMIENTO     -->
+            <!-- ======================================================== -->
+            <div id="scene5" class="scene">
+                <div class="scene-header-box">
+                    <span class="section-tag tag-blue">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        APLICACIÓN PRÁCTICA • PASO 4 (PARTE 1)
+                    </span>
+                    <h2 class="title-hero" style="font-size: 46px;">Diseño y Ejecución de Pruebas de Cumplimiento</h2>
+                    <p class="subtitle-hero" style="font-size: 22px;">Evaluación de Efectividad Operativa en Infraestructura Física, Respaldos y Seguridad Lógica.</p>
+                </div>
+
+                <!-- Barra de Resumen / Métricas de Ejecución -->
+                <div class="tests-summary-bar">
+                    <div class="test-stat-card">
+                        <span class="test-stat-label">Componentes Evaluados</span>
+                        <strong class="test-stat-val val-blue">3 Componentes (A, B, C)</strong>
+                    </div>
+                    <div class="test-stat-card">
+                        <span class="test-stat-label">Procedimientos Ejecutados</span>
+                        <strong class="test-stat-val val-cyan">6 Pruebas de Auditoría</strong>
+                    </div>
+                    <div class="test-stat-card">
+                        <span class="test-stat-label">Áreas Evaluadas</span>
+                        <strong class="test-stat-val val-amber">Centro de Datos • Respaldos • Software</strong>
+                    </div>
+                </div>
+
+                <!-- Tabla de Pruebas Parte 1 -->
+                <div class="tests-table-container" id="tests-table-box-5">
+                    <div class="tests-header-bar">
+                        <div class="tth-col tth-comp">COMPONENTE GTAG</div>
+                        <div class="tth-col tth-risk">RIESGOS</div>
+                        <div class="tth-col tth-proc">PROCEDIMIENTO Y PRUEBA DE CUMPLIMIENTO</div>
+                        <div class="tth-col tth-evid">EVIDENCIA</div>
+                    </div>
+                    <div class="tests-scroll-viewport">
+                        <div class="tests-rows-grid" id="tests-rows-grid-5">
+                            <!-- Fila 1: Componente A - R02 y R20 -->
+                            <div class="test-row-item test-row-comp-a" id="row-test-1">
+                                <div class="comp-cell">
+                                    <span class="comp-badge">A. Seguridad Física</span>
+                                </div>
+                                <div class="risk-cell">
+                                    <span class="risk-code-badge risk-high">R02</span>
+                                    <span class="risk-code-badge risk-crit">R20</span>
+                                </div>
+                                <div class="proc-cell">
+                                    Verificar mediante observación directa en múltiples visitas y revisión de cuestionarios formales e informales el uso de la cerradura, la restricción de acceso y el registro de ingresos al cuarto de servidores.
+                                </div>
+                                <div class="evid-cell">
+                                    <span class="ev-badge ev-obs">E4</span>
+                                    <span class="ev-badge ev-obs">E18</span>
+                                    <span class="ev-badge ev-ind">E5</span>
+                                    <span class="ev-badge ev-ind">E17</span>
+                                </div>
+                            </div>
+
+                            <!-- Fila 2: Componente A - R12 -->
+                            <div class="test-row-item test-row-comp-a" id="row-test-2">
+                                <div class="comp-cell">
+                                    <span class="comp-badge">A. Seguridad Física</span>
+                                </div>
+                                <div class="risk-cell">
+                                    <span class="risk-code-badge risk-high">R12</span>
+                                </div>
+                                <div class="proc-cell">
+                                    Inspeccionar físicamente y mediante entrevistas el cuarto de servidores para validar las condiciones ambientales, la ubicación de los equipos frente a amenazas físicas y la presencia de controles ambientales (como extintores).
+                                </div>
+                                <div class="evid-cell">
+                                    <span class="ev-badge ev-obs">E4</span>
+                                    <span class="ev-badge ev-obs">E18</span>
+                                    <span class="ev-badge ev-ind">E5</span>
+                                </div>
+                            </div>
+
+                            <!-- Fila 3: Componente B - R01 y R07 -->
+                            <div class="test-row-item test-row-comp-b" id="row-test-3">
+                                <div class="comp-cell">
+                                    <span class="comp-badge">B. Respaldo y Recuperación</span>
+                                </div>
+                                <div class="risk-cell">
+                                    <span class="risk-code-badge risk-high">R01</span>
+                                    <span class="risk-code-badge risk-high">R07</span>
+                                </div>
+                                <div class="proc-cell">
+                                    Evaluar mediante inspección documental cruzada con indagación la programación formal de copias de seguridad en el Plan de Continuidad Operativa, el cumplimiento del almacenamiento fuera del local y la ejecución periódica de pruebas de restauración.
+                                </div>
+                                <div class="evid-cell">
+                                    <span class="ev-badge ev-ind">E1</span>
+                                    <span class="ev-badge ev-ind">E5</span>
+                                    <span class="ev-badge ev-doc">E6</span>
+                                </div>
+                            </div>
+
+                            <!-- Fila 4: Componente B - R17 -->
+                            <div class="test-row-item test-row-comp-b" id="row-test-4">
+                                <div class="comp-cell">
+                                    <span class="comp-badge">B. Respaldo y Recuperación</span>
+                                </div>
+                                <div class="risk-cell">
+                                    <span class="risk-code-badge risk-high">R17</span>
+                                </div>
+                                <div class="proc-cell">
+                                    Observar en campo y contrastar con los registros documentales las medidas físicas de protección, resguardo bajo llave y el inventario formal de los medios de respaldo de información.
+                                </div>
+                                <div class="evid-cell">
+                                    <span class="ev-badge ev-obs">E4</span>
+                                    <span class="ev-badge ev-ind">E5</span>
+                                    <span class="ev-badge ev-doc">E7</span>
+                                </div>
+                            </div>
+
+                            <!-- Fila 5: Componente C - R26 -->
+                            <div class="test-row-item test-row-comp-c" id="row-test-5">
+                                <div class="comp-cell">
+                                    <span class="comp-badge">C. Software y Parches</span>
+                                </div>
+                                <div class="risk-cell">
+                                    <span class="risk-code-badge risk-high">R26</span>
+                                </div>
+                                <div class="proc-cell">
+                                    Inspeccionar el inventario institucional y contrastar mediante indagación informal el uso de sistemas operativos sin soporte y la falta de cifrado.
+                                </div>
+                                <div class="evid-cell">
+                                    <span class="ev-badge ev-doc">E7</span>
+                                    <span class="ev-badge ev-ind">E14</span>
+                                </div>
+                            </div>
+
+                            <!-- Fila 6: Componente C - R27 -->
+                            <div class="test-row-item test-row-comp-c" id="row-test-6">
+                                <div class="comp-cell">
+                                    <span class="comp-badge">C. Software y Parches</span>
+                                </div>
+                                <div class="risk-cell">
+                                    <span class="risk-code-badge risk-crit">R27</span>
+                                </div>
+                                <div class="proc-cell">
+                                    Verificar mediante observación directa en campo y entrevista el estado inactivo de la protección antimalware.
+                                </div>
+                                <div class="evid-cell">
+                                    <span class="ev-badge ev-obs">E18</span>
+                                    <span class="ev-badge ev-ind">E5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- ESCENA 6: PASO 4 (PARTE 2) - PRUEBAS DE CUMPLIMIENTO     -->
+            <!-- ======================================================== -->
+            <div id="scene6" class="scene">
+                <div class="scene-header-box">
+                    <span class="section-tag tag-blue">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                        APLICACIÓN PRÁCTICA • PASO 4 (PARTE 2)
+                    </span>
+                    <h2 class="title-hero" style="font-size: 46px;">Diseño y Ejecución de Pruebas de Cumplimiento</h2>
+                    <p class="subtitle-hero" style="font-size: 22px;">Evaluación en Redes, Telecomunicaciones, Mesa de Ayuda y Continuidad Operativa de TI.</p>
+                </div>
+
+                <!-- Barra de Resumen / Métricas de Ejecución -->
+                <div class="tests-summary-bar">
+                    <div class="test-stat-card">
+                        <span class="test-stat-label">Componentes Evaluados</span>
+                        <strong class="test-stat-val val-blue">2 Componentes (D, E)</strong>
+                    </div>
+                    <div class="test-stat-card">
+                        <span class="test-stat-label">Procedimientos Ejecutados</span>
+                        <strong class="test-stat-val val-cyan">4 Pruebas de Auditoría</strong>
+                    </div>
+                    <div class="test-stat-card">
+                        <span class="test-stat-label">Áreas Evaluadas</span>
+                        <strong class="test-stat-val val-amber">Red Provincial • Mesa de Ayuda • SGF</strong>
+                    </div>
+                </div>
+
+                <!-- Tabla de Pruebas Parte 2 -->
+                <div class="tests-table-container" id="tests-table-box-6">
+                    <div class="tests-header-bar">
+                        <div class="tth-col tth-comp">COMPONENTE GTAG</div>
+                        <div class="tth-col tth-risk">RIESGOS</div>
+                        <div class="tth-col tth-proc">PROCEDIMIENTO Y PRUEBA DE CUMPLIMIENTO</div>
+                        <div class="tth-col tth-evid">EVIDENCIA</div>
+                    </div>
+                    <div class="tests-scroll-viewport">
+                        <div class="tests-rows-grid" id="tests-rows-grid-6">
+                            <!-- Fila 1: Componente D - R16 -->
+                            <div class="test-row-item test-row-comp-d" id="row-test-7">
+                                <div class="comp-cell">
+                                    <span class="comp-badge">D. Redes y Telecomunicaciones</span>
+                                </div>
+                                <div class="risk-cell">
+                                    <span class="risk-code-badge risk-crit">R16</span>
+                                </div>
+                                <div class="proc-cell">
+                                    Solicitar documentales de informes de monitoreo de enlaces y, ante su inexistencia, sustentar mediante entrevista e indagación formal la falta de monitoreo proactivo.
+                                </div>
+                                <div class="evid-cell">
+                                    <span class="ev-badge ev-ind">E5</span>
+                                    <span class="ev-badge ev-ind">E17</span>
+                                </div>
+                            </div>
+
+                            <!-- Fila 2: Componente E - R09 -->
+                            <div class="test-row-item test-row-comp-e" id="row-test-8">
+                                <div class="comp-cell">
+                                    <span class="comp-badge">E. Operaciones de TI e Incidentes</span>
+                                </div>
+                                <div class="risk-cell">
+                                    <span class="risk-code-badge risk-high">R09</span>
+                                </div>
+                                <div class="proc-cell">
+                                    Solicitar la revisión del sistema de mesa de ayuda; al constatar físicamente la falta de tickets o registros, sustentar la observación mediante entrevista y cuestionario.
+                                </div>
+                                <div class="evid-cell">
+                                    <span class="ev-badge ev-ind">E1</span>
+                                    <span class="ev-badge ev-obs">E4</span>
+                                    <span class="ev-badge ev-ind">E5</span>
+                                </div>
+                            </div>
+
+                            <!-- Fila 3: Componente E - R24 -->
+                            <div class="test-row-item test-row-comp-e" id="row-test-9">
+                                <div class="comp-cell">
+                                    <span class="comp-badge">E. Operaciones de TI e Incidentes</span>
+                                </div>
+                                <div class="risk-cell">
+                                    <span class="risk-code-badge risk-crit">R24</span>
+                                </div>
+                                <div class="proc-cell">
+                                    Inspeccionar el Plan de Continuidad Operativa cruzado con entrevista para validar la ausencia de diagnóstico local formal y falta de registro de escalamiento al equipo nacional ante caídas del sistema.
+                                </div>
+                                <div class="evid-cell">
+                                    <span class="ev-badge ev-doc">E6</span>
+                                    <span class="ev-badge ev-ind">E5</span>
+                                </div>
+                            </div>
+
+                            <!-- Fila 4: Componente E - R28 -->
+                            <div class="test-row-item test-row-comp-e" id="row-test-10">
+                                <div class="comp-cell">
+                                    <span class="comp-badge">E. Operaciones de TI e Incidentes</span>
+                                </div>
+                                <div class="risk-cell">
+                                    <span class="risk-code-badge risk-high">R28</span>
+                                </div>
+                                <div class="proc-cell">
+                                    Inspeccionar el Reglamento de Organización y Funciones y el Plan de Continuidad Operativa, corroborado con indagación, comprobando la falta de personal de respaldo designado formalmente.
+                                </div>
+                                <div class="evid-cell">
+                                    <span class="ev-badge ev-doc">E3</span>
+                                    <span class="ev-badge ev-doc">E6</span>
+                                    <span class="ev-badge ev-ind">E1</span>
+                                    <span class="ev-badge ev-ind">E5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- ESCENA 7: PASO 5 (PARTE 1) - DESVIACIONES IDENTIFICADAS   -->
+            <!-- ======================================================== -->
+            <div id="scene7" class="scene">
+                <div class="scene-header-box">
+                    <span class="section-tag tag-crimson">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        APLICACIÓN PRÁCTICA • PASO 5 (PARTE 1)
+                    </span>
+                    <h2 class="title-hero" style="font-size: 46px;">Determinación de Desviaciones y Hallazgos</h2>
+                    <p class="subtitle-hero" style="font-size: 22px;">Incumplimientos Críticos en Seguridad Física, Ambiental y Respaldo de Información.</p>
+                </div>
+
+                <!-- Barra de Resumen / Métricas de Desviaciones -->
+                <div class="dev-summary-bar">
+                    <div class="dev-stat-card">
+                        <span class="dev-stat-label">Componentes Evaluados</span>
+                        <strong class="dev-stat-val val-purple">2 Dominios Críticos (A y B)</strong>
+                    </div>
+                    <div class="dev-stat-card">
+                        <span class="dev-stat-label">Desviaciones Identificadas</span>
+                        <strong class="dev-stat-val val-crimson">5 Hallazgos Formales</strong>
+                    </div>
+                    <div class="dev-stat-card">
+                        <span class="dev-stat-label">Nivel de Exposición</span>
+                        <strong class="dev-stat-val val-orange">Riesgo Residual Muy Alto</strong>
+                    </div>
+                </div>
+
+                <!-- Tabla de Desviaciones Parte 1 -->
+                <div class="deviations-table-container" id="dev-table-box-7">
+                    <div class="deviations-header-bar">
+                        <div class="dth-comp">COMPONENTE GTAG</div>
+                        <div class="dth-risk">RIESGOS</div>
+                        <div class="dth-finding">DESVIACIÓN IDENTIFICADA (HALLAZGO)</div>
+                    </div>
+                    <div class="deviations-scroll-viewport">
+                        <div class="deviations-rows-grid" id="dev-rows-grid-7">
+                            <!-- Fila 1: Componente A - R02 y R20 -->
+                            <div class="deviation-row-item dev-row-comp-a" id="row-dev-1">
+                                <div class="dev-comp-cell">
+                                    <span class="dev-comp-badge badge-comp-a">A. Controles Ambientales y Seguridad Física</span>
+                                </div>
+                                <div class="dev-risk-cell">
+                                    <span class="risk-code-badge risk-high">R02</span>
+                                    <span class="risk-code-badge risk-crit">R20</span>
+                                </div>
+                                <div class="dev-finding-cell">
+                                    <div class="finding-callout">
+                                        No se registran los ingresos, el personal de Indicadores entra sin acompañamiento y la cerradura no se usa durante la jornada. No hay procedimiento de autorización, el acceso no se basa en el cargo y la capacitación en seguridad física es ocasional.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fila 2: Componente A - R12 -->
+                            <div class="deviation-row-item dev-row-comp-a" id="row-dev-2">
+                                <div class="dev-comp-cell">
+                                    <span class="dev-comp-badge badge-comp-a">A. Controles Ambientales y Seguridad Física</span>
+                                </div>
+                                <div class="dev-risk-cell">
+                                    <span class="risk-code-badge risk-crit">R12</span>
+                                </div>
+                                <div class="dev-finding-cell">
+                                    <div class="finding-callout">
+                                        No se identificaron las amenazas ambientales del cuarto ni hay una política sobre lo que puede guardarse en él, que no se mantiene libre de materiales. La ubicación no protege de calor, humedad y polvo y no hay extintores, alarmas ni procedimiento de respuesta.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fila 3: Componente B - R01 -->
+                            <div class="deviation-row-item dev-row-comp-b" id="row-dev-3">
+                                <div class="dev-comp-cell">
+                                    <span class="dev-comp-badge badge-comp-b">B. Respaldo y Recuperación</span>
+                                </div>
+                                <div class="dev-risk-cell">
+                                    <span class="risk-code-badge risk-crit">R01</span>
+                                </div>
+                                <div class="dev-finding-cell">
+                                    <div class="finding-callout">
+                                        No existe una programación de pruebas de restauración ni se solicita al DBA nacional evidencia de su ejecución. Los requisitos de almacenamiento local y remoto no están formalizados.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fila 4: Componente B - R07 -->
+                            <div class="deviation-row-item dev-row-comp-b" id="row-dev-4">
+                                <div class="dev-comp-cell">
+                                    <span class="dev-comp-badge badge-comp-b">B. Respaldo y Recuperación</span>
+                                </div>
+                                <div class="dev-risk-cell">
+                                    <span class="risk-code-badge risk-crit">R07</span>
+                                </div>
+                                <div class="dev-finding-cell">
+                                    <div class="finding-callout">
+                                        El calendario de respaldo remoto no se cumple, los requisitos de almacenamiento fuera del local no están formalizados y no se prueban periódicamente las copias.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fila 5: Componente B - R17 -->
+                            <div class="deviation-row-item dev-row-comp-b" id="row-dev-5">
+                                <div class="dev-comp-cell">
+                                    <span class="dev-comp-badge badge-comp-b">B. Respaldo y Recuperación</span>
+                                </div>
+                                <div class="dev-risk-cell">
+                                    <span class="risk-code-badge risk-high">R17</span>
+                                </div>
+                                <div class="dev-finding-cell">
+                                    <div class="finding-callout">
+                                        No existe procedimiento para la custodia de los medios, no se evidenció cifrado ni inventario, el acceso no se limita y no hay salvaguardas físicas.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- ESCENA 8: PASO 5 (PARTE 2) - DESVIACIONES IDENTIFICADAS   -->
+            <!-- ======================================================== -->
+            <div id="scene8" class="scene">
+                <div class="scene-header-box">
+                    <span class="section-tag tag-crimson">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        APLICACIÓN PRÁCTICA • PASO 5 (PARTE 2)
+                    </span>
+                    <h2 class="title-hero" style="font-size: 46px;">Determinación de Desviaciones y Hallazgos</h2>
+                    <p class="subtitle-hero" style="font-size: 22px;">Incumplimientos en Software Lógico, Red Provincial y Operaciones de TI.</p>
+                </div>
+
+                <!-- Barra de Resumen / Métricas de Desviaciones -->
+                <div class="dev-summary-bar">
+                    <div class="dev-stat-card">
+                        <span class="dev-stat-label">Componentes Evaluados</span>
+                        <strong class="dev-stat-val val-purple">3 Dominios Críticos (C, D y E)</strong>
+                    </div>
+                    <div class="dev-stat-card">
+                        <span class="dev-stat-label">Desviaciones Identificadas</span>
+                        <strong class="dev-stat-val val-crimson">6 Hallazgos Formales</strong>
+                    </div>
+                    <div class="dev-stat-card">
+                        <span class="dev-stat-label">Impacto Operativo</span>
+                        <strong class="dev-stat-val val-orange">Alta Vulnerabilidad Institucional</strong>
+                    </div>
+                </div>
+
+                <!-- Tabla de Desviaciones Parte 2 -->
+                <div class="deviations-table-container" id="dev-table-box-8">
+                    <div class="deviations-header-bar">
+                        <div class="dth-comp">COMPONENTE GTAG</div>
+                        <div class="dth-risk">RIESGOS</div>
+                        <div class="dth-finding">DESVIACIÓN IDENTIFICADA (HALLAZGO)</div>
+                    </div>
+                    <div class="deviations-scroll-viewport">
+                        <div class="deviations-rows-grid" id="dev-rows-grid-8">
+                            <!-- Fila 1: Componente C - R26 -->
+                            <div class="deviation-row-item dev-row-comp-c" id="row-dev-6">
+                                <div class="dev-comp-cell">
+                                    <span class="dev-comp-badge badge-comp-c">C. Software y Seguridad Lógica</span>
+                                </div>
+                                <div class="dev-risk-cell">
+                                    <span class="risk-code-badge risk-crit">R26</span>
+                                </div>
+                                <div class="dev-finding-cell">
+                                    <div class="finding-callout">
+                                        Los sistemas no se configuran de forma segura y las estaciones con Windows 10 no reciben actualizaciones. El bloqueo automático por inactividad y el cifrado de información son nulos.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fila 2: Componente C - R27 -->
+                            <div class="deviation-row-item dev-row-comp-c" id="row-dev-7">
+                                <div class="dev-comp-cell">
+                                    <span class="dev-comp-badge badge-comp-c">C. Software y Seguridad Lógica</span>
+                                </div>
+                                <div class="dev-risk-cell">
+                                    <span class="risk-code-badge risk-crit">R27</span>
+                                </div>
+                                <div class="dev-finding-cell">
+                                    <div class="finding-callout">
+                                        La protección antimalware no está activa y actualizada en todas las estaciones y no hay filtrado de tráfico web. La capacitación sobre seguridad de la información es ocasional y no hay distribución centralizada de la protección.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fila 3: Componente D - R16 -->
+                            <div class="deviation-row-item dev-row-comp-d" id="row-dev-8">
+                                <div class="dev-comp-cell">
+                                    <span class="dev-comp-badge badge-comp-d">D. Redes y Telecomunicaciones</span>
+                                </div>
+                                <div class="dev-risk-cell">
+                                    <span class="risk-code-badge risk-crit">R16</span>
+                                </div>
+                                <div class="dev-finding-cell">
+                                    <div class="finding-callout">
+                                        No se elaboran informes de capacidad de los enlaces ni existe un proceso de recopilación de datos de disponibilidad. El monitoreo es puramente reactivo.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fila 4: Componente E - R09 -->
+                            <div class="deviation-row-item dev-row-comp-e" id="row-dev-9">
+                                <div class="dev-comp-cell">
+                                    <span class="dev-comp-badge badge-comp-e">E. Operaciones TI e Incidentes</span>
+                                </div>
+                                <div class="dev-risk-cell">
+                                    <span class="risk-code-badge risk-high">R09</span>
+                                </div>
+                                <div class="dev-finding-cell">
+                                    <div class="finding-callout">
+                                        No se registran todas las peticiones e incidentes, la clasificación solo se aplica a lo que ingresa por la plataforma y no se prioriza según tiempos de respuesta definidos.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fila 5: Componente E - R24 -->
+                            <div class="deviation-row-item dev-row-comp-e" id="row-dev-10">
+                                <div class="dev-comp-cell">
+                                    <span class="dev-comp-badge badge-comp-e">E. Operaciones TI e Incidentes</span>
+                                </div>
+                                <div class="dev-risk-cell">
+                                    <span class="risk-code-badge risk-crit">R24</span>
+                                </div>
+                                <div class="dev-finding-cell">
+                                    <div class="finding-callout">
+                                        El diagnóstico es informal y depende del coordinador. Las caídas y sus causas no se registran. El escalamiento al equipo nacional no tiene tiempos de respuesta definidos para asegurar el restablecimiento del servicio.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fila 6: Componente E - R28 -->
+                            <div class="deviation-row-item dev-row-comp-e" id="row-dev-11">
+                                <div class="dev-comp-cell">
+                                    <span class="dev-comp-badge badge-comp-e">E. Operaciones TI e Incidentes</span>
+                                </div>
+                                <div class="dev-risk-cell">
+                                    <span class="risk-code-badge risk-high">R28</span>
+                                </div>
+                                <div class="dev-finding-cell">
+                                    <div class="finding-callout">
+                                        No hay personal técnico de respaldo ni documentación de procedimientos operativos estándar (manuales) suficiente para reducir la dependencia de una sola persona.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- ESCENA 9: CONCLUSIONES, DICTAMEN DE AUDITORÍA Y CIERRE   -->
+            <!-- ======================================================== -->
+            <div id="scene9" class="scene">
+                <div class="scene-header-box">
+                    <span class="section-tag tag-crimson">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                        DICTAMEN FINAL & CONCLUSIONES DE AUDITORÍA • GTAG
+                    </span>
+                    <h2 class="title-hero" style="font-size: 46px;">Conclusiones y Dictamen de Control Interno</h2>
+                    <p class="subtitle-hero" style="font-size: 22px;">Evaluación Integral del Entorno de Infraestructura y Operaciones de TI en Loreto.</p>
+                </div>
+
+                <div class="scene9-container">
+                    <!-- Banner Hero del Dictamen Global -->
+                    <div class="dictum-hero-banner" id="dictum-hero-box">
+                        <div class="dictum-left-badge">
+                            <span class="dictum-tag-label">DICTAMEN DE CONTROL INTERNO</span>
+                            <span class="dictum-result-title">DEFICIENTE</span>
+                        </div>
+                        <div class="dictum-text-body">
+                            A partir de la evaluación de los doce (12) riesgos significativos priorizados en la infraestructura y operaciones de TI del Distrito Fiscal de Loreto, el equipo auditor concluye que el entorno de control interno presenta <strong>deficiencias estructurales, lógicas y operativas</strong> que exponen a la entidad a potenciales interrupciones del servicio y vulneración de la información.
+                        </div>
+                    </div>
+
+                    <!-- CARRUSEL 3D: LOS 3 EJES CONCLUSIVOS DE AUDITORÍA -->
+                    <div class="concl-3d-viewport" id="concl-3d-viewport">
+                        <div class="concl-3d-ring" id="concl-carousel-ring">
+                            <!-- Card 0: Eje I - Gobernanza y Operaciones -->
+                            <div class="concl-3d-card concl-3d-0 is-active" id="concl-3d-card-0">
+                                <div>
+                                    <div class="concl-3d-header concl-h-1">
+                                        <div class="concl-3d-icon">
+                                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                        </div>
+                                        <div class="concl-3d-titles">
+                                            <span class="concl-3d-tag">EJE I • GOBERNANZA & GESTIÓN TI</span>
+                                            <h3 class="concl-3d-title">Gobernanza y Operaciones</h3>
+                                        </div>
+                                    </div>
+                                    <div class="concl-3d-body">
+                                        <p>La gestión de TI opera bajo un enfoque reactivo y con alta dependencia de los conocimientos de un único coordinador local. La ausencia de personal de respaldo capacitado, sumada a la falta de formalidad en el registro de la mesa de ayuda y en los escalamientos al equipo nacional, limita la capacidad de respuesta ante caídas del Sistema de Gestión Fiscal (SGF).</p>
+                                    </div>
+                                </div>
+                                <div class="concl-3d-footer">
+                                    <span class="concl-pill pill-cyan">Vulnerabilidad Operativa Alta</span>
+                                </div>
+                            </div>
+
+                            <!-- Card 1: Eje II - Seguridad Física y Ambiental -->
+                            <div class="concl-3d-card concl-3d-1" id="concl-3d-card-1">
+                                <div>
+                                    <div class="concl-3d-header concl-h-2">
+                                        <div class="concl-3d-icon">
+                                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                        </div>
+                                        <div class="concl-3d-titles">
+                                            <span class="concl-3d-tag">EJE II • CENTRO DE CÓMPUTO</span>
+                                            <h3 class="concl-3d-title">Seguridad Física y Ambiental</h3>
+                                        </div>
+                                    </div>
+                                    <div class="concl-3d-body">
+                                        <p>El cuarto de servidores, núcleo tecnológico de la sede, opera en un estado de vulnerabilidad física al carecer de restricciones estrictas de acceso, extintores y condiciones de climatización monitoreadas, contraviniendo las buenas prácticas para centros de datos.</p>
+                                    </div>
+                                </div>
+                                <div class="concl-3d-footer">
+                                    <span class="concl-pill pill-purple">Riesgo Crítico en Centro de Cómputo</span>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Eje III - Respaldo y Seguridad Lógica -->
+                            <div class="concl-3d-card concl-3d-2" id="concl-3d-card-2">
+                                <div>
+                                    <div class="concl-3d-header concl-h-3">
+                                        <div class="concl-3d-icon">
+                                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                                        </div>
+                                        <div class="concl-3d-titles">
+                                            <span class="concl-3d-tag">EJE III • CONTINUIDAD & RESGUARDO</span>
+                                            <h3 class="concl-3d-title">Respaldo y Seguridad Lógica</h3>
+                                        </div>
+                                    </div>
+                                    <div class="concl-3d-body">
+                                        <p>Los controles preventivos y de contingencia son insuficientes. Existen estaciones operando con sistemas sin soporte y protección antimalware inactiva. Asimismo, las copias de seguridad se gestionan sin pruebas de restauración demostrables, sin cifrado y sin salvaguardas físicas fuera del local (off-site), lo que compromete la disponibilidad de la información ante un desastre.</p>
+                                    </div>
+                                </div>
+                                <div class="concl-3d-footer">
+                                    <span class="concl-pill pill-amber">Riesgo Severo de Pérdida de Datos</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Indicadores de Posición 3D -->
+                    <div class="concl-3d-dots" id="concl-3d-dots">
+                        <span class="concl-dot active" id="concl-dot-0"></span>
+                        <span class="concl-dot" id="concl-dot-1"></span>
+                        <span class="concl-dot" id="concl-dot-2"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- /camera-rig -->
+
+        <!-- TRANSICIÓN WIPE COLORIDA (ENTRE ESCENAS) -->
+        <svg id="transition-wipe" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+            <path id="wipe-path"
+                d="M -200, -100 L 2200, 150 L -200, 100 L 2200, 350 L -200, 250 L 2200, 550 L -200, 400 L 2200, 750 L -200, 550 L 2200, 950 L -200, 700 L 2200, 1150 L -200, 850 L 2200, 1350 L -200, 1000 L 2200, 1550"
+                fill="none" stroke="#3fb950" stroke-width="220" stroke-linecap="round" stroke-linejoin="round"
+                stroke-dasharray="45000" stroke-dashoffset="45000" />
+        </svg>
+
+    </div> <!-- /container -->
+
+    <!-- ======================================================== -->
+    <!-- DOCK DE CONTROL MODULAR & REPRODUCCIÓN (COMPACTO)        -->
+    <!-- ======================================================== -->
+    <div id="playback-dock">
+        <button id="btn-play-pause" class="dock-btn" title="Reproducir / Pausar">
+            <span id="play-icon">⏸</span>
+        </button>
+
+        <!-- Selector Rápido Compacto de Escenas (E1 a E9) -->
+        <div class="scene-select-group">
+            <button class="scene-btn current" onclick="jumpToScene(1)" title="Escena 1: Portada e Introducción">E1</button>
+            <button class="scene-btn" onclick="jumpToScene(2)" title="Escena 2: Paso 1 - Matriz, 12 Riesgos y Carrusel 3D">E2</button>
+            <button class="scene-btn" onclick="jumpToScene(3)" title="Escena 3: Paso 2 - Controles Esperados">E3</button>
+            <button class="scene-btn" onclick="jumpToScene(4)" title="Escena 4: Paso 3 - Evidencias E1-E19">E4</button>
+            <button class="scene-btn" onclick="jumpToScene(5)" title="Escena 5: Paso 4 (Parte 1) - Pruebas Físicas, Respaldo y Software">E5</button>
+            <button class="scene-btn" onclick="jumpToScene(6)" title="Escena 6: Paso 4 (Parte 2) - Pruebas de Red y Operaciones TI">E6</button>
+            <button class="scene-btn" onclick="jumpToScene(7)" title="Escena 7: Paso 5 (Parte 1) - Desviaciones A y B">E7</button>
+            <button class="scene-btn" onclick="jumpToScene(8)" title="Escena 8: Paso 5 (Parte 2) - Desviaciones C, D y E">E8</button>
+            <button class="scene-btn" onclick="jumpToScene(9)" title="Escena 9: Paso 6 - Conclusiones y Dictamen Final">E9</button>
+        </div>
+
+        <button id="btn-loop-scene" class="dock-btn" title="Repetir escena actual en bucle">
+            🔁 OFF
+        </button>
+
+        <input type="range" id="scrubber-slider" min="0" max="1" step="0.001" value="0">
+        <span id="time-display">00:00 / 01:02</span>
+
+        <button id="btn-hide-dock" class="dock-btn" title="Ocultar para Render / Grabación (Tecla H)">
+            👁️ Ocultar
+        </button>
+    </div>
+
+    <!-- Botón Flotante Discreto para Mostrar Controles cuando el Dock está Oculto -->
+    <button id="btn-show-dock" class="dock-show-pill" title="Mostrar controles de reproducción (Tecla H)">
+        👁️ Mostrar Controles (H)
+    </button>
+
+    <!-- CDN GSAP 3.12+ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="./script.js"></script>
+</body>
+
+</html>
