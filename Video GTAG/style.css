@@ -1088,11 +1088,11 @@ body {
 }
 
 .table-scroll-viewport {
-    height: 460px;
+    height: 560px;
     overflow: hidden;
     position: relative;
-    mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
 }
 
 .table-rows-track {
@@ -2530,6 +2530,8 @@ body {
 .deviations-rows-grid {
     display: flex;
     flex-direction: column;
+    perspective: 1400px;
+    transform-style: preserve-3d;
     will-change: transform;
 }
 
@@ -2539,8 +2541,31 @@ body {
     padding: 18px 30px;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+    transform-origin: top center;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* Ceja / Pestaña lateral de informe administrativo GTAG */
+.deviation-row-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: transparent;
     transition: background 0.3s ease, box-shadow 0.3s ease;
 }
+
+.dev-row-comp-a::before { background: #d2a8ff; }
+.dev-row-comp-b::before { background: #f1e05a; }
+.dev-row-comp-c::before { background: #79c0ff; }
+.dev-row-comp-d::before { background: #f85149; }
+.dev-row-comp-e::before { background: #39c5cf; }
 
 .deviation-row-item:nth-child(even) {
     background: rgba(255, 255, 255, 0.02);

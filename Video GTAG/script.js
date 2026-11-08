@@ -261,7 +261,7 @@ function buildScene2(cam) {
         .to("#matrix-graph-panel .cell-high", { scale: 1.15, duration: 0.3, yoyo: true, repeat: 3, transformOrigin: "center center" }, 5.8)
 
         // 3. TERCER ELEMENTO: Tabla de 12 Riesgos Priorizados (aparición limpia y única con slide)
-        .to(cam, { scale: 1.10, x: 0, y: -130, duration: 1.5, ease: "power2.inOut" }, 7.0)
+        .to(cam, { scale: 1.05, x: 0, y: -70, duration: 1.5, ease: "power2.inOut" }, 7.0)
         .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.9, ease: "back.out(1.2)" }, 7.0)
         .call(() => SFX.slide(), null, 7.0)
         .fromTo("#risks-table-box", {
@@ -273,7 +273,7 @@ function buildScene2(cam) {
 
         // Desplazamiento progresivo de filas de la tabla (desplazamiento continuo suave sin clics repetidos)
         .to("#risks-rows-track", {
-            y: -420,
+            y: -320,
             duration: 8.5,
             ease: "power1.inOut"
         }, 7.5)
@@ -792,15 +792,25 @@ function buildScene7(cam) {
         .from("#dev-table-box-7", { opacity: 0, y: 30, duration: 0.7, ease: "power2.out" }, 2.4)
         .call(() => SFX.slide(), null, 2.4)
 
-        // Cascada de las 5 filas de desviaciones (alineación estrictamente recta y uniforme)
-        .from("#scene7 .deviation-row-item", {
-            y: 14,
-            opacity: 0,
-            duration: 0.35,
-            stagger: 0.06,
-            ease: "power2.out",
-            clearProps: "transform"
-        }, 2.6)
+        // DESDOBLAMIENTO TIPO ACORDEÓN / CARPETA DE ARCHIVO (ACCORDION UNFOLD)
+        // Cada tarjeta se desdobla en 3D desde su borde superior como un expediente administrativo
+        .fromTo("#scene7 .deviation-row-item", 
+            {
+                rotationX: -85,
+                opacity: 0,
+                transformOrigin: "top center",
+                transformPerspective: 1200
+            },
+            {
+                rotationX: 0,
+                opacity: 1,
+                duration: 0.7,
+                stagger: 0.14,
+                ease: "back.out(1.35)",
+                onStart: () => SFX.slide()
+            },
+            2.6
+        )
 
         // FOCO 1: COMPONENTE A - SEGURIDAD FÍSICA Y CUARTO DE SERVIDORES (R02, R20, R12)
         .to(cam, { scale: 1.08, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 3.6)
@@ -866,15 +876,25 @@ function buildScene8(cam) {
         .from("#dev-table-box-8", { opacity: 0, y: 30, duration: 0.7, ease: "power2.out" }, 2.4)
         .call(() => SFX.slide(), null, 2.4)
 
-        // Cascada de las 6 filas de desviaciones (alineación estrictamente recta y uniforme)
-        .from("#scene8 .deviation-row-item", {
-            y: 14,
-            opacity: 0,
-            duration: 0.35,
-            stagger: 0.05,
-            ease: "power2.out",
-            clearProps: "transform"
-        }, 2.6)
+        // DESDOBLAMIENTO TIPO ACORDEÓN / CARPETA DE ARCHIVO (ACCORDION UNFOLD)
+        // Cada tarjeta se desdobla en 3D desde su borde superior como un expediente administrativo
+        .fromTo("#scene8 .deviation-row-item", 
+            {
+                rotationX: -85,
+                opacity: 0,
+                transformOrigin: "top center",
+                transformPerspective: 1200
+            },
+            {
+                rotationX: 0,
+                opacity: 1,
+                duration: 0.7,
+                stagger: 0.14,
+                ease: "back.out(1.35)",
+                onStart: () => SFX.slide()
+            },
+            2.6
+        )
 
         // FOCO 1: COMPONENTE C - SOFTWARE, PARCHES Y SEGURIDAD LÓGICA (R26, R27)
         .to(cam, { scale: 1.08, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 3.6)
