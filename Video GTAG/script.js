@@ -203,6 +203,12 @@ function buildScene2(cam) {
         .set("#risks-table-box", { opacity: 0, y: 50, scale: 0.96, filter: "none" }, 0)
         .set("#risk-carousel-3d-overlay", { opacity: 0, visibility: "hidden", scale: 0.85 }, 0)
         .set("#carousel-ring", { rotationY: 0 }, 0)
+        .set("#blob-mother", { scale: 1, cx: 190, cy: 45, opacity: 1 }, 0)
+        .set("#blob-filtered", { cx: 190, cy: 45, scale: 0.75, opacity: 1 }, 0)
+        .set("#blob-critical", { cx: 190, cy: 45, scale: 0.75, opacity: 1 }, 0)
+        .set("#blob-txt-mother", { opacity: 1, scale: 1 }, 0)
+        .set("#blob-txt-filtered", { opacity: 0 }, 0)
+        .set("#blob-txt-critical", { opacity: 0 }, 0)
         .call(() => set3DCarouselCard(0), null, 0)
         .to("#scene2", { opacity: 1, duration: 0.5 }, 0.1)
         .from("#scene2 .section-tag", { y: -20, opacity: 0, duration: 0.5 }, 0.3)
@@ -232,6 +238,20 @@ function buildScene2(cam) {
             });
         }, null, 2.2)
         .call(() => SFX.slide(), null, 2.2)
+
+        // ANIMACIÓN: DESPRENDIMIENTO CELULAR LÍQUIDO (METABALL GOOEY FILTER)
+        // Estiramiento viscoso de la masa de 32 riesgos iniciales
+        .to("#blob-mother", { scaleX: 1.45, scaleY: 0.82, duration: 0.45, ease: "power2.inOut" }, 2.2)
+        // Separación elástica con puente viscoso conectivo
+        .to("#blob-filtered", { cx: 90, scale: 1, duration: 0.7, ease: "power3.inOut" }, 2.4)
+        .to("#blob-critical", { cx: 290, scale: 1, duration: 0.7, ease: "power3.inOut" }, 2.4)
+        .to("#blob-mother", { scale: 0.35, opacity: 0, duration: 0.4, ease: "power2.in" }, 2.8)
+        .to("#blob-txt-mother", { opacity: 0, scale: 0.5, duration: 0.3 }, 2.75)
+        // Snap elástico con pop sonoro sincronizado
+        .call(() => SFX.pop(), null, 2.95)
+        .to("#blob-filtered", { scale: 1.14, duration: 0.35, yoyo: true, repeat: 1, ease: "elastic.out(1.2, 0.4)" }, 2.95)
+        .to("#blob-critical", { scale: 1.18, duration: 0.35, yoyo: true, repeat: 1, ease: "elastic.out(1.2, 0.4)" }, 2.95)
+        .to(["#blob-txt-filtered", "#blob-txt-critical"], { opacity: 1, duration: 0.35 }, 3.0)
 
         // 2. SEGUNDO ELEMENTO: Matriz 5x5 a la derecha (aparición con zoom y escala)
         .to(cam, { scale: 1.25, x: -340, y: 70, duration: 1.3, ease: "power2.inOut" }, 3.8)
@@ -605,6 +625,8 @@ function buildScene6(cam) {
         .set("#tests-rows-grid-6", { y: 0 }, 0)
         .set("#scene6 .test-row-item", { clearProps: "all" }, 0)
         .set("#scene6 .test-stat-card", { clearProps: "all" }, 0)
+        .set("#network-topology-hud", { opacity: 0, x: 50 }, 0)
+        .set(["#halo-requena", "#halo-datem", "#halo-sgf"], { opacity: 0, scale: 1 }, 0)
         .to("#scene6", { opacity: 1, duration: 0.5 }, 0.1)
         .from("#scene6 .section-tag", { y: -20, opacity: 0, duration: 0.5 }, 0.3)
         // Título escrito letra por letra con SFX.tick (sin ting en título)
@@ -622,8 +644,9 @@ function buildScene6(cam) {
             onStart: () => SFX.pop()
         }, 2.0)
 
-        // Entrada del contenedor de la tabla
+        // Entrada del contenedor de la tabla y del HUD de Topología de Red
         .from("#tests-table-box-6", { opacity: 0, y: 30, duration: 0.7, ease: "power2.out" }, 2.4)
+        .to("#network-topology-hud", { opacity: 1, x: 0, duration: 0.8, ease: "back.out(1.2)" }, 2.4)
         .call(() => SFX.slide(), null, 2.4)
 
         // Cascada de las 4 filas de pruebas (alineación estrictamente recta y uniforme)
@@ -637,7 +660,7 @@ function buildScene6(cam) {
         }, 2.6)
 
         // FOCO 1: COMPONENTE D - REDES Y TELECOMUNICACIONES (R16 - Enlaces de Sedes Caídos)
-        .to(cam, { scale: 1.08, x: 0, y: -25, duration: 0.8, ease: "power2.inOut" }, 3.6)
+        .to(cam, { scale: 1.05, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 3.6)
         .call(() => SFX.ting(), null, 4.4)
         .to("#scene6 .test-row-comp-d", {
             backgroundColor: "rgba(248, 81, 73, 0.22)",
@@ -645,11 +668,34 @@ function buildScene6(cam) {
             duration: 0.4,
             ease: "power2.out"
         }, 4.4)
+        // DISPARO DE TELEMETRÍA EN VIVO: ALERTA R16 EN LA TOPOLOGÍA DE RED
+        .call(() => {
+            const statusPill = document.getElementById('hud-live-status');
+            if (statusPill) {
+                statusPill.textContent = 'ALERTA R16 • CAÍDA DE ENLACES';
+                statusPill.classList.add('alert-mode');
+            }
+            const cReq = document.getElementById('cable-requena');
+            const cDat = document.getElementById('cable-datem');
+            if (cReq) cReq.classList.add('cable-danger');
+            if (cDat) cDat.classList.add('cable-danger');
+            const sReq = document.getElementById('stat-requena');
+            const sDat = document.getElementById('stat-datem');
+            if (sReq) { sReq.textContent = '480ms • CAÍDA INTERMITENTE'; sReq.style.fill = '#ff8b85'; }
+            if (sDat) { sDat.textContent = '520ms • PÉRDIDA PAQUETES 24%'; sDat.style.fill = '#ff8b85'; }
+            const dBul = document.getElementById('diag-bullet');
+            const dTit = document.getElementById('diag-title');
+            const dDesc = document.getElementById('diag-desc');
+            if (dBul) dBul.style.color = '#f85149';
+            if (dTit) { dTit.textContent = 'Riesgo Crítico R16 Identificado'; dTit.style.color = '#ff8b85'; }
+            if (dDesc) dDesc.textContent = 'Falta de enlaces redundantes y nulo monitoreo proactivo hacia fiscalías provinciales.';
+        }, null, 4.4)
+        .to(["#halo-requena", "#halo-datem"], { opacity: 1, scale: 1.5, duration: 0.5, repeat: 3, yoyo: true, ease: "power1.inOut" }, 4.4)
 
         // FOCO 2: COMPONENTE E - OPERACIONES DE TI Y MESA DE AYUDA (R09 Mesa de Ayuda, R24 Caídas SGF, R28 Suplencia)
         // Se atenúa Componente D para ceder el foco exclusivo a Componente E
         .to("#scene6 .test-row-comp-d", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 7.5)
-        .to(cam, { scale: 1.08, x: 0, y: -45, duration: 0.8, ease: "power2.inOut" }, 7.5)
+        .to(cam, { scale: 1.05, x: 0, y: -35, duration: 0.8, ease: "power2.inOut" }, 7.5)
         .call(() => SFX.ting(), null, 8.3)
         // Se resalta el Componente E y SE MANTIENE resaltado durante toda su duración
         .to("#scene6 .test-row-comp-e", {
@@ -659,8 +705,30 @@ function buildScene6(cam) {
             stagger: 0.12,
             ease: "power2.out"
         }, 8.3)
+        // ACTUALIZACIÓN DE TOPOLOGÍA: MESA DE AYUDA Y SGF
+        .call(() => {
+            const statusPill = document.getElementById('hud-live-status');
+            if (statusPill) {
+                statusPill.textContent = 'COMPONENTE E • OPERACIONES & SGF';
+                statusPill.classList.remove('alert-mode');
+                statusPill.style.borderColor = 'var(--accent-blue)';
+                statusPill.style.color = 'var(--accent-blue)';
+                statusPill.style.background = 'rgba(88, 166, 255, 0.18)';
+            }
+            const cReq = document.getElementById('cable-requena');
+            const cDat = document.getElementById('cable-datem');
+            if (cReq) cReq.classList.remove('cable-danger');
+            if (cDat) cDat.classList.remove('cable-danger');
+            const dBul = document.getElementById('diag-bullet');
+            const dTit = document.getElementById('diag-title');
+            const dDesc = document.getElementById('diag-desc');
+            if (dBul) dBul.style.color = 'var(--accent-blue)';
+            if (dTit) { dTit.textContent = 'Operaciones TI y Mesa de Ayuda'; dTit.style.color = '#ffffff'; }
+            if (dDesc) dDesc.textContent = 'Carencia de catálogo de servicios, sin medición de tiempos ni pruebas de continuidad.';
+        }, null, 8.3)
+        .to("#halo-sgf", { opacity: 1, scale: 1.6, duration: 0.6, repeat: 3, yoyo: true, ease: "power1.inOut" }, 8.3)
 
-        // Retorno panorámico y fade out (Componente E se desvanece suavemente durante el retorno)
+        // Retorno panorámico y fade out
         .to("#scene6 .test-row-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, 12.0)
         .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 12.0)
         .to("#scene6", { opacity: 0, duration: 0.6 }, 14.0);
