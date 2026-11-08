@@ -788,7 +788,7 @@ body {
     pointer-events: none;
     opacity: 0;
     visibility: hidden;
-    padding-top: 40px;
+    padding-top: 95px;
     background: radial-gradient(circle at 50% 50%, rgba(13, 17, 23, 0.95) 0%, rgba(13, 17, 23, 0.8) 60%, rgba(13, 17, 23, 0.55) 100%);
     transition: opacity 0.5s ease;
 }

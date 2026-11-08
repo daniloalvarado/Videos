@@ -1102,11 +1102,18 @@ window.jumpToScene = function (sceneNumber) {
     }
 };
 
-// Arranque maestro tras interacción inicial
+// Arranque maestro tras interacción inicial (Oculta controles para vista limpia 1080p)
 window.startMasterPlayback = function () {
     document.getElementById("start-overlay").style.display = "none";
     initAudioSystem();
     if (!masterTimeline) initMasterTimeline();
+
+    // Controles ocultos automáticamente al iniciar
+    const dock = document.getElementById('playback-dock');
+    const showBtn = document.getElementById('btn-show-dock');
+    if (dock) dock.style.display = 'none';
+    if (showBtn) showBtn.style.display = 'flex';
+
     masterTimeline.play();
 };
 
