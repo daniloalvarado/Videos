@@ -17,3 +17,4 @@ Presentación interactiva y explicativa en código Full HD (1920x1080) construid
 3. **Branch:** `main`
 4. **Publish Directory:** `Video GTAG` (o raíz `./`)
 5. **Build Command:** *(dejar vacío)*
+
