@@ -101,3 +101,47 @@ Las desviaciones expuestas requieren que la administración del Distrito Fiscal 
 
 
 
+
+
+
+
+A. Inspiradas en Svg-String (Hilos conductores, rutas y cables de red)
+
+La "Línea de Trazabilidad Forense" (Data Trail):
+
+Concepto: Un filamento luminoso (como un pulso de luz por fibra óptica) viaja serpenteando por la pantalla.
+Dónde usarlo: En la Escena 3 y 4. El pulso sale del Control Esperado, viaja dibujando una línea de circuito técnico por el fondo y llega exactamente a la Evidencia (E1 a E19) que lo valida, demostrando visualmente que cada conclusión de auditoría está conectada a una prueba real.
+
+El "Cable Ethernet Conectivo" en Carruseles:
+
+Concepto: En lugar de que las tarjetas del carrusel floten sueltas, un cable de red realista conecta la parte inferior de cada tarjeta. Conforme el carrusel gira, el cable se tensa, oscila con inercia física y transfiere un destello de datos de una tarjeta a otra.
+
+Topología de Red Viviente (Sede Iquitos):
+
+Concepto: Para la Escena 6 (Dispositivos de Red), líneas sutiles tipo circuito conectan la Sede Central con las sedes remotas. Un pulso verde viaja continuo, pero al mencionar los problemas de lentitud y falta de redundancia, la línea se fragmenta momentáneamente en pulsos intermitentes de advertencia.
+B. Inspiradas en Viscose-carousel (Metamorfosis líquida, estiramiento y desprendimiento)
+
+Desprendimiento Celular de Riesgos (Masa Líquida a Filtro):
+
+Concepto: En la Escena 2, los 32 riesgos iniciales empiezan como una sola masa monolítica o burbuja compacta. Al pasar el filtro de la matriz, la masa sufre tensión elástica: se estira como mercurio líquido y se separa en dos gotas; los 20 riesgos descartados se encogen y desvanecen, mientras los 12 riesgos priorizados se rompen con un rebote elástico hacia el frente.
+
+Apertura de Expedientes por Tensión Elástica:
+
+Concepto: Para las tarjetas de conclusiones en la Escena 9, las tres tarjetas nacen unidas en el centro. Al avanzar la locución, se separan hacia izquierda y derecha estirando un cuello adhesivo que finalmente se suelta suavemente, dando la sensación de módulos desacoplados con peso y consistencia física.
+C. Otras Alternativas Cinematográficas para Videos de Auditoría / TI
+
+Efecto Escáner HUD / Barrido Forense (Laser Inspection Beam):
+
+Concepto: Una línea horizontal de barrido láser semitransparente con partículas tenues recorre las tablas de evidencias y servidores. Conforme el láser pasa sobre un elemento crítico (como la falta de respaldo o el cuarto de servidores), ese elemento "reacciona" iluminándose con un destello de diagnóstico forense.
+
+Desdoblamiento Tipo Acordeón / Carpeta de Archivo (Accordion Unfold):
+
+Concepto: En lugar de que las desviaciones (Escenas 7 y 8) aparezcan simplemente con desvanecimiento, cada tarjeta se desdobla en 3D como un informe técnico en papel membretado o expediente administrativo que se abre en dos pliegues hacia el espectador.
+
+Enfoque Selectivo de Cámara Cinematográfica (Tilt-Shift / Rack Focus):
+
+Concepto: Cuando se enfatiza una evidencia particular (por ejemplo, E4 - Ficha de observación directa), todo el fondo y las demás filas entran en un desenfoque gaussiano suave (profundidad de campo de cámara réflex), trayendo el elemento mencionado 20px al frente con un halo de luz, eliminando cualquier distracción del resto de la pantalla.
+
+Matriz de Puntos Holográfica (Matrix Dot-Matrix Reveal):
+
+Concepto: Para números de métricas, porcentajes o niveles de exposición, los números se forman a partir de una rejilla de micro-puntos de luz que convergen magnéticamente para armar el dígito final antes de solidificarse.
