@@ -557,8 +557,8 @@ body {
     position: relative;
     width: 100%;
     max-width: 1560px;
-    height: 740px;
-    margin: 15px auto 0 auto;
+    height: 770px;
+    margin: 10px auto 0 auto;
 }
 
 .matrix-container {
@@ -1111,14 +1111,15 @@ body {
 }
 
 .table-scroll-viewport {
-    height: 650px;
+    height: 700px;
     overflow: hidden;
     position: relative;
-    mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
 }
 
 .table-rows-track {
+    position: relative;
     display: flex;
     flex-direction: column;
     will-change: transform;
@@ -1271,14 +1272,15 @@ body {
 }
 
 .controls-scroll-viewport {
-    height: 580px;
+    height: 640px;
     overflow: hidden;
     position: relative;
-    mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
 }
 
 .controls-rows-track {
+    position: relative;
     display: flex;
     flex-direction: column;
     will-change: transform;
@@ -1562,14 +1564,15 @@ body {
 }
 
 .evidence-scroll-viewport {
-    height: 580px;
+    height: 620px;
     overflow: hidden;
     position: relative;
-    mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
 }
 
 .evidence-rows-grid {
+    position: relative;
     display: flex;
     flex-direction: column;
     will-change: transform;
@@ -2098,7 +2101,7 @@ body {
 .tests-header-bar .tth-evid { text-align: center; }
 
 .tests-scroll-viewport {
-    height: 560px;
+    height: 620px;
     overflow: hidden;
     position: relative;
     mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
@@ -2106,6 +2109,7 @@ body {
 }
 
 .tests-rows-grid {
+    position: relative;
     display: flex;
     flex-direction: column;
     will-change: transform;
@@ -2543,7 +2547,7 @@ body {
 .deviations-header-bar .dth-finding { text-align: left; padding-left: 18px; }
 
 .deviations-scroll-viewport {
-    height: 560px;
+    height: 620px;
     overflow: hidden;
     position: relative;
     mask-image: linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%);
@@ -2551,6 +2555,7 @@ body {
 }
 
 .deviations-rows-grid {
+    position: relative;
     display: flex;
     flex-direction: column;
     perspective: 1400px;

@@ -137,10 +137,41 @@ function typeHeadingText(selector, text, speed = 0.028, playTing = true) {
 }
 
 // Función para calcular desplazamiento dinámico a una fila según su posición real en pantalla
-function getScrollTargetY(elementId, fallbackY, padding = 20) {
+function getScrollTargetY(elementId, fallbackY, padding = 15) {
     const el = document.getElementById(elementId);
-    if (el && typeof el.offsetTop === 'number' && el.offsetTop > 0) {
-        return -(Math.max(0, el.offsetTop - padding));
+    if (!el) return fallbackY;
+    const track = el.parentElement;
+    if (!track) return fallbackY;
+
+    // Viewport contenedor de la tabla
+    const viewport = track.parentElement;
+    const vh = viewport ? (viewport.clientHeight || viewport.offsetHeight) : 600;
+
+    // Medición exacta de posición respecto al track contenedor
+    let topPos = el.offsetTop;
+    if (typeof topPos !== 'number' || topPos <= 0) {
+        let sib = el.previousElementSibling;
+        let sum = 0;
+        while (sib) {
+            sum += (sib.offsetHeight || sib.clientHeight || 75);
+            sib = sib.previousElementSibling;
+        }
+        topPos = sum;
+    }
+
+    if (topPos >= 0) {
+        let scrollY = -(Math.max(0, topPos - padding));
+        const totalHeight = track.scrollHeight || track.offsetHeight;
+        // Si todo el contenido cabe en el viewport, no requiere scroll
+        if (totalHeight <= vh) {
+            return 0;
+        }
+        // Si el contenido sobrepasa, limitamos para que las últimas filas queden perfectamente dentro del viewport
+        const maxScroll = -(totalHeight - vh + padding);
+        if (scrollY < maxScroll) {
+            scrollY = maxScroll;
+        }
+        return scrollY;
     }
     return fallbackY;
 }
@@ -263,45 +294,48 @@ function buildScene2(cam) {
         .to("#blob-critical", { scale: 1.18, duration: 0.35, yoyo: true, repeat: 1, ease: "elastic.out(1.2, 0.4)" }, 4.25)
         .to(["#blob-txt-filtered", "#blob-txt-critical"], { opacity: 1, duration: 0.35 }, 4.3)
 
-        // 2. SEGUNDO ELEMENTO: Matriz 5x5 a la derecha (aparición con zoom y escala tras contemplar la división celular)
+        // 2. SEGUNDO ELEMENTO: Matriz 5x5 a la derecha (aparición con zoom y permanencia extendida)
         .to(cam, { scale: 1.25, x: -340, y: 70, duration: 1.3, ease: "power2.inOut" }, 5.0)
         .to("#matrix-graph-panel", { opacity: 1, scale: 1.0, duration: 0.8, ease: "back.out(1.2)" }, 5.0)
         .call(() => SFX.ting(), null, 5.8)
         .to("#matrix-graph-panel .cell-high", { scale: 1.15, duration: 0.3, yoyo: true, repeat: 3, transformOrigin: "center center" }, 5.8)
 
-        // 3. TERCER ELEMENTO: Tabla de 12 Riesgos Priorizados (aparición limpia a altura completa de 650px)
-        // Desvanecemos la matriz para ceder todo el escenario a la tabla y centramos la cámara
-        .to("#scene2 .matrix-container", { opacity: 0, y: -25, duration: 0.65, ease: "power2.inOut", pointerEvents: "none" }, 6.7)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.0, ease: "power2.inOut" }, 6.7)
-        .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.85, ease: "power2.out", pointerEvents: "auto" }, 7.0)
-        .call(() => SFX.slide(), null, 7.0)
+        // Pausa de contemplación de la matriz: se mantiene visible y en foco hasta los 10.2s para leer ejes y celdas
+        // 3. TERCER ELEMENTO: Tabla de 12 Riesgos Priorizados (aparición a altura completa ampliada de 700px)
+        // Desvanecemos la matriz tras la lectura prolongada y centramos la cámara
+        .to("#scene2 .matrix-container", { opacity: 0, y: -25, duration: 0.65, ease: "power2.inOut", pointerEvents: "none" }, 10.2)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.0, ease: "power2.inOut" }, 10.2)
+        .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.85, ease: "power2.out", pointerEvents: "auto" }, 10.6)
+        .call(() => SFX.slide(), null, 10.6)
         .fromTo("#risks-table-box", {
             boxShadow: "0 0 45px rgba(88, 166, 255, 0.65)"
         }, {
             boxShadow: "0 16px 45px rgba(0, 0, 0, 0.55)",
             duration: 0.9
-        }, 7.0)
+        }, 10.6)
 
-        // Desplazamiento progresivo de filas de la tabla a través de los 12 riesgos
+        // Desplazamiento progresivo de filas de la tabla adaptado al nuevo viewport ampliado
         .to("#risks-rows-track", {
             y: () => {
                 const track = document.getElementById('risks-rows-track');
-                return track && track.scrollHeight > 650 ? -(track.scrollHeight - 620) : -450;
+                const viewport = track ? track.parentElement : null;
+                const vh = viewport ? (viewport.clientHeight || viewport.offsetHeight) : 700;
+                return track && track.scrollHeight > vh ? -(track.scrollHeight - vh + 15) : -450;
             },
-            duration: 8.5,
+            duration: 8.0,
             ease: "power1.inOut"
-        }, 7.5)
+        }, 11.2)
 
         // ========================================================
         // DESPUÉS DEL TERCERO: CARRUSEL 3D POR ARRIBA DE LOS DEMÁS
         // ========================================================
-        // Retorno de cámara al centro y eliminación total de los textos/tablas de fondo
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 16.0)
+        // Retorno de cámara al centro y desvanecimiento de la tabla y encabezados de fondo
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.0, ease: "power2.inOut" }, 19.8)
         .to(["#scene2 .scene-header-box", "#scene2 .matrix-container", "#scene2 #risks-table-box"], {
             opacity: 0,
             duration: 0.6,
             ease: "power2.out"
-        }, 16.0)
+        }, 19.8)
 
         // Entrada del Carrusel 3D con su encabezado elevado e independiente
         .to("#risk-carousel-3d-overlay", {
@@ -310,27 +344,27 @@ function buildScene2(cam) {
             scale: 1.0,
             duration: 0.9,
             ease: "back.out(1.2)"
-        }, 16.5)
-        .call(() => SFX.whoosh(), null, 16.5)
-        .call(() => { set3DCarouselCard(0); SFX.ting(); }, null, 17.3)
+        }, 20.3)
+        .call(() => SFX.whoosh(), null, 20.3)
+        .call(() => { set3DCarouselCard(0); SFX.ting(); }, null, 21.0)
 
         // Rotación a Card 1 (Bases de Datos Fiscales: R01, R07, R17)
-        .to("#carousel-ring", { rotationY: -90, duration: 0.9, ease: "power2.inOut" }, 19.2)
-        .call(() => { set3DCarouselCard(1); SFX.ting(); }, null, 20.1)
+        .to("#carousel-ring", { rotationY: -90, duration: 0.9, ease: "power2.inOut" }, 23.2)
+        .call(() => { set3DCarouselCard(1); SFX.ting(); }, null, 24.1)
 
         // Rotación a Card 2 (Endpoints y Antivirus: R26, R27)
-        .to("#carousel-ring", { rotationY: -180, duration: 0.9, ease: "power2.inOut" }, 21.8)
-        .call(() => { set3DCarouselCard(2); SFX.ting(); }, null, 22.7)
+        .to("#carousel-ring", { rotationY: -180, duration: 0.9, ease: "power2.inOut" }, 25.8)
+        .call(() => { set3DCarouselCard(2); SFX.ting(); }, null, 26.7)
 
         // Rotación a Card 3 (Mesa de Ayuda y SGF: R09, R24, R28) - Última tarjeta, sin volver a la primera
-        .to("#carousel-ring", { rotationY: -270, duration: 0.9, ease: "power2.inOut" }, 24.4)
-        .call(() => { set3DCarouselCard(3); SFX.ting(); }, null, 25.3)
+        .to("#carousel-ring", { rotationY: -270, duration: 0.9, ease: "power2.inOut" }, 28.4)
+        .call(() => { set3DCarouselCard(3); SFX.ting(); }, null, 29.3)
 
         // Se mantiene fija en la última tarjeta (Card 3: Mesa de Ayuda) para apreciarla sin rotar al inicio
-        .to(cam, { scale: 1.04, duration: 2.2, ease: "power1.out" }, 25.5)
+        .to(cam, { scale: 1.04, duration: 2.4, ease: "power1.out" }, 29.6)
 
         // Cierre fluido de la Escena 2
-        .to("#scene2", { opacity: 0, duration: 0.7 }, 28.5);
+        .to("#scene2", { opacity: 0, duration: 0.7 }, 32.3);
 
     return tl;
 }
@@ -360,7 +394,9 @@ function buildScene3(cam) {
         .to("#controls-rows-track", {
             y: () => {
                 const track = document.getElementById('controls-rows-track');
-                return track && track.scrollHeight > 580 ? -(track.scrollHeight - 550) : -500;
+                const viewport = track ? track.parentElement : null;
+                const vh = viewport ? (viewport.clientHeight || viewport.offsetHeight) : 640;
+                return track && track.scrollHeight > vh ? -(track.scrollHeight - vh + 15) : -450;
             },
             duration: 10.0,
             ease: "power1.inOut"
@@ -496,7 +532,7 @@ function buildScene4(cam) {
         .to(["#row-ev-6", "#row-ev-7", "#row-ev-8", "#row-ev-9", "#row-ev-10"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, 14.5)
         // Recorrido dinámico que desplaza la tabla exactamente hasta centrar E14 y E17 en el viewport
         .to("#evidence-rows-grid", {
-            y: () => getScrollTargetY('row-ev-14', -920, 25),
+            y: () => getScrollTargetY('row-ev-14', -340, 20),
             duration: 2.5,
             ease: "power1.inOut"
         }, 14.7)
