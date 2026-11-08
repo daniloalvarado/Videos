@@ -626,10 +626,13 @@ function buildScene6(cam) {
         .set("#tests-rows-grid-6", { y: 0 }, 0)
         .set("#scene6 .test-row-item", { clearProps: "all" }, 0)
         .set("#scene6 .test-stat-card", { clearProps: "all" }, 0)
-        .call(() => {
-            document.querySelector('.scene6-split-layout')?.classList.remove('split-active');
-        }, null, 0)
-        .set(["#halo-requena", "#halo-datem", "#halo-sgf"], { opacity: 0, scale: 1 }, 0)
+        .set("#tests-table-box-6", { x: 0, opacity: 1, clearProps: "transform" }, 0)
+        .set("#network-topology-hud", { x: 1600, opacity: 0 }, 0)
+        .set(["#halo-requena", "#halo-requena-2", "#halo-datem", "#halo-datem-2", "#halo-sgf", "#halo-sgf-2"], {
+            attr: { r: 14 },
+            opacity: 0,
+            strokeWidth: 2.5
+        }, 0)
         .to("#scene6", { opacity: 1, duration: 0.5 }, 0.1)
         .from("#scene6 .section-tag", { y: -20, opacity: 0, duration: 0.5 }, 0.3)
         // Título escrito letra por letra con SFX.tick (sin ting en título)
@@ -661,21 +664,24 @@ function buildScene6(cam) {
             clearProps: "transform"
         }, 2.6)
 
-        // 2. DESPLAZAMIENTO: SALE LA TOPOLOGÍA DE RED DESPLAZANDO LA TABLA Y OCUPANDO SU LUGAR
-        .call(() => {
-            document.querySelector('.scene6-split-layout')?.classList.add('split-active');
-            SFX.whoosh();
-        }, null, 3.8)
+        // 2. DESPLAZAMIENTO TOTAL: LA TOPOLOGÍA DE RED DESPLAZA POR COMPLETO A LA TABLA Y OCUPA SU LUGAR
+        .call(() => SFX.whoosh(), null, 3.8)
+        .to("#tests-table-box-6", {
+            x: -1600,
+            opacity: 0,
+            duration: 0.85,
+            ease: "power3.inOut"
+        }, 3.8)
+        .to("#network-topology-hud", {
+            x: 0,
+            opacity: 1,
+            duration: 0.85,
+            ease: "power3.inOut"
+        }, 3.8)
 
         // FOCO 1: COMPONENTE D - REDES Y TELECOMUNICACIONES (R16 - Enlaces de Sedes Caídos)
-        .to(cam, { scale: 1.05, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 3.8)
+        .to(cam, { scale: 1.02, x: 0, y: -10, duration: 0.8, ease: "power2.inOut" }, 3.8)
         .call(() => SFX.ting(), null, 4.4)
-        .to("#scene6 .test-row-comp-d", {
-            backgroundColor: "rgba(248, 81, 73, 0.22)",
-            boxShadow: "0 0 22px rgba(248, 81, 73, 0.45)",
-            duration: 0.4,
-            ease: "power2.out"
-        }, 4.4)
         // DISPARO DE TELEMETRÍA EN VIVO: ALERTA R16 EN LA TOPOLOGÍA DE RED
         .call(() => {
             const statusPill = document.getElementById('hud-live-status');
@@ -698,21 +704,21 @@ function buildScene6(cam) {
             if (dTit) { dTit.textContent = 'Riesgo Crítico R16 Identificado'; dTit.style.color = '#ff8b85'; }
             if (dDesc) dDesc.textContent = 'Falta de enlaces redundantes y nulo monitoreo proactivo hacia fiscalías provinciales.';
         }, null, 4.4)
-        .to(["#halo-requena", "#halo-datem"], { opacity: 1, scale: 1.5, duration: 0.5, repeat: 3, yoyo: true, ease: "power1.inOut" }, 4.4)
+        // HALOS CONCÉNTRICOS ALERTA R16 (CENTRADO EXACTO EN EL NODO ORIGEN)
+        .fromTo(["#halo-requena", "#halo-datem"],
+            { attr: { r: 14 }, opacity: 1, strokeWidth: 2.5 },
+            { attr: { r: 44 }, opacity: 0, strokeWidth: 0.5, duration: 0.85, repeat: 3, ease: "power1.out" },
+            4.4
+        )
+        .fromTo(["#halo-requena-2", "#halo-datem-2"],
+            { attr: { r: 14 }, opacity: 0.7, strokeWidth: 2 },
+            { attr: { r: 44 }, opacity: 0, strokeWidth: 0.5, duration: 0.85, repeat: 3, ease: "power1.out" },
+            4.7
+        )
 
         // FOCO 2: COMPONENTE E - OPERACIONES DE TI Y MESA DE AYUDA (R09 Mesa de Ayuda, R24 Caídas SGF, R28 Suplencia)
-        // Se atenúa Componente D para ceder el foco exclusivo a Componente E
-        .to("#scene6 .test-row-comp-d", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 7.5)
-        .to(cam, { scale: 1.05, x: 0, y: -35, duration: 0.8, ease: "power2.inOut" }, 7.5)
+        .to(cam, { scale: 1.02, x: 0, y: -15, duration: 0.8, ease: "power2.inOut" }, 7.5)
         .call(() => SFX.ting(), null, 8.3)
-        // Se resalta el Componente E y SE MANTIENE resaltado durante toda su duración
-        .to("#scene6 .test-row-comp-e", {
-            backgroundColor: "rgba(88, 166, 255, 0.24)",
-            boxShadow: "0 0 20px rgba(88, 166, 255, 0.45)",
-            duration: 0.4,
-            stagger: 0.12,
-            ease: "power2.out"
-        }, 8.3)
         // ACTUALIZACIÓN DE TOPOLOGÍA: MESA DE AYUDA Y SGF
         .call(() => {
             const statusPill = document.getElementById('hud-live-status');
@@ -734,10 +740,19 @@ function buildScene6(cam) {
             if (dTit) { dTit.textContent = 'Operaciones TI y Mesa de Ayuda'; dTit.style.color = '#ffffff'; }
             if (dDesc) dDesc.textContent = 'Carencia de catálogo de servicios, sin medición de tiempos ni pruebas de continuidad.';
         }, null, 8.3)
-        .to("#halo-sgf", { opacity: 1, scale: 1.6, duration: 0.6, repeat: 3, yoyo: true, ease: "power1.inOut" }, 8.3)
+        // HALOS CONCÉNTRICOS MESA DE AYUDA (CENTRADO EXACTO EN EL NODO ORIGEN)
+        .fromTo("#halo-sgf",
+            { attr: { r: 13 }, opacity: 1, strokeWidth: 2.5 },
+            { attr: { r: 40 }, opacity: 0, strokeWidth: 0.5, duration: 0.85, repeat: 3, ease: "power1.out" },
+            8.3
+        )
+        .fromTo("#halo-sgf-2",
+            { attr: { r: 13 }, opacity: 0.7, strokeWidth: 2 },
+            { attr: { r: 40 }, opacity: 0, strokeWidth: 0.5, duration: 0.85, repeat: 3, ease: "power1.out" },
+            8.6
+        )
 
         // Retorno panorámico y fade out
-        .to("#scene6 .test-row-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, 12.0)
         .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 12.0)
         .to("#scene6", { opacity: 0, duration: 0.6 }, 14.0);
 

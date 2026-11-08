@@ -2191,74 +2191,65 @@ body {
 }
 
 /* ==========================================================================
-   ESCENA 6: TOPOLOGÍA DE RED VIVIENTE Y LAYOUT DIVIDIDO (SEDE IQUITOS)
+   ESCENA 6: TOPOLOGÍA DE RED VIVIENTE Y DESPLAZAMIENTO COMPLETO (SEDE IQUITOS)
    ========================================================================== */
 .scene6-split-layout {
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
+    position: relative;
     width: 100%;
     max-width: 1560px;
     margin: 0 auto;
-    position: relative;
-    gap: 0px;
-    transition: gap 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.scene6-split-layout.split-active {
-    gap: 22px;
+    min-height: 480px;
+    overflow: hidden;
+    border-radius: 20px;
 }
 
 #tests-table-box-6 {
     width: 100%;
     max-width: 1560px;
-    flex: 1 1 100%;
-    transition: flex 0.75s cubic-bezier(0.16, 1, 0.3, 1), width 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.scene6-split-layout.split-active #tests-table-box-6 {
-    flex: 1 1 58%;
-    width: 58%;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
 }
 
 #tests-table-box-6 .tests-header-bar,
 #tests-table-box-6 .test-row-item {
     display: grid;
     grid-template-columns: 280px 130px 1fr 220px;
-    transition: grid-template-columns 0.75s ease;
-}
-
-.scene6-split-layout.split-active #tests-table-box-6 .tests-header-bar,
-.scene6-split-layout.split-active #tests-table-box-6 .test-row-item {
-    grid-template-columns: 200px 90px 1fr 130px;
 }
 
 .network-topology-hud {
-    background: rgba(18, 24, 38, 0.68);
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    background: rgba(18, 24, 38, 0.75);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
     border: 1px solid rgba(88, 166, 255, 0.35);
     border-radius: 20px;
-    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
-    padding: 0;
+    padding: 18px 26px;
     overflow: hidden;
-    position: relative;
-    flex: 0 0 0%;
-    width: 0%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 1560px;
+    z-index: 3;
     opacity: 0;
-    transform: translateX(100px);
+    transform: translateX(100%);
     pointer-events: none;
-    transition: flex 0.75s cubic-bezier(0.16, 1, 0.3, 1), width 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease, transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), padding 0.75s ease;
+    transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+}
+
+.scene6-split-layout.split-active #tests-table-box-6 {
+    transform: translateX(-120%);
+    opacity: 0;
+    pointer-events: none;
 }
 
 .scene6-split-layout.split-active .network-topology-hud {
-    flex: 0 0 40%;
-    width: 40%;
-    opacity: 1;
     transform: translateX(0);
-    padding: 16px 20px;
+    opacity: 1;
     pointer-events: auto;
 }
 
@@ -2365,7 +2356,15 @@ body {
     to { stroke-dashoffset: -20; }
 }
 
-/* Nodos */
+/* Nodos y Halos Concéntricos de Alerta */
+.node-halo,
+.node-halo-alert,
+.node-halo-sgf {
+    pointer-events: none;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
 .node-title {
     font-family: var(--font-sans);
     font-size: 13px;

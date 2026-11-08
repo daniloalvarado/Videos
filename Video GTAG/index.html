@@ -821,9 +821,9 @@
                     </div>
                 </div>
 
-                <!-- Layout Dividido: Tabla de Pruebas + Topología de Red Viviente -->
+                <!-- Layout de Transición: Tabla de Pruebas desplazada por Topología de Red Viviente -->
                 <div class="scene6-split-layout">
-                    <!-- Tabla de Pruebas Parte 2 -->
+                    <!-- 1. Tabla de Pruebas Parte 2 (Ancho Completo Inicial) -->
                     <div class="tests-table-container" id="tests-table-box-6">
                         <div class="tests-header-bar">
                             <div class="tth-col tth-comp">COMPONENTE GTAG</div>
@@ -907,7 +907,7 @@
                         </div>
                     </div>
 
-                    <!-- Columna Derecha: Topología de Red Viviente (Sede Iquitos) -->
+                    <!-- 2. Topología de Red Viviente: Desplaza por Completo a la Tabla y Ocupa su Lugar -->
                     <div class="network-topology-hud" id="network-topology-hud">
                         <div class="hud-top-bar">
                             <div class="hud-title-group">
@@ -917,9 +917,9 @@
                             <span class="hud-live-pill" id="hud-live-status">ENLACES ACTIVOS</span>
                         </div>
 
-                        <!-- Canvas SVG de Topología de Red Viviente (estilo Svg-String) -->
+                        <!-- Canvas SVG Panorámico de Topología de Red Viviente (1000 x 280) -->
                         <div class="topology-svg-wrapper">
-                            <svg class="topology-svg-canvas" viewBox="0 0 540 290">
+                            <svg class="topology-svg-canvas" viewBox="0 0 1000 280">
                                 <defs>
                                     <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
                                         <feGaussianBlur stdDeviation="3" result="glow" />
@@ -930,73 +930,68 @@
                                     </filter>
                                 </defs>
 
-                                <!-- Cables de Red / Enlaces WAN -->
+                                <!-- Cables de Red / Enlaces WAN (Líneas Conectoras Panorámicas) -->
                                 <g class="wan-links-paths">
-                                    <path class="cable-bg" d="M 120 145 C 200 145, 250 65, 380 65" />
-                                    <path class="cable-active cable-nauta" id="cable-nauta" d="M 120 145 C 200 145, 250 65, 380 65" />
+                                    <path class="cable-bg" d="M 160 140 C 380 140, 520 55, 740 55" />
+                                    <path class="cable-active cable-nauta" id="cable-nauta" d="M 160 140 C 380 140, 520 55, 740 55" />
 
-                                    <path class="cable-bg" d="M 120 145 C 220 145, 260 145, 380 145" />
-                                    <path class="cable-active cable-requena" id="cable-requena" d="M 120 145 C 220 145, 260 145, 380 145" />
+                                    <path class="cable-bg" d="M 160 140 C 380 140, 520 140, 740 140" />
+                                    <path class="cable-active cable-requena" id="cable-requena" d="M 160 140 C 380 140, 520 140, 740 140" />
 
-                                    <path class="cable-bg" d="M 120 145 C 200 145, 250 225, 380 225" />
-                                    <path class="cable-active cable-datem" id="cable-datem" d="M 120 145 C 200 145, 250 225, 380 225" />
+                                    <path class="cable-bg" d="M 160 140 C 380 140, 520 225, 740 225" />
+                                    <path class="cable-active cable-datem" id="cable-datem" d="M 160 140 C 380 140, 520 225, 740 225" />
 
-                                    <path class="cable-bg" d="M 120 145 C 120 200, 140 245, 210 245" />
-                                    <path class="cable-active cable-lan" id="cable-lan" d="M 120 145 C 120 200, 140 245, 210 245" />
-                                </g>
-
-                                <!-- Pulsos de Datos Vivientes -->
-                                <g class="wan-pulses">
-                                    <circle class="net-pulse pulse-nauta" id="pulse-nauta" r="4.5" fill="#58a6ff" filter="url(#neon-glow)" />
-                                    <circle class="net-pulse pulse-requena" id="pulse-requena" r="4.5" fill="#58a6ff" filter="url(#neon-glow)" />
-                                    <circle class="net-pulse pulse-datem" id="pulse-datem" r="4.5" fill="#58a6ff" filter="url(#neon-glow)" />
-                                    <circle class="net-pulse pulse-lan" id="pulse-lan" r="4" fill="#3fb950" filter="url(#neon-glow)" />
+                                    <path class="cable-bg" d="M 160 140 C 160 195, 240 225, 380 225" />
+                                    <path class="cable-active cable-lan" id="cable-lan" d="M 160 140 C 160 195, 240 225, 380 225" />
                                 </g>
 
                                 <!-- Nodo Central: Iquitos Data Center -->
-                                <g class="node-group node-iquitos" transform="translate(120, 145)">
-                                    <circle class="node-halo" r="30" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4 3" />
-                                    <circle class="node-core" r="20" fill="#161b22" stroke="#58a6ff" stroke-width="2.5" />
+                                <g class="node-group node-iquitos" transform="translate(160, 140)">
+                                    <circle class="node-halo" cx="0" cy="0" r="30" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4 3" />
+                                    <circle class="node-core" cx="0" cy="0" r="20" fill="#161b22" stroke="#58a6ff" stroke-width="2.5" />
                                     <rect x="-8" y="-8" width="16" height="5" rx="1.5" fill="#58a6ff" />
                                     <rect x="-8" y="-1" width="16" height="5" rx="1.5" fill="#58a6ff" />
                                     <rect x="-8" y="6" width="16" height="3" rx="1" fill="#3fb950" />
                                     <text class="node-title" x="0" y="38" text-anchor="middle">SEDE CENTRAL IQUITOS</text>
-                                    <text class="node-sub" x="0" y="50" text-anchor="middle">Data Center Principal</text>
+                                    <text class="node-sub" x="0" y="52" text-anchor="middle">Data Center Principal</text>
                                 </g>
 
                                 <!-- Nodo 1: Nauta / Maynas -->
-                                <g class="node-group node-remote" transform="translate(380, 65)">
-                                    <circle class="node-core" r="13" fill="#161b22" stroke="#58a6ff" stroke-width="2" />
-                                    <circle r="4" fill="#58a6ff" />
-                                    <text class="node-title" x="22" y="2" text-anchor="start">F.P. Maynas / Nauta</text>
-                                    <text class="node-stat stat-ok" x="22" y="14" text-anchor="start">42ms • Radioenlace OK</text>
+                                <g class="node-group node-remote" transform="translate(740, 55)">
+                                    <circle class="node-core" cx="0" cy="0" r="14" fill="#161b22" stroke="#58a6ff" stroke-width="2" />
+                                    <circle cx="0" cy="0" r="4" fill="#58a6ff" />
+                                    <text class="node-title" x="24" y="2" text-anchor="start">F.P. Maynas / Nauta</text>
+                                    <text class="node-stat stat-ok" x="24" y="16" text-anchor="start">42ms • Radioenlace Operativo</text>
                                 </g>
 
-                                <!-- Nodo 2: Requena (Afectado R16) -->
-                                <g class="node-group node-remote node-requena" id="node-requena" transform="translate(380, 145)">
-                                    <circle class="node-halo-alert" id="halo-requena" r="22" fill="none" stroke="#f85149" stroke-width="1.5" opacity="0" />
-                                    <circle class="node-core" id="core-requena" r="13" fill="#161b22" stroke="#58a6ff" stroke-width="2" />
-                                    <circle id="dot-requena" r="4" fill="#58a6ff" />
-                                    <text class="node-title" x="22" y="2" text-anchor="start">F.P. Requena</text>
-                                    <text class="node-stat" id="stat-requena" x="22" y="14" text-anchor="start">180ms • Estable</text>
+                                <!-- Nodo 2: Requena (Afectado R16) con Halos Concéntricos Centrados Exactos -->
+                                <g class="node-group node-remote node-requena" id="node-requena" transform="translate(740, 140)">
+                                    <circle class="node-halo-alert" id="halo-requena" cx="0" cy="0" r="14" fill="none" stroke="#f85149" stroke-width="2.5" opacity="0" />
+                                    <circle class="node-halo-alert" id="halo-requena-2" cx="0" cy="0" r="14" fill="none" stroke="#f85149" stroke-width="1.5" opacity="0" />
+                                    <circle class="node-core" id="core-requena" cx="0" cy="0" r="14" fill="#161b22" stroke="#58a6ff" stroke-width="2" />
+                                    <circle id="dot-requena" cx="0" cy="0" r="4" fill="#58a6ff" />
+                                    <text class="node-title" x="24" y="2" text-anchor="start">F.P. Requena (R16)</text>
+                                    <text class="node-stat" id="stat-requena" x="24" y="16" text-anchor="start">180ms • Estable</text>
                                 </g>
 
-                                <!-- Nodo 3: Datem del Marañón (Afectado R16) -->
-                                <g class="node-group node-remote node-datem" id="node-datem" transform="translate(380, 225)">
-                                    <circle class="node-halo-alert" id="halo-datem" r="22" fill="none" stroke="#f85149" stroke-width="1.5" opacity="0" />
-                                    <circle class="node-core" id="core-datem" r="13" fill="#161b22" stroke="#58a6ff" stroke-width="2" />
-                                    <circle id="dot-datem" r="4" fill="#58a6ff" />
-                                    <text class="node-title" x="22" y="2" text-anchor="start">F.P. Datem del Marañón</text>
-                                    <text class="node-stat" id="stat-datem" x="22" y="14" text-anchor="start">195ms • Estable</text>
+                                <!-- Nodo 3: Datem del Marañón (Afectado R16) con Halos Concéntricos Centrados Exactos -->
+                                <g class="node-group node-remote node-datem" id="node-datem" transform="translate(740, 225)">
+                                    <circle class="node-halo-alert" id="halo-datem" cx="0" cy="0" r="14" fill="none" stroke="#f85149" stroke-width="2.5" opacity="0" />
+                                    <circle class="node-halo-alert" id="halo-datem-2" cx="0" cy="0" r="14" fill="none" stroke="#f85149" stroke-width="1.5" opacity="0" />
+                                    <circle class="node-core" id="core-datem" cx="0" cy="0" r="14" fill="#161b22" stroke="#58a6ff" stroke-width="2" />
+                                    <circle id="dot-datem" cx="0" cy="0" r="4" fill="#58a6ff" />
+                                    <text class="node-title" x="24" y="2" text-anchor="start">F.P. Datem del Marañón (R16)</text>
+                                    <text class="node-stat" id="stat-datem" x="24" y="16" text-anchor="start">195ms • Estable</text>
                                 </g>
 
-                                <!-- Nodo 4: Mesa de Ayuda / SGF (Componente E) -->
-                                <g class="node-group node-local node-sgf" id="node-sgf" transform="translate(210, 245)">
-                                    <circle class="node-halo-sgf" id="halo-sgf" r="19" fill="none" stroke="#3fb950" stroke-width="1.5" opacity="0" />
-                                    <circle class="node-core" id="core-sgf" r="12" fill="#161b22" stroke="#3fb950" stroke-width="2" />
-                                    <circle id="dot-sgf" r="3.5" fill="#3fb950" />
-                                    <text class="node-title" x="18" y="2" text-anchor="start">Mesa de Ayuda & SGF</text>
-                                    <text class="node-stat stat-ok" id="stat-sgf" x="18" y="14" text-anchor="start">LAN Interna • 2ms</text>
+                                <!-- Nodo 4: Mesa de Ayuda / SGF (Componente E) con Halos Concéntricos Centrados Exactos -->
+                                <g class="node-group node-local node-sgf" id="node-sgf" transform="translate(380, 225)">
+                                    <circle class="node-halo-sgf" id="halo-sgf" cx="0" cy="0" r="13" fill="none" stroke="#3fb950" stroke-width="2.5" opacity="0" />
+                                    <circle class="node-halo-sgf" id="halo-sgf-2" cx="0" cy="0" r="13" fill="none" stroke="#3fb950" stroke-width="1.5" opacity="0" />
+                                    <circle class="node-core" id="core-sgf" cx="0" cy="0" r="13" fill="#161b22" stroke="#3fb950" stroke-width="2" />
+                                    <circle id="dot-sgf" cx="0" cy="0" r="3.5" fill="#3fb950" />
+                                    <text class="node-title" x="20" y="2" text-anchor="start">Mesa de Ayuda & SGF</text>
+                                    <text class="node-stat stat-ok" id="stat-sgf" x="20" y="16" text-anchor="start">LAN Interna • 2ms</text>
                                 </g>
                             </svg>
                         </div>
