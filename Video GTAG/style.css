@@ -34,11 +34,11 @@
        CONFIGURACIÓN DE TIPOGRAFÍA DE TABLAS (AJUSTABLE POR EL USUARIO)
        Modifica aquí los tamaños (en px) según tu agrado para todas las tablas:
        ========================================================================== */
-    --tbl-th-size: 16px;         /* Encabezados de columna (CÓD, DESCRIPCIÓN, COMPONENTE...) */
-    --tbl-desc-size: 17.5px;     /* Texto de descripciones principales y hallazgos */
-    --tbl-badge-size: 15.5px;    /* Códigos de identificación (R01, C01, E01, P01, D01...) */
+    --tbl-th-size: 26px;         /* Encabezados de columna (CÓD, DESCRIPCIÓN, COMPONENTE...) */
+    --tbl-meta-size: 26px;       /* Componentes GTAG, categorías y dominios */
+    --tbl-desc-size: 27.5px;     /* Texto de descripciones principales y hallazgos */
+    --tbl-badge-size: 18.5px;    /* Códigos de identificación (R01, C01, E01, P01, D01...) */
     --tbl-level-size: 14px;      /* Badges de nivel o técnica (Alto, Muy Alto, Inspección...) */
-    --tbl-meta-size: 16px;       /* Componentes GTAG, categorías y dominios */
     --tbl-row-padding-y: 16px;   /* Relleno vertical de cada fila para mayor legibilidad */
 }
 
