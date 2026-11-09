@@ -242,73 +242,86 @@
                     </div>
                     <div class="table-scroll-viewport">
                         <div class="table-rows-track" id="risks-rows-track">
-                            <div class="table-row-item">
+                            <!-- GRUPO 1: RESPALDO Y RECUPERACIÓN (R01, R07, R17) -->
+                            <div class="table-row-item risk-comp-respaldo" id="row-risk-r01">
                                 <span class="risk-cod-badge">R01</span>
                                 <span class="risk-desc-text">Pérdida de la información de las fiscalías ante una falla, porque no se ha comprobado que las copias de respaldo puedan restaurarse.</span>
                                 <span class="risk-level-badge badge-level-alto">Alto</span>
                                 <span class="risk-gtag-component">Respaldo y Recuperación</span>
                             </div>
-                            <div class="table-row-item">
-                                <span class="risk-cod-badge">R02</span>
-                                <span class="risk-desc-text">Acceso o manipulación de las bases de datos por personas no autorizadas que ingresan al cuarto de servidores.</span>
-                                <span class="risk-level-badge badge-level-alto">Alto</span>
-                                <span class="risk-gtag-component">Infraestructura Física</span>
-                            </div>
-                            <div class="table-row-item">
+                            <div class="table-row-item risk-comp-respaldo" id="row-risk-r07">
                                 <span class="risk-cod-badge">R07</span>
                                 <span class="risk-desc-text">Pérdida de información si falla la sede, porque la copia fuera del local no está actualizada.</span>
                                 <span class="risk-level-badge badge-level-alto">Alto</span>
                                 <span class="risk-gtag-component">Respaldo y Recuperación</span>
                             </div>
-                            <div class="table-row-item">
-                                <span class="risk-cod-badge">R09</span>
-                                <span class="risk-desc-text">Incidentes que se pierden o se atienden tarde, sin datos para medir la carga de trabajo ni detectar problemas recurrentes.</span>
-                                <span class="risk-level-badge badge-level-alto">Alto</span>
-                                <span class="risk-gtag-component">Operaciones de TI</span>
-                            </div>
-                            <div class="table-row-item">
-                                <span class="risk-cod-badge">R12</span>
-                                <span class="risk-desc-text">Falla de los servidores por sobrecalentamiento o humedad en el cuarto.</span>
-                                <span class="risk-level-badge badge-level-alto">Alto</span>
-                                <span class="risk-gtag-component">Centro de Datos</span>
-                            </div>
-                            <div class="table-row-item row-critical">
-                                <span class="risk-cod-badge badge-cod-muy-alto">R16</span>
-                                <span class="risk-desc-text">Pérdida de acceso a los sistemas en las sedes por caída o lentitud de los enlaces de comunicación.</span>
-                                <span class="risk-level-badge badge-level-muy-alto">Muy Alto</span>
-                                <span class="risk-gtag-component">Dispositivos de Red</span>
-                            </div>
-                            <div class="table-row-item">
+                            <div class="table-row-item risk-comp-respaldo" id="row-risk-r17">
                                 <span class="risk-cod-badge">R17</span>
                                 <span class="risk-desc-text">Sustracción de medios con copias de la información fiscal y pérdida del respaldo.</span>
                                 <span class="risk-level-badge badge-level-alto">Alto</span>
                                 <span class="risk-gtag-component">Respaldo y Recuperación</span>
                             </div>
-                            <div class="table-row-item row-critical">
+
+                            <!-- GRUPO 2: CENTRO DE DATOS (R12) -->
+                            <div class="table-row-item risk-comp-centrodatos" id="row-risk-r12">
+                                <span class="risk-cod-badge">R12</span>
+                                <span class="risk-desc-text">Falla de los servidores por sobrecalentamiento o humedad en el cuarto.</span>
+                                <span class="risk-level-badge badge-level-alto">Alto</span>
+                                <span class="risk-gtag-component">Centro de Datos</span>
+                            </div>
+
+                            <!-- GRUPO 3: INFRAESTRUCTURA FÍSICA (R02, R20) -->
+                            <div class="table-row-item risk-comp-fisica" id="row-risk-r02">
+                                <span class="risk-cod-badge">R02</span>
+                                <span class="risk-desc-text">Acceso o manipulación de las bases de datos por personas no autorizadas que ingresan al cuarto de servidores.</span>
+                                <span class="risk-level-badge badge-level-alto">Alto</span>
+                                <span class="risk-gtag-component">Infraestructura Física</span>
+                            </div>
+                            <div class="table-row-item row-critical risk-comp-fisica" id="row-risk-r20">
                                 <span class="risk-cod-badge badge-cod-muy-alto">R20</span>
                                 <span class="risk-desc-text">Manipulación, desconexión o daño de los servidores por personas que ingresan al cuarto para imprimir.</span>
                                 <span class="risk-level-badge badge-level-muy-alto">Muy Alto</span>
                                 <span class="risk-gtag-component">Infraestructura Física</span>
                             </div>
-                            <div class="table-row-item row-critical">
-                                <span class="risk-cod-badge badge-cod-muy-alto">R24</span>
-                                <span class="risk-desc-text">Paralización del registro de casos fiscales cuando falla alguno de los componentes de los que depende el SGF.</span>
+
+                            <!-- GRUPO 4: DISPOSITIVOS DE RED (R16) -->
+                            <div class="table-row-item row-critical risk-comp-red" id="row-risk-r16">
+                                <span class="risk-cod-badge badge-cod-muy-alto">R16</span>
+                                <span class="risk-desc-text">Pérdida de acceso a los sistemas en las sedes por caída o lentitud de los enlaces de comunicación.</span>
                                 <span class="risk-level-badge badge-level-muy-alto">Muy Alto</span>
-                                <span class="risk-gtag-component">Operaciones de TI</span>
+                                <span class="risk-gtag-component">Dispositivos de Red</span>
                             </div>
-                            <div class="table-row-item">
+
+                            <!-- GRUPO 5: GESTIÓN DE PARCHES (R26) -->
+                            <div class="table-row-item risk-comp-parches" id="row-risk-r26">
                                 <span class="risk-cod-badge">R26</span>
                                 <span class="risk-desc-text">Explotación de vulnerabilidades sin corrección en estaciones con un sistema operativo sin soporte.</span>
                                 <span class="risk-level-badge badge-level-alto">Alto</span>
                                 <span class="risk-gtag-component">Gestión de Parches</span>
                             </div>
-                            <div class="table-row-item row-critical">
+
+                            <!-- GRUPO 6: SOFTWARE Y ANTIVIRUS (R27) -->
+                            <div class="table-row-item row-critical risk-comp-software" id="row-risk-r27">
                                 <span class="risk-cod-badge badge-cod-muy-alto">R27</span>
                                 <span class="risk-desc-text">Infección de equipos y propagación de software malicioso en la red del distrito.</span>
                                 <span class="risk-level-badge badge-level-muy-alto">Muy Alto</span>
                                 <span class="risk-gtag-component">Software y Antivirus</span>
                             </div>
-                            <div class="table-row-item">
+
+                            <!-- GRUPO 7: OPERACIONES DE TI (R09, R24, R28) -->
+                            <div class="table-row-item risk-comp-operaciones" id="row-risk-r09">
+                                <span class="risk-cod-badge">R09</span>
+                                <span class="risk-desc-text">Incidentes que se pierden o se atienden tarde, sin datos para medir la carga de trabajo ni detectar problemas recurrentes.</span>
+                                <span class="risk-level-badge badge-level-alto">Alto</span>
+                                <span class="risk-gtag-component">Operaciones de TI</span>
+                            </div>
+                            <div class="table-row-item row-critical risk-comp-operaciones" id="row-risk-r24">
+                                <span class="risk-cod-badge badge-cod-muy-alto">R24</span>
+                                <span class="risk-desc-text">Paralización del registro de casos fiscales cuando falla alguno de los componentes de los que depende el SGF.</span>
+                                <span class="risk-level-badge badge-level-muy-alto">Muy Alto</span>
+                                <span class="risk-gtag-component">Operaciones de TI</span>
+                            </div>
+                            <div class="table-row-item risk-comp-operaciones" id="row-risk-r28">
                                 <span class="risk-cod-badge">R28</span>
                                 <span class="risk-desc-text">Paralización de la gestión de accesos y de la recuperación de servicios ante la ausencia del coordinador.</span>
                                 <span class="risk-level-badge badge-level-alto">Alto</span>
@@ -317,82 +330,6 @@
                         </div>
                     </div>
                 </div>
-                </div>
-
-                <!-- ======================================================== -->
-                <!-- CARRUSEL 3D: EVIDENCIAS EN CAMPO (DESPUÉS DEL 3° ELEMENTO, POR ARRIBA DE LOS DEMÁS) -->
-                <!-- ======================================================== -->
-                <div id="risk-carousel-3d-overlay" class="carousel-3d-overlay">
-                    <div class="carousel-3d-header">
-                        <span class="carousel-tag">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                            EVIDENCIA EN CAMPO • 4 DOMINIOS CRÍTICOS
-                        </span>
-                        <h3 class="carousel-title">Inspección Física y Lógica en Sede Central Iquitos</h3>
-                    </div>
-
-                    <div class="carousel-3d-viewport">
-                        <div class="carousel-3d-ring" id="carousel-ring">
-                            <!-- Card 0: Cuarto de Servidores -->
-                            <div class="carousel-3d-card card-3d-0 is-active" id="c3d-card-0">
-                                <div class="c3d-img-box">
-                                    <img src="./img/saladeservidores.jpg" alt="Cuarto de Servidores">
-                                    <span class="c3d-badge">R02 • R12 • R20</span>
-                                </div>
-                                <div class="c3d-body">
-                                    <span class="c3d-domain">A. Seguridad Física y Ambiental</span>
-                                    <h4>Cuarto de Servidores</h4>
-                                    <p>Acceso no restringido para imprimir, sin llave durante la jornada y sin climatización monitoreada ni extintores.</p>
-                                </div>
-                            </div>
-
-                            <!-- Card 1: Bases de Datos -->
-                            <div class="carousel-3d-card card-3d-1" id="c3d-card-1">
-                                <div class="c3d-img-box">
-                                    <img src="./img/gestordebasededatos.jpg" alt="Bases de Datos Fiscales">
-                                    <span class="c3d-badge">R01 • R07 • R17</span>
-                                </div>
-                                <div class="c3d-body">
-                                    <span class="c3d-domain">B. Respaldo y Recuperación</span>
-                                    <h4>Bases de Datos Fiscales</h4>
-                                    <p>Copias de respaldo sin pruebas periódicas de restauración, falta de custodia bajo llave y omisión de resguardo off-site.</p>
-                                </div>
-                            </div>
-
-                            <!-- Card 2: Endpoints y Antivirus -->
-                            <div class="carousel-3d-card card-3d-2" id="c3d-card-2">
-                                <div class="c3d-img-box">
-                                    <img src="./img/antivirus.jpg" alt="Seguridad Endpoint y Antivirus">
-                                    <span class="c3d-badge">R26 • R27</span>
-                                </div>
-                                <div class="c3d-body">
-                                    <span class="c3d-domain">C. Software y Parches Lógicos</span>
-                                    <h4>Endpoints & Antivirus</h4>
-                                    <p>Estaciones operando con Windows 10 sin soporte de seguridad, antimalware inactivo y ausencia de bloqueo por inactividad.</p>
-                                </div>
-                            </div>
-
-                            <!-- Card 3: Mesa de Ayuda y SGF -->
-                            <div class="carousel-3d-card card-3d-3" id="c3d-card-3">
-                                <div class="c3d-img-box">
-                                    <img src="./img/mesadeayuda.png" alt="Mesa de Ayuda y SGF">
-                                    <span class="c3d-badge">R09 • R24 • R28</span>
-                                </div>
-                                <div class="c3d-body">
-                                    <span class="c3d-domain">E. Operaciones TI e Incidentes</span>
-                                    <h4>Mesa de Ayuda & SGF</h4>
-                                    <p>Falta de registro formal de peticiones e incidentes, caídas del SGF sin diagnóstico local y dependencia de un solo coordinador.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="carousel-3d-dots">
-                        <span class="c3d-dot active" id="c3d-dot-0"></span>
-                        <span class="c3d-dot" id="c3d-dot-1"></span>
-                        <span class="c3d-dot" id="c3d-dot-2"></span>
-                        <span class="c3d-dot" id="c3d-dot-3"></span>
-                    </div>
                 </div>
             </div>
 
@@ -905,105 +842,6 @@
                                         <span class="ev-badge ev-ind">E5</span>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 2. Topología de Red Viviente: Desplaza por Completo a la Tabla y Ocupa su Lugar -->
-                    <div class="network-topology-hud" id="network-topology-hud">
-                        <div class="hud-top-bar">
-                            <div class="hud-title-group">
-                                <span class="hud-tag">TOPOLOGÍA DE RED VIVIENTE</span>
-                                <h4 class="hud-heading">Sede Central Iquitos • Enlaces WAN Loreto</h4>
-                            </div>
-                            <span class="hud-live-pill" id="hud-live-status">ENLACES ACTIVOS</span>
-                        </div>
-
-                        <!-- Canvas SVG Panorámico de Topología de Red Viviente (1000 x 280) -->
-                        <div class="topology-svg-wrapper">
-                            <svg class="topology-svg-canvas" viewBox="0 0 1000 280">
-                                <defs>
-                                    <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
-                                        <feGaussianBlur stdDeviation="3" result="glow" />
-                                        <feMerge>
-                                            <feMergeNode in="glow" />
-                                            <feMergeNode in="SourceGraphic" />
-                                        </feMerge>
-                                    </filter>
-                                </defs>
-
-                                <!-- Cables de Red / Enlaces WAN (Líneas Conectoras Panorámicas) -->
-                                <g class="wan-links-paths">
-                                    <path class="cable-bg" d="M 160 140 C 380 140, 520 55, 740 55" />
-                                    <path class="cable-active cable-nauta" id="cable-nauta" d="M 160 140 C 380 140, 520 55, 740 55" />
-
-                                    <path class="cable-bg" d="M 160 140 C 380 140, 520 140, 740 140" />
-                                    <path class="cable-active cable-requena" id="cable-requena" d="M 160 140 C 380 140, 520 140, 740 140" />
-
-                                    <path class="cable-bg" d="M 160 140 C 380 140, 520 225, 740 225" />
-                                    <path class="cable-active cable-datem" id="cable-datem" d="M 160 140 C 380 140, 520 225, 740 225" />
-
-                                    <path class="cable-bg" d="M 160 140 C 160 195, 240 225, 380 225" />
-                                    <path class="cable-active cable-lan" id="cable-lan" d="M 160 140 C 160 195, 240 225, 380 225" />
-                                </g>
-
-                                <!-- Nodo Central: Iquitos Data Center -->
-                                <g class="node-group node-iquitos" transform="translate(160, 140)">
-                                    <circle class="node-halo" cx="0" cy="0" r="30" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4 3" />
-                                    <circle class="node-core" cx="0" cy="0" r="20" fill="#161b22" stroke="#58a6ff" stroke-width="2.5" />
-                                    <rect x="-8" y="-8" width="16" height="5" rx="1.5" fill="#58a6ff" />
-                                    <rect x="-8" y="-1" width="16" height="5" rx="1.5" fill="#58a6ff" />
-                                    <rect x="-8" y="6" width="16" height="3" rx="1" fill="#3fb950" />
-                                    <text class="node-title" x="0" y="38" text-anchor="middle">SEDE CENTRAL IQUITOS</text>
-                                    <text class="node-sub" x="0" y="52" text-anchor="middle">Data Center Principal</text>
-                                </g>
-
-                                <!-- Nodo 1: Nauta / Maynas -->
-                                <g class="node-group node-remote" transform="translate(740, 55)">
-                                    <circle class="node-core" cx="0" cy="0" r="14" fill="#161b22" stroke="#58a6ff" stroke-width="2" />
-                                    <circle cx="0" cy="0" r="4" fill="#58a6ff" />
-                                    <text class="node-title" x="24" y="2" text-anchor="start">F.P. Maynas / Nauta</text>
-                                    <text class="node-stat stat-ok" x="24" y="16" text-anchor="start">42ms • Radioenlace Operativo</text>
-                                </g>
-
-                                <!-- Nodo 2: Requena (Afectado R16) con Halos Concéntricos Centrados Exactos -->
-                                <g class="node-group node-remote node-requena" id="node-requena" transform="translate(740, 140)">
-                                    <circle class="node-halo-alert" id="halo-requena" cx="0" cy="0" r="14" fill="none" stroke="#f85149" stroke-width="2.5" opacity="0" />
-                                    <circle class="node-halo-alert" id="halo-requena-2" cx="0" cy="0" r="14" fill="none" stroke="#f85149" stroke-width="1.5" opacity="0" />
-                                    <circle class="node-core" id="core-requena" cx="0" cy="0" r="14" fill="#161b22" stroke="#58a6ff" stroke-width="2" />
-                                    <circle id="dot-requena" cx="0" cy="0" r="4" fill="#58a6ff" />
-                                    <text class="node-title" x="24" y="2" text-anchor="start">F.P. Requena (R16)</text>
-                                    <text class="node-stat" id="stat-requena" x="24" y="16" text-anchor="start">180ms • Estable</text>
-                                </g>
-
-                                <!-- Nodo 3: Datem del Marañón (Afectado R16) con Halos Concéntricos Centrados Exactos -->
-                                <g class="node-group node-remote node-datem" id="node-datem" transform="translate(740, 225)">
-                                    <circle class="node-halo-alert" id="halo-datem" cx="0" cy="0" r="14" fill="none" stroke="#f85149" stroke-width="2.5" opacity="0" />
-                                    <circle class="node-halo-alert" id="halo-datem-2" cx="0" cy="0" r="14" fill="none" stroke="#f85149" stroke-width="1.5" opacity="0" />
-                                    <circle class="node-core" id="core-datem" cx="0" cy="0" r="14" fill="#161b22" stroke="#58a6ff" stroke-width="2" />
-                                    <circle id="dot-datem" cx="0" cy="0" r="4" fill="#58a6ff" />
-                                    <text class="node-title" x="24" y="2" text-anchor="start">F.P. Datem del Marañón (R16)</text>
-                                    <text class="node-stat" id="stat-datem" x="24" y="16" text-anchor="start">195ms • Estable</text>
-                                </g>
-
-                                <!-- Nodo 4: Mesa de Ayuda / SGF (Componente E) con Halos Concéntricos Centrados Exactos -->
-                                <g class="node-group node-local node-sgf" id="node-sgf" transform="translate(380, 225)">
-                                    <circle class="node-halo-sgf" id="halo-sgf" cx="0" cy="0" r="13" fill="none" stroke="#3fb950" stroke-width="2.5" opacity="0" />
-                                    <circle class="node-halo-sgf" id="halo-sgf-2" cx="0" cy="0" r="13" fill="none" stroke="#3fb950" stroke-width="1.5" opacity="0" />
-                                    <circle class="node-core" id="core-sgf" cx="0" cy="0" r="13" fill="#161b22" stroke="#3fb950" stroke-width="2" />
-                                    <circle id="dot-sgf" cx="0" cy="0" r="3.5" fill="#3fb950" />
-                                    <text class="node-title" x="20" y="2" text-anchor="start">Mesa de Ayuda & SGF</text>
-                                    <text class="node-stat stat-ok" id="stat-sgf" x="20" y="16" text-anchor="start">LAN Interna • 2ms</text>
-                                </g>
-                            </svg>
-                        </div>
-
-                        <!-- Footer de Telemetría Dinámica -->
-                        <div class="hud-diagnostic-footer" id="hud-diagnostic-footer">
-                            <div class="diag-bullet" id="diag-bullet">●</div>
-                            <div class="diag-text-col">
-                                <strong id="diag-title">Monitoreo Proactivo de Red WAN</strong>
-                                <p id="diag-desc">Tráfico de red nominal y enlace a fiscalías provinciales en estado de observación.</p>
                             </div>
                         </div>
                     </div>

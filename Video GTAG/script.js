@@ -27,6 +27,13 @@ function playAudioFile(relativePath) {
     } catch (e) { }
 }
 
+// =========================================================================
+// VELOCIDAD GLOBAL DE AUDIO (MODIFICABLE POR EL USUARIO)
+// Cambia este valor para aumentar o disminuir la velocidad de todos los audios:
+// Ejemplos: 1.0 (normal), 1.14 (+14% recomendada), 1.20 (+20%), 1.25 (+25%)
+// =========================================================================
+const GLOBAL_AUDIO_SPEED = 1.14;
+
 // --- SISTEMA MAESTRO DE VOZ EN OFF (VOICEOVER CONTROLLER) ---
 const VOICEOVER_TRACKS = [
     {
@@ -35,8 +42,10 @@ const VOICEOVER_TRACKS = [
         sceneLabel: "scene2_start",
         sceneIndex: 2,
         offsetInScene: 0.4,
-        speed: 1.14,
-        duration: 16.84 / 1.14 // ~14.77s
+        rawAudioStart: 0,
+        rawDuration: 16.84,
+        get speed() { return GLOBAL_AUDIO_SPEED; },
+        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
     },
     {
         id: "paso1_2",
@@ -44,8 +53,10 @@ const VOICEOVER_TRACKS = [
         sceneLabel: "scene2_start",
         sceneIndex: 2,
         offsetInScene: 15.8,
-        speed: 1.14,
-        duration: 117.26 / 1.14 // ~102.86s
+        rawAudioStart: 0,
+        rawDuration: 117.26,
+        get speed() { return GLOBAL_AUDIO_SPEED; },
+        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
     },
     {
         id: "paso2",
@@ -53,8 +64,10 @@ const VOICEOVER_TRACKS = [
         sceneLabel: "scene3_start",
         sceneIndex: 3,
         offsetInScene: 0.4,
-        speed: 1.14,
-        duration: 130.76 / 1.14 // ~114.70s
+        rawAudioStart: 0,
+        rawDuration: 130.76,
+        get speed() { return GLOBAL_AUDIO_SPEED; },
+        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
     },
     {
         id: "paso3",
@@ -62,8 +75,65 @@ const VOICEOVER_TRACKS = [
         sceneLabel: "scene4_start",
         sceneIndex: 4,
         offsetInScene: 0.4,
-        speed: 1.14,
-        duration: 133.96 / 1.14 // ~117.51s
+        rawAudioStart: 0,
+        rawDuration: 133.96,
+        get speed() { return GLOBAL_AUDIO_SPEED; },
+        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+    },
+    {
+        id: "paso4_e5",
+        file: "./AUDIOS PASO 1-6/Paso 4.wav",
+        sceneLabel: "scene5_start",
+        sceneIndex: 5,
+        offsetInScene: 0.4,
+        rawAudioStart: 0,
+        rawDuration: 64.2, // Bloque 1: Intro + Componentes A, B, C
+        get speed() { return GLOBAL_AUDIO_SPEED; },
+        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+    },
+    {
+        id: "paso4_e6",
+        file: "./AUDIOS PASO 1-6/Paso 4.wav",
+        sceneLabel: "scene6_start",
+        sceneIndex: 6,
+        offsetInScene: 0.4,
+        rawAudioStart: 65.0, // Bloque 2: Componentes D y E
+        rawDuration: 35.31,
+        get speed() { return GLOBAL_AUDIO_SPEED; },
+        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+    },
+    {
+        id: "paso5_e7",
+        file: "./AUDIOS PASO 1-6/Paso 5.wav",
+        sceneLabel: "scene7_start",
+        sceneIndex: 7,
+        offsetInScene: 0.4,
+        rawAudioStart: 0,
+        rawDuration: 100.25, // Bloque 1: Intro + Desviaciones A y B
+        get speed() { return GLOBAL_AUDIO_SPEED; },
+        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+    },
+    {
+        id: "paso5_e8",
+        file: "./AUDIOS PASO 1-6/Paso 5.wav",
+        sceneLabel: "scene8_start",
+        sceneIndex: 8,
+        offsetInScene: 0.4,
+        rawAudioStart: 101.5, // Bloque 2: Desviaciones C, D y E
+        rawDuration: 86.55,
+        get speed() { return GLOBAL_AUDIO_SPEED; },
+        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+    },
+    {
+        id: "paso6_e9",
+        file: "./AUDIOS PASO 1-6/Paso 6.wav",
+        sceneLabel: "scene9_start",
+        sceneIndex: 9,
+        offsetInScene: 0.4,
+        rawAudioStart: 0,
+        rawDuration: 99.18, // Dictamen y Conclusiones completas
+        get speed() { return GLOBAL_AUDIO_SPEED; },
+        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
     }
 ];
 
@@ -72,7 +142,10 @@ class VoiceoverController {
         this.audio = null;
         this.currentSrc = null;
         this.currentTrackId = null;
-        this.defaultSpeed = 1.14; // Velocidad ligeramente acelerada (+14%) como solicitó el usuario
+    }
+
+    get defaultSpeed() {
+        return GLOBAL_AUDIO_SPEED;
     }
 
     getTrackAtTime(timelineTime) {
@@ -83,11 +156,12 @@ class VoiceoverController {
             const start = sceneStart + tr.offsetInScene;
             const end = start + tr.duration;
             if (timelineTime >= start && timelineTime < end) {
+                const spd = tr.speed || GLOBAL_AUDIO_SPEED;
                 return {
                     track: tr,
                     startTimelineTime: start,
                     endTimelineTime: end,
-                    audioTime: (timelineTime - start) * (tr.speed || this.defaultSpeed)
+                    audioTime: (tr.rawAudioStart || 0) + (timelineTime - start) * spd
                 };
             }
         }
@@ -102,7 +176,7 @@ class VoiceoverController {
         }
 
         const { track, audioTime } = info;
-        const speed = track.speed || this.defaultSpeed;
+        const speed = track.speed || GLOBAL_AUDIO_SPEED;
 
         if (this.audio && this.currentTrackId === track.id) {
             // Ya es el mismo archivo de audio
@@ -157,9 +231,9 @@ class VoiceoverController {
         }
     }
 
-    play(filePath, speed = 1.14, startTime = 0) {
-        // Si ya está reproduciéndose este mismo archivo cerca del tiempo solicitado, continuar
-        if (this.audio && this.currentSrc === filePath && Math.abs(this.audio.currentTime - startTime) < 0.6) {
+    play(filePath, speed = GLOBAL_AUDIO_SPEED, startTime = 0, trackId = null) {
+        // Si ya está reproduciéndose este mismo track cerca del tiempo solicitado, continuar
+        if (this.audio && this.currentTrackId === trackId && Math.abs(this.audio.currentTime - startTime) < 0.6) {
             return;
         }
         this.stop();
@@ -170,17 +244,24 @@ class VoiceoverController {
             a.playbackRate = speed;
             a.defaultPlaybackRate = speed;
             a.preservesPitch = true;
-            if (startTime > 0) {
-                a.currentTime = startTime;
-            }
             this.audio = a;
             this.currentSrc = filePath;
-            const matching = VOICEOVER_TRACKS.find(t => t.file === filePath);
-            if (matching) this.currentTrackId = matching.id;
+            this.currentTrackId = trackId || (VOICEOVER_TRACKS.find(t => t.file === filePath)?.id || null);
 
-            a.play().catch(err => {
-                console.warn("Reproducción de voz en off pospuesta:", err);
-            });
+            const applySeekAndPlay = () => {
+                try {
+                    if (startTime > 0) a.currentTime = startTime;
+                } catch (e) {}
+                a.play().catch(err => {
+                    console.warn("Reproducción de voz en off pospuesta:", err);
+                });
+            };
+
+            if (a.readyState >= 1) {
+                applySeekAndPlay();
+            } else {
+                a.addEventListener('loadedmetadata', applySeekAndPlay, { once: true });
+            }
         } catch (e) {
             console.error("Error al reproducir audio de voz en off:", e);
         }
@@ -397,27 +478,14 @@ function buildScene1(cam) {
     return tl;
 }
 
-// Función auxiliar para actualizar el estado del Carrusel 3D (tarjeta activa y dot indicador)
-function set3DCarouselCard(index) {
-    for (let i = 0; i < 4; i++) {
-        const card = document.getElementById(`c3d-card-${i}`);
-        const dot = document.getElementById(`c3d-dot-${i}`);
-        if (card) {
-            if (i === index) card.classList.add('is-active');
-            else card.classList.remove('is-active');
-        }
-        if (dot) {
-            if (i === index) dot.classList.add('active');
-            else dot.classList.remove('active');
-        }
-    }
-}
-
 // ==========================================
 // ESCENA 2: PASO 1 - IDENTIFICACIÓN Y EVALUACIÓN DE RIESGOS
 // ==========================================
 function buildScene2(cam) {
     const tl = gsap.timeline();
+    const dur1 = 16.84 / GLOBAL_AUDIO_SPEED;
+    const dur2 = 117.26 / GLOBAL_AUDIO_SPEED;
+    const tableStartTime = 0.4 + dur1 + 0.6; // ~15.8s at 1.14x
 
     tl.call(() => setActiveSceneDOM('scene2'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -429,22 +497,19 @@ function buildScene2(cam) {
         .set("#scene2 .risk-kpi-panel", { opacity: 0, x: -60 }, 0)
         .set("#matrix-graph-panel", { opacity: 0, scale: 0.88 }, 0)
         .set("#risks-table-box", { opacity: 0, y: 40, scale: 0.98, filter: "none", pointerEvents: "none" }, 0)
-        .set("#risk-carousel-3d-overlay", { opacity: 0, visibility: "hidden", scale: 0.85 }, 0)
-        .set("#carousel-ring", { rotationY: 0 }, 0)
         .set("#blob-mother", { scale: 1, cx: 190, cy: 45, opacity: 1 }, 0)
         .set("#blob-filtered", { cx: 190, cy: 45, scale: 0.75, opacity: 1 }, 0)
         .set("#blob-critical", { cx: 190, cy: 45, scale: 0.75, opacity: 1 }, 0)
         .set("#blob-txt-mother", { opacity: 1, scale: 1 }, 0)
         .set("#blob-txt-filtered", { opacity: 0 }, 0)
         .set("#blob-txt-critical", { opacity: 0 }, 0)
-        .call(() => set3DCarouselCard(0), null, 0)
         .to("#scene2", { opacity: 1, duration: 0.5 }, 0.1)
         .from("#scene2 .section-tag", { y: -20, opacity: 0, duration: 0.5 }, 0.3)
         // Título escrito letra por letra con SFX.tick
         .add(typeHeadingText("#scene2 .title-hero", "Identificación y Valoración de Riesgos", 0.03, false), 0.4)
 
-        // AUDIO 1: PASO 1_1.WAV AL APARECER EL TÍTULO (con velocidad acelerada a 1.14x)
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 1_1.wav', 1.14), null, 0.4)
+        // AUDIO 1: PASO 1_1.WAV AL APARECER EL TÍTULO
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 1_1.wav', GLOBAL_AUDIO_SPEED, 0, 'paso1_1'), null, 0.4)
 
         .from("#scene2 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
@@ -472,42 +537,37 @@ function buildScene2(cam) {
         .call(() => SFX.slide(), null, 2.2)
 
         // ANIMACIÓN: DESPRENDIMIENTO CELULAR LÍQUIDO (METABALL GOOEY FILTER)
-        // Pausa intencional para permitir ver la masa madre de 32 riesgos asentada y los contadores
-        // Comienza el estiramiento viscoso tras la pausa
         .to("#blob-mother", { scaleX: 1.45, scaleY: 0.82, duration: 0.5, ease: "power2.inOut" }, 3.5)
-        // Separación elástica con puente viscoso conectivo
         .to("#blob-filtered", { cx: 90, scale: 1, duration: 0.75, ease: "power3.inOut" }, 3.7)
         .to("#blob-critical", { cx: 290, scale: 1, duration: 0.75, ease: "power3.inOut" }, 3.7)
         .to("#blob-mother", { scale: 0.35, opacity: 0, duration: 0.4, ease: "power2.in" }, 4.1)
         .to("#blob-txt-mother", { opacity: 0, scale: 0.5, duration: 0.3 }, 4.05)
-        // Snap elástico con pop sonoro sincronizado
         .call(() => SFX.pop(), null, 4.25)
         .to("#blob-filtered", { scale: 1.14, duration: 0.35, yoyo: true, repeat: 1, ease: "elastic.out(1.2, 0.4)" }, 4.25)
         .to("#blob-critical", { scale: 1.18, duration: 0.35, yoyo: true, repeat: 1, ease: "elastic.out(1.2, 0.4)" }, 4.25)
         .to(["#blob-txt-filtered", "#blob-txt-critical"], { opacity: 1, duration: 0.35 }, 4.3)
 
-        // 2. SEGUNDO ELEMENTO: Matriz 5x5 a la derecha (aparición con zoom y permanencia mientras se completa la locución inicial)
+        // 2. SEGUNDO ELEMENTO: Matriz 5x5 a la derecha (aparición con zoom)
         .to(cam, { scale: 1.25, x: -340, y: 70, duration: 1.3, ease: "power2.inOut" }, 5.0)
         .to("#matrix-graph-panel", { opacity: 1, scale: 1.0, duration: 0.8, ease: "back.out(1.2)" }, 5.0)
         .call(() => SFX.ting(), null, 5.8)
         .to("#matrix-graph-panel .cell-high", { scale: 1.15, duration: 0.3, yoyo: true, repeat: 3, transformOrigin: "center center" }, 5.8)
 
-        // Pausa de contemplación de la matriz: se mantiene visible y en foco hasta los 15.0s (duración de Paso 1_1.wav acelerado)
-        // 3. TERCER ELEMENTO: Tabla de 12 Riesgos Priorizados (aparición a altura completa ampliada de 700px)
-        // Desvanecemos la matriz tras la locución inicial y centramos la cámara
-        .to("#scene2 .matrix-container", { opacity: 0, y: -25, duration: 0.65, ease: "power2.inOut", pointerEvents: "none" }, 15.0)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 0.9, ease: "power2.inOut" }, 15.0)
-        .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.85, ease: "power2.out", pointerEvents: "auto" }, 15.6)
-        .call(() => SFX.slide(), null, 15.6)
+        // Pausa de contemplación de la matriz: se mantiene visible hasta tableStartTime - 0.8s
+        // 3. TERCER ELEMENTO: Tabla de 12 Riesgos Priorizados (reordenada por componentes)
+        .to("#scene2 .matrix-container", { opacity: 0, y: -25, duration: 0.65, ease: "power2.inOut", pointerEvents: "none" }, tableStartTime - 0.8)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 0.9, ease: "power2.inOut" }, tableStartTime - 0.8)
+        .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.85, ease: "power2.out", pointerEvents: "auto" }, tableStartTime - 0.2)
+        .call(() => SFX.slide(), null, tableStartTime - 0.2)
         .fromTo("#risks-table-box", {
             boxShadow: "0 0 45px rgba(88, 166, 255, 0.65)"
         }, {
             boxShadow: "0 16px 45px rgba(0, 0, 0, 0.55)",
             duration: 0.9
-        }, 15.6)
+        }, tableStartTime - 0.2)
 
-        // AUDIO 2: PASO 1_2TABLA.WAV AL APARECER LA TABLA (duración a 1.14x es ~102.8s)
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 1_2Tabla.wav', 1.14), null, 15.8)
+        // AUDIO 2: PASO 1_2TABLA.WAV AL APARECER LA TABLA
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 1_2Tabla.wav', GLOBAL_AUDIO_SPEED, 0, 'paso1_2'), null, tableStartTime)
 
         // Desplazamiento progresivo continuo y cadencioso de las filas de la tabla durante toda la locución de la tabla
         .to("#risks-rows-track", {
@@ -517,50 +577,19 @@ function buildScene2(cam) {
                 const vh = viewport ? (viewport.clientHeight || viewport.offsetHeight) : 700;
                 return track && track.scrollHeight > vh ? -(track.scrollHeight - vh + 15) : -450;
             },
-            duration: 98.0,
+            duration: Math.max(10, dur2 - 4.5),
             ease: "power1.inOut"
-        }, 18.0)
+        }, tableStartTime + 2.0)
 
-        // ========================================================
-        // DESPUÉS DEL TERCERO: CARRUSEL 3D POR ARRIBA DE LOS DEMÁS
-        // ========================================================
-        // Retorno de cámara al centro y desvanecimiento de la tabla y encabezados de fondo tras culminar la locución de la tabla
-        .call(() => Voiceover.stop(), null, 118.8)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.0, ease: "power2.inOut" }, 119.0)
-        .to(["#scene2 .scene-header-box", "#scene2 .matrix-container", "#scene2 #risks-table-box"], {
+        // Cierre fluido directo al terminar la locución de la tabla (CARRUSEL 3D ELIMINADO COMO SOLICITÓ EL USUARIO)
+        .call(() => Voiceover.stop(), null, tableStartTime + dur2)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.0, ease: "power2.inOut" }, tableStartTime + dur2)
+        .to(["#scene2 .scene-header-box", "#scene2 #risks-table-box"], {
             opacity: 0,
             duration: 0.7,
             ease: "power2.out"
-        }, 119.0)
-
-        // Entrada del Carrusel 3D con su encabezado elevado e independiente
-        .to("#risk-carousel-3d-overlay", {
-            visibility: "visible",
-            opacity: 1,
-            scale: 1.0,
-            duration: 0.9,
-            ease: "back.out(1.2)"
-        }, 119.8)
-        .call(() => SFX.whoosh(), null, 119.8)
-        .call(() => { set3DCarouselCard(0); SFX.ting(); }, null, 120.5)
-
-        // Rotación a Card 1 (Bases de Datos Fiscales: R01, R07, R17)
-        .to("#carousel-ring", { rotationY: -90, duration: 0.9, ease: "power2.inOut" }, 124.0)
-        .call(() => { set3DCarouselCard(1); SFX.ting(); }, null, 124.9)
-
-        // Rotación a Card 2 (Endpoints y Antivirus: R26, R27)
-        .to("#carousel-ring", { rotationY: -180, duration: 0.9, ease: "power2.inOut" }, 128.0)
-        .call(() => { set3DCarouselCard(2); SFX.ting(); }, null, 128.9)
-
-        // Rotación a Card 3 (Mesa de Ayuda y SGF: R09, R24, R28) - Última tarjeta, sin volver a la primera
-        .to("#carousel-ring", { rotationY: -270, duration: 0.9, ease: "power2.inOut" }, 132.0)
-        .call(() => { set3DCarouselCard(3); SFX.ting(); }, null, 132.9)
-
-        // Se mantiene fija en la última tarjeta (Card 3: Mesa de Ayuda) para apreciarla sin rotar al inicio
-        .to(cam, { scale: 1.04, duration: 2.5, ease: "power1.out" }, 133.5)
-
-        // Cierre fluido de la Escena 2
-        .to("#scene2", { opacity: 0, duration: 0.8 }, 136.5);
+        }, tableStartTime + dur2)
+        .to("#scene2", { opacity: 0, duration: 0.8 }, tableStartTime + dur2 + 0.6);
 
     return tl;
 }
@@ -570,6 +599,8 @@ function buildScene2(cam) {
 // ==========================================
 function buildScene3(cam) {
     const tl = gsap.timeline();
+    const dur = 130.76 / GLOBAL_AUDIO_SPEED;
+    const at = (rawSec) => 0.4 + (rawSec / GLOBAL_AUDIO_SPEED);
 
     tl.call(() => setActiveSceneDOM('scene3'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -581,8 +612,8 @@ function buildScene3(cam) {
         // Título escrito letra por letra con SFX.tick
         .add(typeHeadingText("#scene3 .title-hero", "Identificación de Controles Esperados", 0.028, false), 0.4)
 
-        // AUDIO PASO 2: VOZ EN OFF ACELERADA A 1.14x (duración neta: 114.70s)
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 2.wav', 1.14), null, 0.4)
+        // AUDIO PASO 2: VOZ EN OFF
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 2.wav', GLOBAL_AUDIO_SPEED, 0, 'paso2'), null, 0.4)
 
         .from("#scene3 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
@@ -593,82 +624,77 @@ function buildScene3(cam) {
 
         // ==============================================================
         // COMPONENTE A: CONTROLES AMBIENTALES Y SEGURIDAD FÍSICA (R02, R20, R12)
-        // Narración: 16.5s a 38.0s
         // ==============================================================
-        .call(() => SFX.ting(), null, 16.8)
+        .call(() => SFX.ting(), null, at(19.0))
         .to(".row-ctrl-comp-a", {
             backgroundColor: "rgba(56, 139, 253, 0.20)",
             boxShadow: "0 0 18px rgba(88, 166, 255, 0.45)",
             duration: 0.45,
             yoyo: true,
             repeat: 1
-        }, 16.8)
+        }, at(19.0))
 
         // ==============================================================
         // COMPONENTE B: RESPALDO Y RECUPERACIÓN (R01, R07, R17)
-        // Narración: 38.0s a 62.0s
         // ==============================================================
-        .to(".row-ctrl-comp-a", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 37.5)
+        .to(".row-ctrl-comp-a", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(42.5))
         .to("#controls-rows-track", {
             y: () => getScrollTargetY('row-ctrl-r01', -200, 20),
             duration: 2.2,
             ease: "power1.inOut"
-        }, 37.8)
-        .call(() => SFX.slide(), null, 38.0)
-        .call(() => SFX.ting(), null, 40.2)
+        }, at(42.8))
+        .call(() => SFX.slide(), null, at(43.0))
+        .call(() => SFX.ting(), null, at(45.5))
         .to(".row-ctrl-comp-b", {
             backgroundColor: "rgba(210, 153, 34, 0.22)",
             boxShadow: "0 0 18px rgba(210, 153, 34, 0.45)",
             duration: 0.45,
             yoyo: true,
             repeat: 1
-        }, 40.2)
+        }, at(45.5))
 
         // ==============================================================
         // COMPONENTE C: SOFTWARE, GESTIÓN DE PARCHES Y SEGURIDAD LÓGICA (R26, R27)
-        // Narración: 62.0s a 82.0s
         // ==============================================================
-        .to(".row-ctrl-comp-b", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 61.5)
+        .to(".row-ctrl-comp-b", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(70.0))
         .to("#controls-rows-track", {
             y: () => getScrollTargetY('row-ctrl-r26', -380, 20),
             duration: 2.2,
             ease: "power1.inOut"
-        }, 61.8)
-        .call(() => SFX.slide(), null, 62.0)
-        .call(() => SFX.ting(), null, 64.2)
+        }, at(70.3))
+        .call(() => SFX.slide(), null, at(70.5))
+        .call(() => SFX.ting(), null, at(73.0))
         .to(".row-ctrl-comp-c", {
             backgroundColor: "rgba(248, 81, 73, 0.22)",
             boxShadow: "0 0 18px rgba(248, 81, 73, 0.45)",
             duration: 0.45,
             yoyo: true,
             repeat: 1
-        }, 64.2)
+        }, at(73.0))
 
         // ==============================================================
         // COMPONENTE D: REDES Y TELECOMUNICACIONES (R16)
-        // Narración: 82.0s a 95.0s
         // ==============================================================
-        .to(".row-ctrl-comp-c", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 81.5)
+        .to(".row-ctrl-comp-c", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(92.5))
         .to("#controls-rows-track", {
             y: () => getScrollTargetY('row-ctrl-r16', -540, 20),
             duration: 2.0,
             ease: "power1.inOut"
-        }, 81.8)
-        .call(() => SFX.slide(), null, 82.0)
-        .call(() => SFX.ting(), null, 84.0)
+        }, at(92.8))
+        .call(() => SFX.slide(), null, at(93.0))
+        .call(() => SFX.ting(), null, at(95.5))
         .to("#row-ctrl-r16", {
             backgroundColor: "rgba(57, 197, 207, 0.25)",
             boxShadow: "0 0 20px rgba(57, 197, 207, 0.5)",
             duration: 0.45,
             yoyo: true,
             repeat: 1
-        }, 84.0)
+        }, at(95.5))
 
         // ==============================================================
         // COMPONENTE E: OPERACIONES DE TI Y GESTIÓN DE INCIDENTES (R09, R24, R28)
-        // Narración: 95.0s a 114.7s
         // ==============================================================
-        .to("#row-ctrl-r16", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 94.5)
+        .to("#row-ctrl-r16", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(107.5))
         .to("#controls-rows-track", {
             y: () => {
                 const track = document.getElementById('controls-rows-track');
@@ -678,24 +704,24 @@ function buildScene3(cam) {
             },
             duration: 2.4,
             ease: "power1.inOut"
-        }, 94.8)
-        .call(() => SFX.slide(), null, 95.0)
-        .call(() => SFX.ting(), null, 97.2)
+        }, at(107.8))
+        .call(() => SFX.slide(), null, at(108.0))
+        .call(() => SFX.ting(), null, at(110.5))
         .to(".row-ctrl-comp-e", {
             backgroundColor: "rgba(63, 185, 80, 0.22)",
             boxShadow: "0 0 18px rgba(63, 185, 80, 0.45)",
             duration: 0.45,
             yoyo: true,
             repeat: 1
-        }, 97.2)
+        }, at(110.5))
 
         // ==============================================================
-        // CIERRE Y RETORNO PANORÁMICO TRAS CULMINAR LA LOCUCIÓN (~115.1s)
+        // CIERRE Y RETORNO PANORÁMICO TRAS CULMINAR LA LOCUCIÓN
         // ==============================================================
-        .to(".row-ctrl-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.5 }, 114.5)
-        .call(() => Voiceover.stop(), null, 115.2)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, 115.0)
-        .to("#scene3", { opacity: 0, duration: 0.6 }, 116.6);
+        .to(".row-ctrl-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.5 }, at(130.0))
+        .call(() => Voiceover.stop(), null, 0.4 + dur)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, 0.4 + dur - 0.2)
+        .to("#scene3", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.2);
 
     return tl;
 }
@@ -705,6 +731,8 @@ function buildScene3(cam) {
 // ==========================================
 function buildScene4(cam) {
     const tl = gsap.timeline();
+    const dur = 133.96 / GLOBAL_AUDIO_SPEED;
+    const at = (rawSec) => 0.4 + (rawSec / GLOBAL_AUDIO_SPEED);
 
     tl.call(() => setActiveSceneDOM('scene4'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -718,8 +746,8 @@ function buildScene4(cam) {
         // Título escrito letra por letra con SFX.tick
         .add(typeHeadingText("#scene4 .title-hero", "Solicitud de Evidencias e Instrumentos", 0.026, false), 0.4)
 
-        // AUDIO PASO 3: VOZ EN OFF ACELERADA A 1.14x (duración neta: 117.51s)
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 3.wav', 1.14), null, 0.4)
+        // AUDIO PASO 3: VOZ EN OFF
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 3.wav', GLOBAL_AUDIO_SPEED, 0, 'paso3'), null, 0.4)
 
         .from("#scene4 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
@@ -755,137 +783,133 @@ function buildScene4(cam) {
 
         // ==============================================================
         // 1. PRIMER ACTO DE LOCUCIÓN: INDAGACIÓN (E1, E5, E14, E17)
-        // Narración: 23.5s a 47.0s
         // ==============================================================
-        .to(cam, { scale: 1.05, x: 0, y: -20, duration: 1.2, ease: "power2.inOut" }, 22.8)
-        .call(() => SFX.ting(), null, 23.8)
+        .to(cam, { scale: 1.05, x: 0, y: -20, duration: 1.2, ease: "power2.inOut" }, at(25.0))
+        .call(() => SFX.ting(), null, at(26.5))
         .to("#pill-indagacion", {
             scale: 1.08,
             borderColor: "var(--accent-blue)",
             boxShadow: "0 0 28px rgba(88, 166, 255, 0.6)",
             duration: 0.4
-        }, 23.8)
+        }, at(26.5))
         .to(["#row-ev-1", "#row-ev-5"], {
             backgroundColor: "rgba(88, 166, 255, 0.24)",
             boxShadow: "0 0 18px rgba(88, 166, 255, 0.45)",
             duration: 0.4,
             yoyo: true,
             repeat: 1
-        }, 24.2)
+        }, at(27.0))
         // Scroll hacia E14 y E17 cuando se mencionan en la locución
         .to("#evidence-rows-grid", {
             y: () => getScrollTargetY('row-ev-14', -350, 20),
             duration: 2.2,
             ease: "power1.inOut"
-        }, 34.0)
-        .call(() => SFX.slide(), null, 34.2)
-        .call(() => SFX.ting(), null, 36.4)
+        }, at(38.0))
+        .call(() => SFX.slide(), null, at(38.2))
+        .call(() => SFX.ting(), null, at(40.5))
         .to(["#row-ev-14", "#row-ev-17"], {
             backgroundColor: "rgba(88, 166, 255, 0.24)",
             boxShadow: "0 0 18px rgba(88, 166, 255, 0.45)",
             duration: 0.4,
             yoyo: true,
             repeat: 1
-        }, 36.4)
+        }, at(40.5))
 
         // ==============================================================
-        // 2. SEGUNDO ACTO: INSPECCIÓN DOCUMENTAL - GESTIÓN INTERNA (E2, E8, E3, E6, E7, E9, E19)
-        // Narración: 47.0s a 76.0s
+        // 2. SEGUNDO ACTO: INSPECCIÓN DOCUMENTAL - GESTIÓN INTERNA (E2, E3, E6, E7, E8, E9, E19)
         // ==============================================================
-        .to("#pill-indagacion", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.35 }, 46.5)
-        .to(["#row-ev-14", "#row-ev-17", "#row-ev-1", "#row-ev-5"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, 46.5)
+        .to("#pill-indagacion", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.35 }, at(52.5))
+        .to(["#row-ev-14", "#row-ev-17", "#row-ev-1", "#row-ev-5"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, at(52.5))
         // Desplazamiento dinámico para centrar el bloque de gestión interna
         .to("#evidence-rows-grid", {
             y: () => getScrollTargetY('row-ev-2', -80, 20),
             duration: 2.0,
             ease: "power1.inOut"
-        }, 46.8)
-        .call(() => SFX.slide(), null, 47.0)
-        .call(() => SFX.ting(), null, 49.0)
+        }, at(52.8))
+        .call(() => SFX.slide(), null, at(53.0))
+        .call(() => SFX.ting(), null, at(55.0))
         .to("#pill-inspeccion", {
             scale: 1.08,
             borderColor: "var(--accent-amber)",
             boxShadow: "0 0 28px rgba(210, 153, 34, 0.6)",
             duration: 0.4
-        }, 49.0)
-        .to(["#row-ev-2", "#row-ev-3", "#row-ev-6", "#row-ev-7", "#row-ev-8", "#row-ev-9"], {
+        }, at(55.0))
+        .to(["#row-ev-2", "#row-ev-3", "#row-ev-6", "#row-ev-7", "#row-ev-8", "#row-ev-9", "#row-ev-19"], {
             backgroundColor: "rgba(210, 153, 34, 0.22)",
             boxShadow: "0 0 16px rgba(210, 153, 34, 0.45)",
             duration: 0.4,
             yoyo: true,
             repeat: 1
-        }, 49.0)
+        }, at(55.0))
 
         // ==============================================================
         // 3. TERCER ACTO: INSPECCIÓN DOCUMENTAL - MARCO LEGAL OBLIGATORIO (E10, E11, E12, E13)
-        // Narración: 76.0s a 96.0s
         // ==============================================================
         .to("#evidence-rows-grid", {
             y: () => getScrollTargetY('row-ev-10', -300, 20),
             duration: 2.2,
             ease: "power1.inOut"
-        }, 75.8)
-        .call(() => SFX.slide(), null, 76.0)
-        .call(() => SFX.ting(), null, 78.2)
+        }, at(85.5))
+        .call(() => SFX.slide(), null, at(85.8))
+        .call(() => SFX.ting(), null, at(88.0))
         .to(["#row-ev-10", "#row-ev-11", "#row-ev-12", "#row-ev-13"], {
             backgroundColor: "rgba(210, 153, 34, 0.26)",
             boxShadow: "0 0 18px rgba(210, 153, 34, 0.5)",
             duration: 0.45,
             yoyo: true,
             repeat: 1
-        }, 78.2)
+        }, at(88.0))
 
         // ==============================================================
         // 4. CUARTO ACTO: OBSERVACIÓN DIRECTA PRESENCIAL (E4, E18)
-        // Narración: 96.0s a 117.5s
         // ==============================================================
-        .to("#pill-inspeccion", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.35 }, 95.8)
-        .to("#scene4 .row-tech-inspeccion", { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, 95.8)
+        .to("#pill-inspeccion", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.35 }, at(108.0))
+        .to("#scene4 .row-tech-inspeccion", { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, at(108.0))
         // Retorno hacia E4
         .to("#evidence-rows-grid", {
             y: () => getScrollTargetY('row-ev-4', -120, 20),
             duration: 2.0,
             ease: "power1.inOut"
-        }, 96.2)
-        .call(() => SFX.slide(), null, 96.4)
-        .call(() => SFX.ting(), null, 98.4)
+        }, at(108.5))
+        .call(() => SFX.slide(), null, at(108.8))
+        .call(() => SFX.ting(), null, at(111.0))
         .to("#pill-observacion", {
             scale: 1.08,
             borderColor: "var(--accent-purple)",
             boxShadow: "0 0 28px rgba(188, 140, 255, 0.6)",
             duration: 0.4
-        }, 98.4)
+        }, at(111.0))
         .to("#row-ev-4", {
             backgroundColor: "rgba(188, 140, 255, 0.26)",
             boxShadow: "0 0 20px rgba(188, 140, 255, 0.5)",
             duration: 0.45,
             yoyo: true,
             repeat: 1
-        }, 98.4)
+        }, at(111.0))
         // Scroll hacia E18 cuando se menciona la inspección ocular del 1 de octubre
         .to("#evidence-rows-grid", {
             y: () => getScrollTargetY('row-ev-18', -450, 20),
             duration: 2.2,
             ease: "power1.inOut"
-        }, 107.0)
-        .call(() => SFX.slide(), null, 107.2)
-        .call(() => SFX.ting(), null, 109.4)
+        }, at(121.0))
+        .call(() => SFX.slide(), null, at(121.2))
+        .call(() => SFX.ting(), null, at(123.5))
         .to("#row-ev-18", {
             backgroundColor: "rgba(188, 140, 255, 0.28)",
             boxShadow: "0 0 22px rgba(188, 140, 255, 0.55)",
             duration: 0.45,
             yoyo: true,
             repeat: 1
-        }, 109.4)
+        }, at(123.5))
 
         // ==============================================================
-        // CIERRE Y RETORNO PANORÁMICO TRAS CULMINAR LA LOCUCIÓN (~117.9s)
+        // CIERRE Y RETORNO PANORÁMICO TRAS CULMINAR LA LOCUCIÓN
         // ==============================================================
-        .to(["#row-ev-4", "#row-ev-18"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.5 }, 117.2)
-        .to(".tech-pill", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.5 }, 117.2)
-        .call(() => Voiceover.stop(), null, 118.0)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, 117.8)
-        .to("#scene4", { opacity: 0, duration: 0.6 }, 119.4);
+        .to(["#row-ev-4", "#row-ev-18"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.5 }, at(133.0))
+        .to(".tech-pill", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.5 }, at(133.0))
+        .call(() => Voiceover.stop(), null, 0.4 + dur)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, 0.4 + dur - 0.2)
+        .to("#scene4", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.4);
 
     return tl;
 }
@@ -895,6 +919,8 @@ function buildScene4(cam) {
 // ==============================================================
 function buildScene5(cam) {
     const tl = gsap.timeline();
+    const dur = 64.2 / GLOBAL_AUDIO_SPEED;
+    const at = (rawSec) => 0.4 + (rawSec / GLOBAL_AUDIO_SPEED);
 
     tl.call(() => setActiveSceneDOM('scene5'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -904,8 +930,12 @@ function buildScene5(cam) {
         .set("#scene5 .test-stat-card", { clearProps: "all" }, 0)
         .to("#scene5", { opacity: 1, duration: 0.5 }, 0.1)
         .from("#scene5 .section-tag", { y: -20, opacity: 0, duration: 0.5 }, 0.3)
-        // Título escrito letra por letra con SFX.tick (sin ting en título)
+        // Título escrito letra por letra con SFX.tick
         .add(typeHeadingText("#scene5 .title-hero", "Diseño y Ejecución de Pruebas de Cumplimiento", 0.024, false), 0.4)
+
+        // AUDIO PASO 4 (BLOQUE 1: COMPONENTES A, B, C)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 4.wav', GLOBAL_AUDIO_SPEED, 0, 'paso4_e5'), null, 0.4)
+
         .from("#scene5 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
         // Entrada de las pastillas estadísticas de resumen (3 Componentes, 6 Pruebas, Alcance)
@@ -923,7 +953,7 @@ function buildScene5(cam) {
         .from("#tests-table-box-5", { opacity: 0, y: 30, duration: 0.7, ease: "power2.out" }, 2.4)
         .call(() => SFX.slide(), null, 2.4)
 
-        // Cascada de las 6 filas de pruebas (alineación estrictamente recta y uniforme)
+        // Cascada de las 6 filas de pruebas
         .from("#scene5 .test-row-item", {
             y: 14,
             opacity: 0,
@@ -936,66 +966,61 @@ function buildScene5(cam) {
         // ==============================================================
         // 1. FOCO EN COMPONENTE A: SEGURIDAD FÍSICA Y CUARTO DE SERVIDORES (R02, R20, R12)
         // ==============================================================
-        // La cámara se desplaza y encuadra primero con suavidad
-        .to(cam, { scale: 1.08, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 3.6)
-        // Justo al asentarse la cámara (4.4s), suena el ting y resalta el Componente A
-        .call(() => SFX.ting(), null, 4.4)
+        .to(cam, { scale: 1.05, x: 0, y: -20, duration: 1.0, ease: "power2.inOut" }, at(11.0))
+        .call(() => SFX.ting(), null, at(12.0))
         .to("#scene5 .test-row-comp-a", {
             backgroundColor: "rgba(188, 140, 255, 0.22)",
             boxShadow: "0 0 22px rgba(188, 140, 255, 0.45)",
             duration: 0.4,
             ease: "power2.out"
-        }, 4.4)
+        }, at(12.0))
 
         // ==============================================================
         // 2. FOCO EN COMPONENTE B: RESPALDO, RECUPERACIÓN Y MEDIOS (R01, R07, R17)
         // ==============================================================
-        // Se atenúa Componente A para ceder el turno a Componente B
-        .to("#scene5 .test-row-comp-a", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 7.2)
-        // Desplazamiento dinámico sincronizado para centrar Componente B
+        .to("#scene5 .test-row-comp-a", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(26.8))
         .to("#tests-rows-grid-5", {
             y: () => getScrollTargetY('row-test-3', -160, 20),
-            duration: 0.8,
+            duration: 1.2,
             ease: "power2.inOut"
-        }, 7.2)
-        .to(cam, { scale: 1.08, x: 0, y: -35, duration: 0.8, ease: "power2.inOut" }, 7.2)
-        // Al asentarse el scroll y la cámara (8.0s), suena el ting y resalta el Componente B
-        .call(() => SFX.ting(), null, 8.0)
+        }, at(27.0))
+        .to(cam, { scale: 1.05, x: 0, y: -30, duration: 1.2, ease: "power2.inOut" }, at(27.0))
+        .call(() => SFX.slide(), null, at(27.2))
+        .call(() => SFX.ting(), null, at(28.5))
         .to("#scene5 .test-row-comp-b", {
             backgroundColor: "rgba(210, 153, 34, 0.22)",
             boxShadow: "0 0 22px rgba(210, 153, 34, 0.45)",
             duration: 0.4,
             ease: "power2.out"
-        }, 8.0)
+        }, at(28.5))
 
         // ==============================================================
         // 3. FOCO EN COMPONENTE C: SOFTWARE, PARCHES Y SEGURIDAD LÓGICA (R26, R27)
         // ==============================================================
-        // Se atenúa Componente B para ceder el turno a Componente C
-        .to("#scene5 .test-row-comp-b", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 10.8)
-        // Desplazamiento sincronizado dinámico para centrar Componente C en el viewport
+        .to("#scene5 .test-row-comp-b", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(44.2))
         .to("#tests-rows-grid-5", {
             y: () => getScrollTargetY('row-test-5', -380, 20),
-            duration: 0.9,
+            duration: 1.2,
             ease: "power2.inOut"
-        }, 10.8)
-        .to(cam, { scale: 1.08, x: 0, y: -30, duration: 0.9, ease: "power2.inOut" }, 10.8)
-        // Al asentarse el scroll y la cámara (11.7s), suena el ting y resalta el Componente C
-        .call(() => SFX.ting(), null, 11.7)
+        }, at(44.5))
+        .to(cam, { scale: 1.05, x: 0, y: -25, duration: 1.2, ease: "power2.inOut" }, at(44.5))
+        .call(() => SFX.slide(), null, at(44.8))
+        .call(() => SFX.ting(), null, at(46.0))
         .to("#scene5 .test-row-comp-c", {
             backgroundColor: "rgba(88, 166, 255, 0.24)",
             boxShadow: "0 0 22px rgba(88, 166, 255, 0.45)",
             duration: 0.4,
             ease: "power2.out"
-        }, 11.7)
+        }, at(46.0))
 
         // ==============================================================
-        // 4. RETORNO PANORÁMICO Y CIERRE
+        // 4. RETORNO PANORÁMICO Y CIERRE TRAS CULMINAR EL BLOQUE 1
         // ==============================================================
-        .to("#scene5 .test-row-comp-c", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, 14.8)
-        .to("#tests-rows-grid-5", { y: 0, duration: 1.2, ease: "power2.inOut" }, 14.8)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 14.8)
-        .to("#scene5", { opacity: 0, duration: 0.6 }, 16.8);
+        .to("#scene5 .test-row-comp-c", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(63.5))
+        .to("#tests-rows-grid-5", { y: 0, duration: 1.2, ease: "power2.inOut" }, at(63.5))
+        .call(() => Voiceover.stop(), null, 0.4 + dur)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur - 0.2)
+        .to("#scene5", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.2);
 
     return tl;
 }
@@ -1005,6 +1030,8 @@ function buildScene5(cam) {
 // ==============================================================
 function buildScene6(cam) {
     const tl = gsap.timeline();
+    const dur = 35.31 / GLOBAL_AUDIO_SPEED;
+    const at = (elapsedRaw) => 0.4 + (elapsedRaw / GLOBAL_AUDIO_SPEED);
 
     tl.call(() => setActiveSceneDOM('scene6'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -1013,16 +1040,14 @@ function buildScene6(cam) {
         .set("#scene6 .test-row-item", { clearProps: "all" }, 0)
         .set("#scene6 .test-stat-card", { clearProps: "all" }, 0)
         .set("#tests-table-box-6", { x: 0, opacity: 1, clearProps: "transform" }, 0)
-        .set("#network-topology-hud", { x: 1600, opacity: 0 }, 0)
-        .set(["#halo-requena", "#halo-requena-2", "#halo-datem", "#halo-datem-2", "#halo-sgf", "#halo-sgf-2"], {
-            attr: { r: 14 },
-            opacity: 0,
-            strokeWidth: 2.5
-        }, 0)
         .to("#scene6", { opacity: 1, duration: 0.5 }, 0.1)
         .from("#scene6 .section-tag", { y: -20, opacity: 0, duration: 0.5 }, 0.3)
-        // Título escrito letra por letra con SFX.tick (sin ting en título)
+        // Título escrito letra por letra con SFX.tick
         .add(typeHeadingText("#scene6 .title-hero", "Diseño y Ejecución de Pruebas de Cumplimiento", 0.024, false), 0.4)
+
+        // AUDIO PASO 4 (BLOQUE 2: COMPONENTES D, E - DESDE 65.0s RAW)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 4.wav', GLOBAL_AUDIO_SPEED, 65.0, 'paso4_e6'), null, 0.4)
+
         .from("#scene6 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
         // Entrada de las pastillas estadísticas de resumen (2 Componentes, 4 Pruebas, Alcance)
@@ -1036,7 +1061,7 @@ function buildScene6(cam) {
             onStart: () => SFX.pop()
         }, 2.0)
 
-        // 1. LA TABLA ENTRA A ANCHO COMPLETO (100% Full Width inicial)
+        // Entrada de la tabla de pruebas a ANCHO COMPLETO
         .from("#tests-table-box-6", { opacity: 0, y: 30, duration: 0.7, ease: "power2.out" }, 2.4)
         .call(() => SFX.slide(), null, 2.4)
 
@@ -1050,100 +1075,45 @@ function buildScene6(cam) {
             clearProps: "transform"
         }, 2.6)
 
-        // Permanencia y lectura de la tabla de pruebas (demora intencional para lectura completa)
-        .to(cam, { scale: 1.03, x: 0, y: -15, duration: 1.8, ease: "power1.out" }, 3.2)
+        // ==============================================================
+        // 1. FOCO EN COMPONENTE D: REDES Y TELECOMUNICACIONES (R16)
+        // ==============================================================
+        .to(cam, { scale: 1.05, x: 0, y: -20, duration: 1.0, ease: "power2.inOut" }, at(2.0))
+        .call(() => SFX.ting(), null, at(2.5))
+        .to("#scene6 .test-row-comp-d", {
+            backgroundColor: "rgba(57, 197, 207, 0.25)",
+            boxShadow: "0 0 22px rgba(57, 197, 207, 0.5)",
+            duration: 0.4,
+            ease: "power2.out"
+        }, at(2.5))
 
-        // 2. DESPLAZAMIENTO TOTAL: TRAS LA LECTURA, LA TOPOLOGÍA DE RED DESPLAZA POR COMPLETO A LA TABLA Y OCUPA SU LUGAR
-        .call(() => SFX.whoosh(), null, 7.2)
-        .to("#tests-table-box-6", {
-            x: -1600,
-            opacity: 0,
-            duration: 0.85,
-            ease: "power3.inOut"
-        }, 7.2)
-        .to("#network-topology-hud", {
-            x: 0,
-            opacity: 1,
-            duration: 0.85,
-            ease: "power3.inOut"
-        }, 7.2)
+        // ==============================================================
+        // 2. FOCO EN COMPONENTE E: OPERACIONES TI Y MESA DE AYUDA (R09, R24, R28)
+        // ==============================================================
+        .to("#scene6 .test-row-comp-d", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(15.8))
+        .to("#tests-rows-grid-6", {
+            y: () => getScrollTargetY('row-test-8', -180, 20),
+            duration: 1.2,
+            ease: "power2.inOut"
+        }, at(16.0))
+        .to(cam, { scale: 1.05, x: 0, y: -30, duration: 1.2, ease: "power2.inOut" }, at(16.0))
+        .call(() => SFX.slide(), null, at(16.2))
+        .call(() => SFX.ting(), null, at(17.5))
+        .to("#scene6 .test-row-comp-e", {
+            backgroundColor: "rgba(63, 185, 80, 0.22)",
+            boxShadow: "0 0 20px rgba(63, 185, 80, 0.45)",
+            duration: 0.4,
+            ease: "power2.out"
+        }, at(17.5))
 
-        // FOCO 1: COMPONENTE D - REDES Y TELECOMUNICACIONES (R16 - Enlaces de Sedes Caídos)
-        .to(cam, { scale: 1.02, x: 0, y: -10, duration: 0.8, ease: "power2.inOut" }, 7.8)
-        .call(() => SFX.ting(), null, 8.5)
-        // DISPARO DE TELEMETRÍA EN VIVO: ALERTA R16 EN LA TOPOLOGÍA DE RED
-        .call(() => {
-            const statusPill = document.getElementById('hud-live-status');
-            if (statusPill) {
-                statusPill.textContent = 'ALERTA R16 • CAÍDA DE ENLACES';
-                statusPill.classList.add('alert-mode');
-            }
-            const cReq = document.getElementById('cable-requena');
-            const cDat = document.getElementById('cable-datem');
-            if (cReq) cReq.classList.add('cable-danger');
-            if (cDat) cDat.classList.add('cable-danger');
-            const sReq = document.getElementById('stat-requena');
-            const sDat = document.getElementById('stat-datem');
-            if (sReq) { sReq.textContent = '480ms • CAÍDA INTERMITENTE'; sReq.style.fill = '#ff8b85'; }
-            if (sDat) { sDat.textContent = '520ms • PÉRDIDA PAQUETES 24%'; sDat.style.fill = '#ff8b85'; }
-            const dBul = document.getElementById('diag-bullet');
-            const dTit = document.getElementById('diag-title');
-            const dDesc = document.getElementById('diag-desc');
-            if (dBul) dBul.style.color = '#f85149';
-            if (dTit) { dTit.textContent = 'Riesgo Crítico R16 Identificado'; dTit.style.color = '#ff8b85'; }
-            if (dDesc) dDesc.textContent = 'Falta de enlaces redundantes y nulo monitoreo proactivo hacia fiscalías provinciales.';
-        }, null, 8.5)
-        // HALOS CONCÉNTRICOS ALERTA R16 (CENTRADO EXACTO EN EL NODO ORIGEN)
-        .fromTo(["#halo-requena", "#halo-datem"],
-            { attr: { r: 14 }, opacity: 1, strokeWidth: 2.5 },
-            { attr: { r: 44 }, opacity: 0, strokeWidth: 0.5, duration: 0.85, repeat: 3, ease: "power1.out" },
-            8.5
-        )
-        .fromTo(["#halo-requena-2", "#halo-datem-2"],
-            { attr: { r: 14 }, opacity: 0.7, strokeWidth: 2 },
-            { attr: { r: 44 }, opacity: 0, strokeWidth: 0.5, duration: 0.85, repeat: 3, ease: "power1.out" },
-            8.8
-        )
-
-        // FOCO 2: COMPONENTE E - OPERACIONES DE TI Y MESA DE AYUDA (R09 Mesa de Ayuda, R24 Caídas SGF, R28 Suplencia)
-        .to(cam, { scale: 1.02, x: 0, y: -15, duration: 0.8, ease: "power2.inOut" }, 12.6)
-        .call(() => SFX.ting(), null, 13.4)
-        // ACTUALIZACIÓN DE TOPOLOGÍA: MESA DE AYUDA Y SGF
-        .call(() => {
-            const statusPill = document.getElementById('hud-live-status');
-            if (statusPill) {
-                statusPill.textContent = 'COMPONENTE E • OPERACIONES & SGF';
-                statusPill.classList.remove('alert-mode');
-                statusPill.style.borderColor = 'var(--accent-blue)';
-                statusPill.style.color = 'var(--accent-blue)';
-                statusPill.style.background = 'rgba(88, 166, 255, 0.18)';
-            }
-            const cReq = document.getElementById('cable-requena');
-            const cDat = document.getElementById('cable-datem');
-            if (cReq) cReq.classList.remove('cable-danger');
-            if (cDat) cDat.classList.remove('cable-danger');
-            const dBul = document.getElementById('diag-bullet');
-            const dTit = document.getElementById('diag-title');
-            const dDesc = document.getElementById('diag-desc');
-            if (dBul) dBul.style.color = 'var(--accent-blue)';
-            if (dTit) { dTit.textContent = 'Operaciones TI y Mesa de Ayuda'; dTit.style.color = '#ffffff'; }
-            if (dDesc) dDesc.textContent = 'Carencia de catálogo de servicios, sin medición de tiempos ni pruebas de continuidad.';
-        }, null, 13.4)
-        // HALOS CONCÉNTRICOS MESA DE AYUDA (CENTRADO EXACTO EN EL NODO ORIGEN)
-        .fromTo("#halo-sgf",
-            { attr: { r: 13 }, opacity: 1, strokeWidth: 2.5 },
-            { attr: { r: 40 }, opacity: 0, strokeWidth: 0.5, duration: 0.85, repeat: 3, ease: "power1.out" },
-            13.4
-        )
-        .fromTo("#halo-sgf-2",
-            { attr: { r: 13 }, opacity: 0.7, strokeWidth: 2 },
-            { attr: { r: 40 }, opacity: 0, strokeWidth: 0.5, duration: 0.85, repeat: 3, ease: "power1.out" },
-            13.7
-        )
-
-        // Retorno panorámico y fade out
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 17.5)
-        .to("#scene6", { opacity: 0, duration: 0.6 }, 19.5);
+        // ==============================================================
+        // 3. RETORNO PANORÁMICO Y CIERRE TRAS CULMINAR EL BLOQUE 2
+        // ==============================================================
+        .to("#scene6 .test-row-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(34.5))
+        .to("#tests-rows-grid-6", { y: 0, duration: 1.0, ease: "power2.inOut" }, at(34.5))
+        .call(() => Voiceover.stop(), null, 0.4 + dur)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur - 0.2)
+        .to("#scene6", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.2);
 
     return tl;
 }
@@ -1153,6 +1123,8 @@ function buildScene6(cam) {
 // ==============================================================
 function buildScene7(cam) {
     const tl = gsap.timeline();
+    const dur = 100.25 / GLOBAL_AUDIO_SPEED;
+    const at = (rawSec) => 0.4 + (rawSec / GLOBAL_AUDIO_SPEED);
 
     tl.call(() => setActiveSceneDOM('scene7'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -1202,39 +1174,41 @@ function buildScene7(cam) {
         )
 
         // FOCO 1: COMPONENTE A - SEGURIDAD FÍSICA Y CUARTO DE SERVIDORES (R02, R20, R12)
-        .to(cam, { scale: 1.08, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 3.6)
-        .call(() => SFX.ting(), null, 4.4)
+        .to(cam, { scale: 1.06, x: 0, y: -20, duration: 1.0, ease: "power2.inOut" }, at(14.0))
+        .call(() => SFX.ting(), null, at(15.0))
         .to("#scene7 .dev-row-comp-a", {
             backgroundColor: "rgba(188, 140, 255, 0.22)",
             boxShadow: "0 0 22px rgba(188, 140, 255, 0.45)",
             duration: 0.4,
             ease: "power2.out"
-        }, 4.4)
+        }, at(15.0))
 
         // FOCO 2: COMPONENTE B - RESPALDO, RECUPERACIÓN Y CUSTODIA (R01, R07, R17)
         // Se atenúa Componente A para ceder el turno exclusivo a Componente B
-        .to("#scene7 .dev-row-comp-a", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 7.5)
+        .to("#scene7 .dev-row-comp-a", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(52.5))
         // Desplazamiento sincronizado de la tabla para centrar las 3 filas del Componente B en el viewport
         .to("#dev-rows-grid-7", {
-            y: () => getScrollTargetY('row-dev-3', -300, 20),
-            duration: 0.8,
+            y: () => getScrollTargetY('row-dev-3', -280, 20),
+            duration: 1.2,
             ease: "power2.inOut"
-        }, 7.5)
-        .to(cam, { scale: 1.08, x: 0, y: -35, duration: 0.8, ease: "power2.inOut" }, 7.5)
-        .call(() => SFX.ting(), null, 8.3)
+        }, at(52.8))
+        .to(cam, { scale: 1.06, x: 0, y: -30, duration: 1.2, ease: "power2.inOut" }, at(52.8))
+        .call(() => SFX.slide(), null, at(53.0))
+        .call(() => SFX.ting(), null, at(55.0))
         // Se resalta el Componente B cuando TODAS sus filas están visibles en pantalla
         .to("#scene7 .dev-row-comp-b", {
             backgroundColor: "rgba(210, 153, 34, 0.22)",
             boxShadow: "0 0 22px rgba(210, 153, 34, 0.45)",
             duration: 0.4,
             ease: "power2.out"
-        }, 8.3)
+        }, at(55.0))
 
-        // Retorno panorámico y fade out (Componente B se desvanece suavemente durante el retorno)
-        .to("#scene7 .dev-row-comp-b", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, 12.0)
-        .to("#dev-rows-grid-7", { y: 0, duration: 1.2, ease: "power2.inOut" }, 12.0)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 12.0)
-        .to("#scene7", { opacity: 0, duration: 0.6 }, 14.0);
+        // RETORNO PANORÁMICO Y CIERRE TRAS CULMINAR EL BLOQUE 1
+        .to("#scene7 .dev-row-comp-b", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(99.0))
+        .to("#dev-rows-grid-7", { y: 0, duration: 1.2, ease: "power2.inOut" }, at(99.0))
+        .call(() => Voiceover.stop(), null, 0.4 + dur)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur - 0.2)
+        .to("#scene7", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.2);
 
     return tl;
 }
@@ -1244,6 +1218,8 @@ function buildScene7(cam) {
 // ==============================================================
 function buildScene8(cam) {
     const tl = gsap.timeline();
+    const dur = 86.55 / GLOBAL_AUDIO_SPEED;
+    const at = (elapsedRaw) => 0.4 + (elapsedRaw / GLOBAL_AUDIO_SPEED);
 
     tl.call(() => setActiveSceneDOM('scene8'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -1255,6 +1231,10 @@ function buildScene8(cam) {
         .from("#scene8 .section-tag", { y: -20, opacity: 0, duration: 0.5 }, 0.3)
         // Título escrito letra por letra con SFX.tick (sin ting en título)
         .add(typeHeadingText("#scene8 .title-hero", "Determinación de Desviaciones y Hallazgos", 0.024, false), 0.4)
+
+        // AUDIO PASO 5 (BLOQUE 2: DESVIACIONES C, D, E - DESDE 101.5s RAW)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 5.wav', GLOBAL_AUDIO_SPEED, 101.5, 'paso5_e8'), null, 0.4)
+
         .from("#scene8 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
         // Entrada de las pastillas estadísticas de resumen (3 Componentes, 6 Hallazgos, Alta Vulnerabilidad)
@@ -1293,52 +1273,56 @@ function buildScene8(cam) {
         )
 
         // FOCO 1: COMPONENTE C - SOFTWARE, PARCHES Y SEGURIDAD LÓGICA (R26, R27)
-        .to(cam, { scale: 1.08, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 3.6)
-        .call(() => SFX.ting(), null, 4.4)
+        .to(cam, { scale: 1.05, x: 0, y: -20, duration: 1.0, ease: "power2.inOut" }, at(2.0))
+        .call(() => SFX.ting(), null, at(2.5))
         .to("#scene8 .dev-row-comp-c", {
             backgroundColor: "rgba(88, 166, 255, 0.24)",
             boxShadow: "0 0 22px rgba(88, 166, 255, 0.45)",
             duration: 0.4,
             ease: "power2.out"
-        }, 4.4)
+        }, at(2.5))
 
         // FOCO 2: COMPONENTE D - REDES Y TELECOMUNICACIONES (R16)
-        // Se atenúa Componente C al cambiar el turno
-        .to("#scene8 .dev-row-comp-c", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 7.0)
-        .to(cam, { scale: 1.08, x: 0, y: -38, duration: 0.8, ease: "power2.inOut" }, 7.0)
-        .call(() => SFX.ting(), null, 7.8)
+        .to("#scene8 .dev-row-comp-c", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(25.8))
+        .to("#dev-rows-grid-8", {
+            y: () => getScrollTargetY('row-dev-8', -220, 20),
+            duration: 1.2,
+            ease: "power2.inOut"
+        }, at(26.0))
+        .to(cam, { scale: 1.05, x: 0, y: -30, duration: 1.2, ease: "power2.inOut" }, at(26.0))
+        .call(() => SFX.slide(), null, at(26.2))
+        .call(() => SFX.ting(), null, at(27.5))
         .to("#scene8 .dev-row-comp-d", {
             backgroundColor: "rgba(248, 81, 73, 0.22)",
             boxShadow: "0 0 22px rgba(248, 81, 73, 0.45)",
             duration: 0.4,
             ease: "power2.out"
-        }, 7.8)
+        }, at(27.5))
 
         // FOCO 3: COMPONENTE E - OPERACIONES TI, CAÍDAS SGF Y DEPENDENCIA HUMANA (R09, R24, R28)
-        // Se atenúa Componente D para ceder el turno exclusivo a Componente E
-        .to("#scene8 .dev-row-comp-d", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 10.4)
-        // Desplazamiento dinámico sincronizado para centrar las 3 filas del Componente E en el viewport
+        .to("#scene8 .dev-row-comp-d", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(52.8))
         .to("#dev-rows-grid-8", {
             y: () => getScrollTargetY('row-dev-9', -380, 20),
-            duration: 0.9,
+            duration: 1.2,
             ease: "power2.inOut"
-        }, 10.4)
-        .to(cam, { scale: 1.08, x: 0, y: -30, duration: 0.9, ease: "power2.inOut" }, 10.4)
-        .call(() => SFX.ting(), null, 11.3)
-        // Se resalta el Componente E cuando TODAS sus 3 filas están plenamente visibles en el viewport
+        }, at(53.0))
+        .to(cam, { scale: 1.05, x: 0, y: -25, duration: 1.2, ease: "power2.inOut" }, at(53.0))
+        .call(() => SFX.slide(), null, at(53.2))
+        .call(() => SFX.ting(), null, at(54.5))
         .to("#scene8 .dev-row-comp-e", {
             backgroundColor: "rgba(57, 197, 207, 0.24)",
             boxShadow: "0 0 22px rgba(57, 197, 207, 0.45)",
             duration: 0.4,
             stagger: 0.12,
             ease: "power2.out"
-        }, 11.3)
+        }, at(54.5))
 
-        // Retorno panorámico y fade out (Componente E se desvanece suavemente durante el retorno)
-        .to("#scene8 .dev-row-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, 14.8)
-        .to("#dev-rows-grid-8", { y: 0, duration: 1.2, ease: "power2.inOut" }, 14.8)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 14.8)
-        .to("#scene8", { opacity: 0, duration: 0.6 }, 16.8);
+        // RETORNO PANORÁMICO Y CIERRE TRAS CULMINAR EL BLOQUE 2
+        .to("#scene8 .dev-row-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(85.5))
+        .to("#dev-rows-grid-8", { y: 0, duration: 1.2, ease: "power2.inOut" }, at(85.5))
+        .call(() => Voiceover.stop(), null, 0.4 + dur)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur - 0.2)
+        .to("#scene8", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.2);
 
     return tl;
 }
@@ -1362,6 +1346,8 @@ function setConcl3DCard(index) {
 // ==============================================================
 function buildScene9(cam) {
     const tl = gsap.timeline();
+    const dur = 99.18 / GLOBAL_AUDIO_SPEED;
+    const at = (rawSec) => 0.4 + (rawSec / GLOBAL_AUDIO_SPEED);
 
     tl.call(() => setActiveSceneDOM('scene9'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -1382,6 +1368,10 @@ function buildScene9(cam) {
         .to("#scene9", { opacity: 1, duration: 0.5 }, 0.1)
         .from("#scene9 .section-tag", { y: -20, opacity: 0, duration: 0.5, ease: "power2.out" }, 0.25)
         .add(typeHeadingText("#scene9 .title-hero", "Conclusiones y Dictamen de Control Interno", 0.024, false), 0.35)
+
+        // AUDIO PASO 6: CONCLUSIONES Y DICTAMEN DE AUDITORÍA
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 6.wav', GLOBAL_AUDIO_SPEED, 0, 'paso6_e9'), null, 0.4)
+
         .from("#scene9 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8, ease: "power2.out" }, 1.5)
 
         // 2. Efecto de Aparición del Dictamen Global (DEFICIENTE)
@@ -1431,38 +1421,42 @@ function buildScene9(cam) {
         .to(["#ligament-left", "#ligament-right"], { opacity: 0, strokeWidth: 0, duration: 0.3 }, 3.65)
 
         // 5. FOCO EN EJE I - GOBERNANZA Y OPERACIONES TI
-        .call(() => setConcl3DCard(0), null, 3.9)
-        .call(() => SFX.ting(), null, 3.9)
-        .to("#concl-3d-card-0", { scale: 1.04, opacity: 1.0, zIndex: 20, duration: 0.4, ease: "power2.out" }, 3.9)
-        .to(["#concl-3d-card-1", "#concl-3d-card-2"], { scale: 0.98, opacity: 0.65, zIndex: 5, duration: 0.4 }, 3.9)
+        .call(() => setConcl3DCard(0), null, at(23.5))
+        .call(() => SFX.ting(), null, at(23.5))
+        .to("#concl-3d-card-0", { scale: 1.04, opacity: 1.0, zIndex: 20, duration: 0.4, ease: "power2.out" }, at(23.5))
+        .to(["#concl-3d-card-1", "#concl-3d-card-2"], { scale: 0.98, opacity: 0.65, zIndex: 5, duration: 0.4 }, at(23.5))
 
         // 6. FOCO EN EJE II - SEGURIDAD FÍSICA Y CENTRO DE CÓMPUTO
-        .call(() => setConcl3DCard(1), null, 8.0)
-        .call(() => SFX.ting(), null, 8.0)
-        .to("#concl-3d-card-1", { scale: 1.04, opacity: 1.0, zIndex: 20, duration: 0.4, ease: "power2.out" }, 8.0)
-        .to(["#concl-3d-card-0", "#concl-3d-card-2"], { scale: 0.98, opacity: 0.65, zIndex: 5, duration: 0.4 }, 8.0)
+        .call(() => setConcl3DCard(1), null, at(46.0))
+        .call(() => SFX.ting(), null, at(46.0))
+        .to("#concl-3d-card-1", { scale: 1.04, opacity: 1.0, zIndex: 20, duration: 0.4, ease: "power2.out" }, at(46.0))
+        .to(["#concl-3d-card-0", "#concl-3d-card-2"], { scale: 0.98, opacity: 0.65, zIndex: 5, duration: 0.4 }, at(46.0))
 
         // 7. FOCO EN EJE III - RESPALDO Y SEGURIDAD LÓGICA
-        .call(() => setConcl3DCard(2), null, 12.5)
-        .call(() => SFX.ting(), null, 12.5)
-        .to("#concl-3d-card-2", { scale: 1.04, opacity: 1.0, zIndex: 20, duration: 0.4, ease: "power2.out" }, 12.5)
-        .to(["#concl-3d-card-0", "#concl-3d-card-1"], { scale: 0.98, opacity: 0.65, zIndex: 5, duration: 0.4 }, 12.5)
+        .call(() => setConcl3DCard(2), null, at(68.5))
+        .call(() => SFX.ting(), null, at(68.5))
+        .to("#concl-3d-card-2", { scale: 1.04, opacity: 1.0, zIndex: 20, duration: 0.4, ease: "power2.out" }, at(68.5))
+        .to(["#concl-3d-card-0", "#concl-3d-card-1"], { scale: 0.98, opacity: 0.65, zIndex: 5, duration: 0.4 }, at(68.5))
 
-        // 8. VEREDICTO FINAL UNIFICADO: Las 3 conclusiones brillan al 100% como módulos independientes consolidados
+        // 8. VEREDICTO FINAL UNIFICADO: Las 3 conclusiones brillan al 100% como módulos consolidados
         .call(() => {
             for (let i = 0; i < 3; i++) {
                 document.getElementById(`concl-3d-card-${i}`)?.classList.add('is-active');
                 document.getElementById(`concl-dot-${i}`)?.classList.add('active');
             }
-        }, null, 16.0)
+        }, null, at(90.0))
+        .call(() => SFX.ting(), null, at(90.0))
         .to(["#concl-3d-card-0", "#concl-3d-card-1", "#concl-3d-card-2"], {
             scale: 1.0,
             opacity: 1.0,
             zIndex: 10,
             duration: 0.6,
             ease: "power2.out"
-        }, 16.0)
-        .to("#scene9", { opacity: 1, duration: 4.5 }, 16.5);
+        }, at(90.0))
+        .call(() => Voiceover.stop(), null, 0.4 + dur)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, at(90.5))
+        // Al culminar, la escena se mantiene fija y visible sin fundir a negro para lectura final
+        .to("#scene9", { opacity: 1, duration: 2.0 }, 0.4 + dur);
 
     return tl;
 }

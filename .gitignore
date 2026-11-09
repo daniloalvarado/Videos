@@ -1,8 +1,10 @@
-# Archivos de video pesados (grabaciones o exports locales)
+# Archivos pesados (grabaciones, exports locales, audios crudos y zips)
 *.mp4
 *.webm
 *.avi
 *.mov
+*.zip
+*.wav
 
 # Subrepositorios embebidos
 auditoria-informatica/Svg-String/
