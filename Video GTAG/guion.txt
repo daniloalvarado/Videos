@@ -1,0 +1,147 @@
+-----------------------------------------------------------------------------------------------
+PASO 1
+
+En una auditoría de infraestructura y operaciones de TI, el primer paso nunca es probar controles a ciegas. Siguiendo la guía GTAG y la Norma Global 13.2, el trabajo inicia identificando las amenazas y vulnerabilidades que ponen en riesgo la disponibilidad, integridad y confidencialidad de los servicios tecnológicos de la organización
+
+
+Al examinar la tabla en detalle, identificamos el impacto directo de cada riesgo:
+
+* En **Respaldo y Recuperación**, encontramos tres riesgos calificados como Altos: **R01**, por la falta de pruebas de restauración que impide garantizar la recuperación de bases de datos; **R07**, por no tener copias fuera del local actualizadas ante un desastre en sede central; y **R17**, por el peligro de sustracción de medios físicos sin custodia.
+* En el componente **Centro de Datos**, el riesgo **R12**, de nivel Alto, advierte sobre fallas en los servidores debido a problemas de climatización y humedad.
+* En **Infraestructura Física**, se ubican dos amenazas críticas: el riesgo **R02**, calificado como Alto por el ingreso no autorizado al cuarto de cómputo; y el **R20**, calificado como Muy Alto por la manipulación accidental o daño de servidores debido al ingreso de personal a imprimir.
+* En conectividad y plataformas, el componente **Dispositivos de Red** presenta el riesgo **R16**, de nivel Muy Alto, por la caída o saturación de enlaces hacia las sedes provinciales. En **Gestión de Parches**, el **R26**, calificado como Alto, expone estaciones con sistemas operativos sin soporte; mientras que en **Software y Antivirus**, el **R27** alcanza nivel Muy Alto ante el peligro inminente de propagación de malware en la red.
+* Finalmente, en **Operaciones de TI**, se concentran tres factores clave: el riesgo **R09**, de nivel Alto, por tickets de soporte desatendidos o no medidos; el **R24**, de nivel Muy Alto, por la paralización del Sistema de Gestión Fiscal ante fallas de componentes dependientes; y el **R28**, calificado como Alto, por la dependencia crítica y falta de relevo ante la ausencia del coordinador de TI
+
+
+--------------------------------------
+
+PASO 2
+
+
+Una vez identificados y priorizados los riesgos críticos, el auditor no inventa qué debería haber en la organización. El Paso 2 consiste en determinar los **controles esperados**: la línea base técnica y organizativa que la entidad debió diseñar e implementar para mitigar esas amenazas y asegurar la continuidad operativa
+
+Para los riesgos **R02** y **R20** —de accesos no autorizados y manipulación accidental por personal ajeno—, el control exige puertas bajo llave, registro formal de ingresos y la prohibición estricta de usar el cuarto para tareas administrativas. Y para el riesgo **R12** —falla por sobrecalentamiento—, se define un ambiente climatizado, con monitoreo térmico y extintores vigentes
+
+Frente al riesgo **R01** de perder bases de datos críticas, el control demanda coordinar y evidenciar pruebas periódicas de restauración con el DBA. Para el riesgo **R07**, exige calendarios de copias fuera de sitio (*off-site*); y para el **R17**, que los medios físicos de respaldo estén inventariados, bajo llave y cifrados
+
+Ante el riesgo **R26** de vulnerabilidades en sistemas obsoletos, el control establece operar solo con sistemas con soporte del fabricante, parches al día y bloqueo por inactividad. Y para el riesgo **R27** —infección por malware—, exige protección antimalware centralizada con firmas activas y filtrado de tráfico web
+
+Para el riesgo **R16** de caídas e incomunicación de sedes remotas, el control esperado es el monitoreo proactivo de enlaces de datos, midiendo disponibilidad y saturación en lugar de esperar la queja del usuario
+
+Frente al riesgo **R09** de incidentes perdidos o atendidos tarde, el estándar es una mesa de ayuda formal que clasifique y mida tiempos de respuesta. Para el riesgo **R24** —paralización de los sistemas centrales—, un protocolo formal de diagnóstico y escalamiento rápido; y para el riesgo **R28**, la designación de personal técnico de respaldo y manuales operativos que eliminen la dependencia de una sola persona»
+
+
+--------------------------------------------------------------
+
+PASO 3
+
+Con los controles esperados ya definidos en el Paso 2, el auditor no asume que estos existen solo porque una política los mencione. El Paso 3 consiste en solicitar y recopilar la evidencia que demostrará si los controles se diseñaron e implementaron en la realidad operativa. La Norma Global 14.1 y la GTAG exigen que esta evidencia sea rigurosa, suficiente y confiable, estructurándose en una tabla formal que combina códigos de trazabilidad, descripciones precisas y técnicas de obtención especializadas
+
+Al recorrer la tabla de evidencias de manera integral, encontramos diecisiete fuentes probatorias clave:
+
+En el frente de **indagación**, se recopilan los testimonios técnicos: el cuestionario inicial de setiembre en **E1**, la entrevista complementaria en **E5**, la indagación informal al personal en **E14**, y el cuestionario formal de auditoría de octubre en **E17**, todos dirigidos al Analista Coordinador y su equipo.
+
+Mediante **inspección documental**, se examina la gestión interna: el Plan de Mantenimiento Preventivo 2022 en **E2** y el de 2026 en elaboración en **E8**; el Reglamento de Organización y Funciones en **E3**; el Plan de Continuidad Operativa en **E6**; el inventario de equipos 2025 en **E7**; el directorio telefónico del Distrito Fiscal en **E9**; y la Directiva 006 de la Contraloría sobre Control Interno en **E19**.
+
+En el mismo rubro documental, se incorpora el **marco legal obligatorio**: la Ley de Protección de Datos Personales en **E10**; los Lineamientos de SGSI de la PCM en **E11**; la Ley de Gobierno Digital en **E12**; y el artículo 324 del Código Procesal Penal sobre reserva de la investigación en **E13**.
+
+Y finalmente, mediante **observación directa** presencial, se obtienen las fichas de verificación in situ: la ficha del área de informática de setiembre en **E4**, y la inspección ocular del área y del cuarto de servidores realizada el primero de octubre en **E18**.
+
+--------------------------------------------------------------
+
+PASO 4: PRUEBAS DE CUMPLIMIENTO
+
+Una vez recopiladas las evidencias en el Paso 3, el equipo auditor procede en el Paso 4 al diseño y ejecución formal de las pruebas de cumplimiento. El objetivo es corroborar mediante pruebas cruzadas —combinando observación en campo, análisis documental cruzado e indagación técnica— si los controles operaron de manera continua y efectiva en la sede central de Iquitos.
+
+En una primera escena se auditan los componentes A, B y C: en Seguridad Física (A), se evalúan los accesos y registros del cuarto de servidores (R02, R20) y las condiciones ambientales y extintores (R12); en Respaldo y Recuperación (B), se revisa el cronograma de copias del PCO, el almacenamiento fuera del local y las pruebas de restauración con el DBA (R01, R07), además de la custodia bajo llave de los medios (R17); y en Software y Seguridad Lógica (C), se inspeccionan los sistemas sin soporte técnico (R26) y la protección antimalware (R27).
+
+En una segunda escena se evalúan los componentes D y E: en Redes y Telecomunicaciones (D), se solicitan los reportes de monitoreo de capacidad y disponibilidad de enlaces provinciales (R16); y en Operaciones de TI y Gestión de Incidentes (E), se somete a prueba el registro de tickets en la mesa de ayuda (R09), el diagnóstico y escalamiento ante caídas del Sistema de Gestión Fiscal (R24) y la existencia formal de personal técnico de respaldo en el ROF y PCO (R28).
+
+--------------------------------------------------------------
+
+PASO 5: DETERMINACIÓN DE DESVIACIONES (HALLAZGOS IDENTIFICADOS)
+
+Con las pruebas de cumplimiento ejecutadas, el auditor formaliza en el Paso 5 las desviaciones o hallazgos detectados, estructurados en dos escenas clave:
+
+ESCENA 7 - PARTE 1 (COMPONENTES A Y B):
+- Componente A (Controles Ambientales y de Seguridad Física):
+  * R02 y R20: No se registran los ingresos, el personal de Indicadores entra sin acompañamiento y la cerradura no se usa durante la jornada. No hay procedimiento de autorización, el acceso no se basa en el cargo y la capacitación en seguridad física es ocasional.
+  * R12: No se identificaron las amenazas ambientales del cuarto ni hay una política sobre lo que puede guardarse en él, que no se mantiene libre de materiales. La ubicación no protege de calor, humedad y polvo y no hay extintores, alarmas ni procedimiento de respuesta.
+- Componente B (Respaldo y Recuperación):
+  * R01: No existe una programación de pruebas de restauración ni se solicita al DBA nacional evidencia de su ejecución. Los requisitos de almacenamiento local y remoto no están formalizados.
+  * R07: El calendario de respaldo remoto no se cumple, los requisitos de almacenamiento fuera del local no están formalizados y no se prueban periódicamente las copias.
+  * R17: No existe procedimiento para la custodia de los medios, no se evidenció cifrado ni inventario, el acceso no se limita y no hay salvaguardas físicas.
+
+ESCENA 8 - PARTE 2 (COMPONENTES C, D Y E):
+- Componente C (Software, Gestión de Parches y Seguridad Lógica):
+  * R26: Los sistemas no se configuran de forma segura y las estaciones con Windows 10 no reciben actualizaciones. El bloqueo automático por inactividad y el cifrado de información son nulos.
+  * R27: La protección antimalware no está activa y actualizada en todas las estaciones y no hay filtrado de tráfico web. La capacitación sobre seguridad de la información es ocasional y no hay distribución centralizada de la protección.
+- Componente D (Redes y Telecomunicaciones):
+  * R16: No se elaboran informes de capacidad de los enlaces ni existe un proceso de recopilación de datos de disponibilidad. El monitoreo es puramente reactivo.
+- Componente E (Operaciones de TI y Gestión de Incidentes):
+  * R09: No se registran todas las peticiones e incidentes, la clasificación solo se aplica a lo que ingresa por la plataforma y no se prioriza según tiempos de respuesta definidos.
+  * R24: El diagnóstico es informal y depende del coordinador. Las caídas y sus causas no se registran. El escalamiento al equipo nacional no tiene tiempos de respuesta definidos para asegurar el restablecimiento del servicio.
+  * R28: No hay personal técnico de respaldo ni documentación de procedimientos operativos estándar (manuales) suficiente para reducir la dependencia de una sola persona.
+
+--------------------------------------------------------------
+
+PASO 6: CONCLUSIONES Y DICTAMEN DE AUDITORÍA (ESCENA 9)
+
+A partir de la evaluación de los doce (12) riesgos significativos priorizados en la infraestructura y operaciones de TI del Distrito Fiscal de Loreto, el equipo auditor concluye que el entorno de control interno presenta deficiencias estructurales, lógicas y operativas que exponen a la entidad a potenciales interrupciones del servicio y vulneración de la información.
+
+Se concluye que:
+
+La gestión de TI opera bajo un enfoque reactivo y con alta dependencia de los conocimientos de un único coordinador local. La ausencia de personal de respaldo capacitado, sumada a la falta de formalidad en el registro de la mesa de ayuda y en los escalamientos al equipo nacional, limita la capacidad de respuesta ante caídas del Sistema de Gestión Fiscal (SGF).
+
+El cuarto de servidores, núcleo tecnológico de la sede, opera en un estado de vulnerabilidad física al carecer de restricciones estrictas de acceso, extintores y condiciones de climatización monitoreadas, contraviniendo las buenas prácticas para centros de datos.
+
+Los controles preventivos y de contingencia son insuficientes. Existen estaciones operando con sistemas sin soporte y protección antimalware inactiva. Asimismo, las copias de seguridad se gestionan sin pruebas de restauración demostrables, sin cifrado y sin salvaguardas físicas fuera del local (off-site), lo que compromete la disponibilidad de la información ante un desastre.
+
+Las desviaciones expuestas requieren que la administración del Distrito Fiscal formule e implemente un plan de acción correctivo a la brevedad.
+
+
+
+
+
+
+
+A. Inspiradas en Svg-String (Hilos conductores, rutas y cables de red)
+
+La "Línea de Trazabilidad Forense" (Data Trail):
+
+Concepto: Un filamento luminoso (como un pulso de luz por fibra óptica) viaja serpenteando por la pantalla.
+Dónde usarlo: En la Escena 3 y 4. El pulso sale del Control Esperado, viaja dibujando una línea de circuito técnico por el fondo y llega exactamente a la Evidencia (E1 a E19) que lo valida, demostrando visualmente que cada conclusión de auditoría está conectada a una prueba real.
+
+El "Cable Ethernet Conectivo" en Carruseles:
+
+Concepto: En lugar de que las tarjetas del carrusel floten sueltas, un cable de red realista conecta la parte inferior de cada tarjeta. Conforme el carrusel gira, el cable se tensa, oscila con inercia física y transfiere un destello de datos de una tarjeta a otra.
+
+Topología de Red Viviente (Sede Iquitos):
+
+Concepto: Para la Escena 6 (Dispositivos de Red), líneas sutiles tipo circuito conectan la Sede Central con las sedes remotas. Un pulso verde viaja continuo, pero al mencionar los problemas de lentitud y falta de redundancia, la línea se fragmenta momentáneamente en pulsos intermitentes de advertencia.
+B. Inspiradas en Viscose-carousel (Metamorfosis líquida, estiramiento y desprendimiento)
+
+Desprendimiento Celular de Riesgos (Masa Líquida a Filtro):
+
+Concepto: En la Escena 2, los 32 riesgos iniciales empiezan como una sola masa monolítica o burbuja compacta. Al pasar el filtro de la matriz, la masa sufre tensión elástica: se estira como mercurio líquido y se separa en dos gotas; los 20 riesgos descartados se encogen y desvanecen, mientras los 12 riesgos priorizados se rompen con un rebote elástico hacia el frente.
+
+Apertura de Expedientes por Tensión Elástica:
+
+Concepto: Para las tarjetas de conclusiones en la Escena 9, las tres tarjetas nacen unidas en el centro. Al avanzar la locución, se separan hacia izquierda y derecha estirando un cuello adhesivo que finalmente se suelta suavemente, dando la sensación de módulos desacoplados con peso y consistencia física.
+C. Otras Alternativas Cinematográficas para Videos de Auditoría / TI
+
+Efecto Escáner HUD / Barrido Forense (Laser Inspection Beam):
+
+Concepto: Una línea horizontal de barrido láser semitransparente con partículas tenues recorre las tablas de evidencias y servidores. Conforme el láser pasa sobre un elemento crítico (como la falta de respaldo o el cuarto de servidores), ese elemento "reacciona" iluminándose con un destello de diagnóstico forense.
+
+Desdoblamiento Tipo Acordeón / Carpeta de Archivo (Accordion Unfold):
+
+Concepto: En lugar de que las desviaciones (Escenas 7 y 8) aparezcan simplemente con desvanecimiento, cada tarjeta se desdobla en 3D como un informe técnico en papel membretado o expediente administrativo que se abre en dos pliegues hacia el espectador.
+
+Enfoque Selectivo de Cámara Cinematográfica (Tilt-Shift / Rack Focus):
+
+Concepto: Cuando se enfatiza una evidencia particular (por ejemplo, E4 - Ficha de observación directa), todo el fondo y las demás filas entran en un desenfoque gaussiano suave (profundidad de campo de cámara réflex), trayendo el elemento mencionado 20px al frente con un halo de luz, eliminando cualquier distracción del resto de la pantalla.
+
+Matriz de Puntos Holográfica (Matrix Dot-Matrix Reveal):
+
+Concepto: Para números de métricas, porcentajes o niveles de exposición, los números se forman a partir de una rejilla de micro-puntos de luz que convergen magnéticamente para armar el dígito final antes de solidificarse.

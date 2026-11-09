@@ -27,6 +27,61 @@ function playAudioFile(relativePath) {
     } catch (e) { }
 }
 
+// --- SISTEMA MAESTRO DE VOZ EN OFF (VOICEOVER CONTROLLER) ---
+class VoiceoverController {
+    constructor() {
+        this.audio = null;
+        this.currentSrc = null;
+        this.defaultSpeed = 1.14; // Velocidad ligeramente acelerada (+14%) como solicitó el usuario
+    }
+
+    play(filePath, speed = 1.14, startTime = 0) {
+        this.stop();
+        try {
+            const safePath = encodeURI(filePath);
+            const a = new Audio(safePath);
+            a.volume = 0.95;
+            a.playbackRate = speed;
+            a.defaultPlaybackRate = speed;
+            a.preservesPitch = true;
+            if (startTime > 0) {
+                a.currentTime = startTime;
+            }
+            this.audio = a;
+            this.currentSrc = filePath;
+            a.play().catch(err => {
+                console.warn("Reproducción de voz en off pospuesta:", err);
+            });
+        } catch (e) {
+            console.error("Error al reproducir audio de voz en off:", e);
+        }
+    }
+
+    pause() {
+        if (this.audio && !this.audio.paused) {
+            this.audio.pause();
+        }
+    }
+
+    resume() {
+        if (this.audio && this.audio.paused) {
+            this.audio.play().catch(() => {});
+        }
+    }
+
+    stop() {
+        if (this.audio) {
+            try {
+                this.audio.pause();
+                this.audio.currentTime = 0;
+            } catch (e) {}
+            this.audio = null;
+            this.currentSrc = null;
+        }
+    }
+}
+const Voiceover = new VoiceoverController();
+
 const SFX = {
     whoosh: () => {
         playAudioFile('./sfx/clean fast swoosh.mp3');
@@ -234,6 +289,7 @@ function buildScene2(cam) {
 
     tl.call(() => setActiveSceneDOM('scene2'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
+        .call(() => Voiceover.stop(), null, 0)
         .set(cam, { scale: 1.0, x: 0, y: 0 }, 0)
         .set("#risks-rows-track", { y: 0 }, 0)
         .set("#scene2 .scene-header-box", { opacity: 1 }, 0)
@@ -254,6 +310,10 @@ function buildScene2(cam) {
         .from("#scene2 .section-tag", { y: -20, opacity: 0, duration: 0.5 }, 0.3)
         // Título escrito letra por letra con SFX.tick
         .add(typeHeadingText("#scene2 .title-hero", "Identificación y Valoración de Riesgos", 0.03, false), 0.4)
+
+        // AUDIO 1: PASO 1_1.WAV AL APARECER EL TÍTULO (con velocidad acelerada a 1.14x)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 1_1.wav', 1.14), null, 0.4)
+
         .from("#scene2 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
         // 1. PRIMER ELEMENTO: Panel de KPIs a la izquierda (aparición con desplazamiento)
@@ -294,27 +354,30 @@ function buildScene2(cam) {
         .to("#blob-critical", { scale: 1.18, duration: 0.35, yoyo: true, repeat: 1, ease: "elastic.out(1.2, 0.4)" }, 4.25)
         .to(["#blob-txt-filtered", "#blob-txt-critical"], { opacity: 1, duration: 0.35 }, 4.3)
 
-        // 2. SEGUNDO ELEMENTO: Matriz 5x5 a la derecha (aparición con zoom y permanencia extendida)
+        // 2. SEGUNDO ELEMENTO: Matriz 5x5 a la derecha (aparición con zoom y permanencia mientras se completa la locución inicial)
         .to(cam, { scale: 1.25, x: -340, y: 70, duration: 1.3, ease: "power2.inOut" }, 5.0)
         .to("#matrix-graph-panel", { opacity: 1, scale: 1.0, duration: 0.8, ease: "back.out(1.2)" }, 5.0)
         .call(() => SFX.ting(), null, 5.8)
         .to("#matrix-graph-panel .cell-high", { scale: 1.15, duration: 0.3, yoyo: true, repeat: 3, transformOrigin: "center center" }, 5.8)
 
-        // Pausa de contemplación de la matriz: se mantiene visible y en foco hasta los 10.2s para leer ejes y celdas
+        // Pausa de contemplación de la matriz: se mantiene visible y en foco hasta los 15.0s (duración de Paso 1_1.wav acelerado)
         // 3. TERCER ELEMENTO: Tabla de 12 Riesgos Priorizados (aparición a altura completa ampliada de 700px)
-        // Desvanecemos la matriz tras la lectura prolongada y centramos la cámara
-        .to("#scene2 .matrix-container", { opacity: 0, y: -25, duration: 0.65, ease: "power2.inOut", pointerEvents: "none" }, 10.2)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.0, ease: "power2.inOut" }, 10.2)
-        .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.85, ease: "power2.out", pointerEvents: "auto" }, 10.6)
-        .call(() => SFX.slide(), null, 10.6)
+        // Desvanecemos la matriz tras la locución inicial y centramos la cámara
+        .to("#scene2 .matrix-container", { opacity: 0, y: -25, duration: 0.65, ease: "power2.inOut", pointerEvents: "none" }, 15.0)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 0.9, ease: "power2.inOut" }, 15.0)
+        .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.85, ease: "power2.out", pointerEvents: "auto" }, 15.6)
+        .call(() => SFX.slide(), null, 15.6)
         .fromTo("#risks-table-box", {
             boxShadow: "0 0 45px rgba(88, 166, 255, 0.65)"
         }, {
             boxShadow: "0 16px 45px rgba(0, 0, 0, 0.55)",
             duration: 0.9
-        }, 10.6)
+        }, 15.6)
 
-        // Desplazamiento progresivo de filas de la tabla adaptado al nuevo viewport ampliado
+        // AUDIO 2: PASO 1_2TABLA.WAV AL APARECER LA TABLA (duración a 1.14x es ~102.8s)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 1_2Tabla.wav', 1.14), null, 15.8)
+
+        // Desplazamiento progresivo continuo y cadencioso de las filas de la tabla durante toda la locución de la tabla
         .to("#risks-rows-track", {
             y: () => {
                 const track = document.getElementById('risks-rows-track');
@@ -322,20 +385,21 @@ function buildScene2(cam) {
                 const vh = viewport ? (viewport.clientHeight || viewport.offsetHeight) : 700;
                 return track && track.scrollHeight > vh ? -(track.scrollHeight - vh + 15) : -450;
             },
-            duration: 8.0,
+            duration: 98.0,
             ease: "power1.inOut"
-        }, 11.2)
+        }, 18.0)
 
         // ========================================================
         // DESPUÉS DEL TERCERO: CARRUSEL 3D POR ARRIBA DE LOS DEMÁS
         // ========================================================
-        // Retorno de cámara al centro y desvanecimiento de la tabla y encabezados de fondo
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.0, ease: "power2.inOut" }, 19.8)
+        // Retorno de cámara al centro y desvanecimiento de la tabla y encabezados de fondo tras culminar la locución de la tabla
+        .call(() => Voiceover.stop(), null, 118.8)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.0, ease: "power2.inOut" }, 119.0)
         .to(["#scene2 .scene-header-box", "#scene2 .matrix-container", "#scene2 #risks-table-box"], {
             opacity: 0,
-            duration: 0.6,
+            duration: 0.7,
             ease: "power2.out"
-        }, 19.8)
+        }, 119.0)
 
         // Entrada del Carrusel 3D con su encabezado elevado e independiente
         .to("#risk-carousel-3d-overlay", {
@@ -344,27 +408,27 @@ function buildScene2(cam) {
             scale: 1.0,
             duration: 0.9,
             ease: "back.out(1.2)"
-        }, 20.3)
-        .call(() => SFX.whoosh(), null, 20.3)
-        .call(() => { set3DCarouselCard(0); SFX.ting(); }, null, 21.0)
+        }, 119.8)
+        .call(() => SFX.whoosh(), null, 119.8)
+        .call(() => { set3DCarouselCard(0); SFX.ting(); }, null, 120.5)
 
         // Rotación a Card 1 (Bases de Datos Fiscales: R01, R07, R17)
-        .to("#carousel-ring", { rotationY: -90, duration: 0.9, ease: "power2.inOut" }, 23.2)
-        .call(() => { set3DCarouselCard(1); SFX.ting(); }, null, 24.1)
+        .to("#carousel-ring", { rotationY: -90, duration: 0.9, ease: "power2.inOut" }, 124.0)
+        .call(() => { set3DCarouselCard(1); SFX.ting(); }, null, 124.9)
 
         // Rotación a Card 2 (Endpoints y Antivirus: R26, R27)
-        .to("#carousel-ring", { rotationY: -180, duration: 0.9, ease: "power2.inOut" }, 25.8)
-        .call(() => { set3DCarouselCard(2); SFX.ting(); }, null, 26.7)
+        .to("#carousel-ring", { rotationY: -180, duration: 0.9, ease: "power2.inOut" }, 128.0)
+        .call(() => { set3DCarouselCard(2); SFX.ting(); }, null, 128.9)
 
         // Rotación a Card 3 (Mesa de Ayuda y SGF: R09, R24, R28) - Última tarjeta, sin volver a la primera
-        .to("#carousel-ring", { rotationY: -270, duration: 0.9, ease: "power2.inOut" }, 28.4)
-        .call(() => { set3DCarouselCard(3); SFX.ting(); }, null, 29.3)
+        .to("#carousel-ring", { rotationY: -270, duration: 0.9, ease: "power2.inOut" }, 132.0)
+        .call(() => { set3DCarouselCard(3); SFX.ting(); }, null, 132.9)
 
         // Se mantiene fija en la última tarjeta (Card 3: Mesa de Ayuda) para apreciarla sin rotar al inicio
-        .to(cam, { scale: 1.04, duration: 2.4, ease: "power1.out" }, 29.6)
+        .to(cam, { scale: 1.04, duration: 2.5, ease: "power1.out" }, 133.5)
 
         // Cierre fluido de la Escena 2
-        .to("#scene2", { opacity: 0, duration: 0.7 }, 32.3);
+        .to("#scene2", { opacity: 0, duration: 0.8 }, 136.5);
 
     return tl;
 }
@@ -1158,6 +1222,7 @@ function initMasterTimeline() {
         paused: true,
         onUpdate: updateScrubberUI,
         onComplete: () => {
+            Voiceover.stop();
             if (isLoopingScene) {
                 jumpToScene(currentSceneIndex);
             } else {
@@ -1219,6 +1284,7 @@ function runWipeTransition() {
 
 // Manejador del DOM para visibilidad de escenas
 function setActiveSceneDOM(sceneId) {
+    Voiceover.stop();
     document.querySelectorAll('.scene').forEach(sc => {
         sc.classList.remove('active-scene');
         sc.style.opacity = '0';
@@ -1285,6 +1351,7 @@ const scrubber = document.getElementById('scrubber-slider');
 if (scrubber) {
     scrubber.addEventListener('input', (e) => {
         if (!masterTimeline) initMasterTimeline();
+        Voiceover.stop();
         masterTimeline.progress(parseFloat(e.target.value));
     });
 }
@@ -1292,6 +1359,7 @@ if (scrubber) {
 // Salto directo a Escena (1 a 9)
 window.jumpToScene = function (sceneNumber) {
     initAudioSystem();
+    Voiceover.stop();
     if (!masterTimeline) initMasterTimeline();
 
     const label = sceneLabels[sceneNumber - 1];
@@ -1328,9 +1396,11 @@ document.getElementById('btn-play-pause').addEventListener('click', () => {
     const icon = document.getElementById('play-icon');
     if (masterTimeline.paused()) {
         masterTimeline.play();
+        Voiceover.resume();
         if (icon) icon.textContent = '⏸';
     } else {
         masterTimeline.pause();
+        Voiceover.pause();
         if (icon) icon.textContent = '▶';
     }
 });
@@ -1400,10 +1470,12 @@ window.addEventListener('keydown', (e) => {
         if (lBtn) lBtn.click();
     } else if (e.code === 'ArrowLeft') {
         if (masterTimeline) {
+            Voiceover.stop();
             masterTimeline.seek(Math.max(0, masterTimeline.time() - 2));
         }
     } else if (e.code === 'ArrowRight') {
         if (masterTimeline) {
+            Voiceover.stop();
             masterTimeline.seek(Math.min(masterTimeline.duration(), masterTimeline.time() + 2));
         }
     }
