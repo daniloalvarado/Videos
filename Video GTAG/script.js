@@ -28,33 +28,41 @@ function playAudioFile(relativePath) {
 }
 
 // =========================================================================
-// 🎚️ VELOCIDAD GLOBAL DE AUDIO (MODIFICABLE POR EL USUARIO)
-// Cambia este único valor numérico para acelerar o ralentizar TODO el video
-// y todos los audios y animaciones se sincronizan automáticamente:
-// Ejemplos:
-//   1.00 -> Velocidad original normal
-//   1.14 -> Velocidad fluida recomendada (+14%)
-//   1.20 -> Velocidad dinámica (+20%)
-//   1.25 -> Velocidad rápida (+25%)
+// 🎚️ CALIBRADOR DE VELOCIDADES INDIVIDUALES POR AUDIO / ESCENA
+// Modifica la velocidad de cada audio de forma totalmente independiente:
+// Ejemplos: 1.0 (normal), 1.15 (+15%), 1.20 (+20%), 1.25 (+25%)
+// Al modificar cualquiera, todo el video, sus animaciones, zooms
+// y desplazamientos de tabla se sincronizan automáticamente.
 // =========================================================================
-const GLOBAL_AUDIO_SPEED = 1.25;
+const AUDIO_SPEEDS = {
+    paso1_1: 1.25,      // Escena 2: Intro 32 Riesgos + Matriz 5x5 (Paso 1_1.wav)
+    paso1_2: 1.25,      // Escena 2: Tabla de 12 Riesgos Priorizados (Paso 1_2Tabla.wav)
+    paso2: 1.25,        // Escena 3: Controles Esperados Componentes A-E (Paso 2.wav)
+    paso3: 1.25,        // Escena 4: Solicitud de Evidencias E1-E19 (Paso 3.wav: 0s-73.2s y 116.2s-133.96s)
+    paso4_e5: 1.25,     // Escena 5: Pruebas de Cumplimiento A, B, C (Paso 4.wav: 0s a 64.85s)
+    paso4_e6: 1.25,     // Escena 6: Pruebas de Cumplimiento D, E (Paso 4.wav: 64.88s a 100.31s)
+    paso5_e7: 1.25,     // Escena 7: Hallazgos y Desviaciones A, B (Paso 5.wav: 0s a 100.95s)
+    paso5_e8: 1.25,     // Escena 8: Hallazgos y Desviaciones C, D, E (Paso 5.wav: 100.95s a 188.05s)
+    paso6_e9: 1.25      // Escena 9: Conclusiones y Dictamen de Auditoría (Paso 6.wav)
+};
 
 /*
 ===============================================================================
 📋 MAPEO MAESTRO DE AUDIOS POR ESCENA Y PUNTOS DE CORTE EXACTOS (RMS):
 -------------------------------------------------------------------------------
-#  | ESCENA      | ARCHIVO DE AUDIO      | SEGMENTO / CONTENIDO           | INICIO AUDIO | DUR. RAW
----+-------------+-----------------------+--------------------------------+--------------+----------
-1  | Escena 1    | (Sin voz - Portada)   | Efectos SFX y tipografía       | -            | -
-2a | Escena 2    | Paso 1_1.wav          | Intro 32 Riesgos + Matriz 5x5  | 0.00s        | 16.84s
-2b | Escena 2    | Paso 1_2Tabla.wav     | Tabla 12 Riesgos Priorizados   | 0.00s        | 117.26s
-3  | Escena 3    | Paso 2.wav            | Controles Esperados (Comp A-E) | 0.00s        | 130.76s
-4  | Escena 4    | Paso 3.wav            | Solicitud de Evidencias E1-E19 | 0.00s        | 133.96s
-5  | Escena 5    | Paso 4.wav (Bloque 1) | Pruebas Cumplimiento (A, B, C) | 0.00s        | 64.85s  (corte en silencio 64.80-64.88s)
-6  | Escena 6    | Paso 4.wav (Bloque 2) | Pruebas Cumplimiento (D, E)    | 64.88s       | 35.43s  (hasta final 100.31s)
-7  | Escena 7    | Paso 5.wav (Bloque 1) | Hallazgos/Desviaciones (A, B)  | 0.00s        | 100.95s (corte en silencio 100.88-101.02s)
-8  | Escena 8    | Paso 5.wav (Bloque 2) | Hallazgos/Desviaciones (C,D,E) | 100.95s      | 87.10s  (hasta final 188.05s)
-9  | Escena 9    | Paso 6.wav            | Dictamen y Conclusiones Finales| 0.00s        | 99.18s
+#  | ESCENA      | ARCHIVO DE AUDIO      | SEGMENTO / CONTENIDO           | INICIO AUDIO | DUR. RAW | VELOCIDAD
+---+-------------+-----------------------+--------------------------------+--------------+----------+----------
+1  | Escena 1    | (Sin voz - Portada)   | Efectos SFX y tipografía       | -            | -        | -
+2a | Escena 2    | Paso 1_1.wav          | Intro 32 Riesgos + Matriz 5x5  | 0.00s        | 16.84s   | AUDIO_SPEEDS.paso1_1
+2b | Escena 2    | Paso 1_2Tabla.wav     | Tabla 12 Riesgos Priorizados   | 0.00s        | 117.26s  | AUDIO_SPEEDS.paso1_2
+3  | Escena 3    | Paso 2.wav            | Controles Esperados (Comp A-E) | 0.00s        | 130.76s  | AUDIO_SPEEDS.paso2
+4a | Escena 4    | Paso 3.wav (Parte 1)  | Indagación + Gestión Interna   | 0.00s        | 73.20s   | AUDIO_SPEEDS.paso3 (detiene en 1:13)
+4b | Escena 4    | Paso 3.wav (Parte 2)  | Observación Directa Presencial | 116.20s      | 17.76s   | AUDIO_SPEEDS.paso3 (reanuda en 1:56)
+5  | Escena 5    | Paso 4.wav (Bloque 1) | Pruebas Cumplimiento (A, B, C) | 0.00s        | 64.85s   | AUDIO_SPEEDS.paso4_e5 (corte en silencio 64.80-64.88s)
+6  | Escena 6    | Paso 4.wav (Bloque 2) | Pruebas Cumplimiento (D, E)    | 64.88s       | 35.43s   | AUDIO_SPEEDS.paso4_e6 (hasta final 100.31s)
+7  | Escena 7    | Paso 5.wav (Bloque 1) | Hallazgos/Desviaciones (A, B)  | 0.00s        | 100.95s  | AUDIO_SPEEDS.paso5_e7 (corte en silencio 100.88-101.02s)
+8  | Escena 8    | Paso 5.wav (Bloque 2) | Hallazgos/Desviaciones (C,D,E) | 100.95s      | 87.10s   | AUDIO_SPEEDS.paso5_e8 (hasta final 188.05s)
+9  | Escena 9    | Paso 6.wav            | Dictamen y Conclusiones Finales| 0.00s        | 99.18s   | AUDIO_SPEEDS.paso6_e9
 ===============================================================================
 */
 
@@ -68,19 +76,19 @@ const VOICEOVER_TRACKS = [
         offsetInScene: 0.4,
         rawAudioStart: 0,
         rawDuration: 16.84,
-        get speed() { return GLOBAL_AUDIO_SPEED; },
-        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+        get speed() { return AUDIO_SPEEDS.paso1_1; },
+        get duration() { return this.rawDuration / this.speed; }
     },
     {
         id: "paso1_2",
         file: "./AUDIOS PASO 1-6/Paso 1_2Tabla.wav",
         sceneLabel: "scene2_start",
         sceneIndex: 2,
-        get offsetInScene() { return 0.4 + (16.84 / GLOBAL_AUDIO_SPEED) + 1.2; },
+        get offsetInScene() { return 0.4 + (16.84 / AUDIO_SPEEDS.paso1_1) + 1.2; },
         rawAudioStart: 0,
         rawDuration: 117.26,
-        get speed() { return GLOBAL_AUDIO_SPEED; },
-        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+        get speed() { return AUDIO_SPEEDS.paso1_2; },
+        get duration() { return this.rawDuration / this.speed; }
     },
     {
         id: "paso2",
@@ -90,19 +98,32 @@ const VOICEOVER_TRACKS = [
         offsetInScene: 0.4,
         rawAudioStart: 0,
         rawDuration: 130.76,
-        get speed() { return GLOBAL_AUDIO_SPEED; },
-        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+        get speed() { return AUDIO_SPEEDS.paso2; },
+        get duration() { return this.rawDuration / this.speed; }
     },
     {
-        id: "paso3",
+        id: "paso3_part1",
         file: "./AUDIOS PASO 1-6/Paso 3.wav",
         sceneLabel: "scene4_start",
         sceneIndex: 4,
         offsetInScene: 0.4,
         rawAudioStart: 0,
-        rawDuration: 133.96,
-        get speed() { return GLOBAL_AUDIO_SPEED; },
-        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+        rawDuration: 73.20, // Se detiene en 1:13 (73.20s) del audio original
+        get speed() { return AUDIO_SPEEDS.paso3; },
+        get duration() { return this.rawDuration / this.speed; }
+    },
+    {
+        id: "paso3_part2",
+        file: "./AUDIOS PASO 1-6/Paso 3.wav",
+        sceneLabel: "scene4_start",
+        sceneIndex: 4,
+        get offsetInScene() {
+            return 0.4 + (73.20 / AUDIO_SPEEDS.paso3) + 0.5;
+        },
+        rawAudioStart: 116.20, // Se reanuda en 1:56 (116.20s) del audio original hasta el final
+        rawDuration: 17.76,    // 133.96s - 116.20s
+        get speed() { return AUDIO_SPEEDS.paso3; },
+        get duration() { return this.rawDuration / this.speed; }
     },
     {
         id: "paso4_e5",
@@ -112,8 +133,8 @@ const VOICEOVER_TRACKS = [
         offsetInScene: 0.4,
         rawAudioStart: 0,
         rawDuration: 64.85, // Bloque 1: Intro + Componentes A, B, C (Silencio exacto entre 64.80s y 64.88s)
-        get speed() { return GLOBAL_AUDIO_SPEED; },
-        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+        get speed() { return AUDIO_SPEEDS.paso4_e5; },
+        get duration() { return this.rawDuration / this.speed; }
     },
     {
         id: "paso4_e6",
@@ -123,8 +144,8 @@ const VOICEOVER_TRACKS = [
         offsetInScene: 0.4,
         rawAudioStart: 64.88, // Bloque 2: Componentes D y E (arranca en el silencio de 64.88s; locución inicia en 64.95s)
         rawDuration: 35.43,   // 100.31s total - 64.88s
-        get speed() { return GLOBAL_AUDIO_SPEED; },
-        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+        get speed() { return AUDIO_SPEEDS.paso4_e6; },
+        get duration() { return this.rawDuration / this.speed; }
     },
     {
         id: "paso5_e7",
@@ -134,8 +155,8 @@ const VOICEOVER_TRACKS = [
         offsetInScene: 0.4,
         rawAudioStart: 0,
         rawDuration: 100.95, // Bloque 1: Intro + Desviaciones A y B (Silencio exacto entre 100.88s y 101.02s)
-        get speed() { return GLOBAL_AUDIO_SPEED; },
-        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+        get speed() { return AUDIO_SPEEDS.paso5_e7; },
+        get duration() { return this.rawDuration / this.speed; }
     },
     {
         id: "paso5_e8",
@@ -145,8 +166,8 @@ const VOICEOVER_TRACKS = [
         offsetInScene: 0.4,
         rawAudioStart: 100.95, // Bloque 2: Desviaciones C, D y E (arranca en pausa de 100.95s; locución inicia en 101.05s)
         rawDuration: 87.10,    // 188.05s total - 100.95s
-        get speed() { return GLOBAL_AUDIO_SPEED; },
-        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+        get speed() { return AUDIO_SPEEDS.paso5_e8; },
+        get duration() { return this.rawDuration / this.speed; }
     },
     {
         id: "paso6_e9",
@@ -156,8 +177,8 @@ const VOICEOVER_TRACKS = [
         offsetInScene: 0.4,
         rawAudioStart: 0,
         rawDuration: 99.18, // Dictamen y Conclusiones completas
-        get speed() { return GLOBAL_AUDIO_SPEED; },
-        get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
+        get speed() { return AUDIO_SPEEDS.paso6_e9; },
+        get duration() { return this.rawDuration / this.speed; }
     }
 ];
 
@@ -169,7 +190,7 @@ class VoiceoverController {
     }
 
     get defaultSpeed() {
-        return GLOBAL_AUDIO_SPEED;
+        return AUDIO_SPEEDS.paso1_1 || 1.0;
     }
 
     getTrackAtTime(timelineTime) {
@@ -180,7 +201,7 @@ class VoiceoverController {
             const start = sceneStart + tr.offsetInScene;
             const end = start + tr.duration + 0.6; // Margen de gracia para permitir terminación natural
             if (timelineTime >= start && timelineTime < end) {
-                const spd = tr.speed || GLOBAL_AUDIO_SPEED;
+                const spd = tr.speed || 1.0;
                 return {
                     track: tr,
                     startTimelineTime: start,
@@ -200,7 +221,7 @@ class VoiceoverController {
         }
 
         const { track, audioTime } = info;
-        const speed = track.speed || GLOBAL_AUDIO_SPEED;
+        const speed = track.speed || 1.0;
 
         if (this.audio && this.currentTrackId === track.id) {
             // Ya es el mismo archivo de audio
@@ -255,7 +276,7 @@ class VoiceoverController {
         }
     }
 
-    play(filePath, speed = GLOBAL_AUDIO_SPEED, startTime = 0, trackId = null) {
+    play(filePath, speed = 1.0, startTime = 0, trackId = null) {
         // Si ya está reproduciéndose este mismo track cerca del tiempo solicitado, continuar
         if (this.audio && this.currentTrackId === trackId && Math.abs(this.audio.currentTime - startTime) < 0.6) {
             return;
@@ -507,8 +528,10 @@ function buildScene1(cam) {
 // ==========================================
 function buildScene2(cam) {
     const tl = gsap.timeline();
-    const dur1 = 16.84 / GLOBAL_AUDIO_SPEED;
-    const dur2 = 117.26 / GLOBAL_AUDIO_SPEED;
+    const spd1 = AUDIO_SPEEDS.paso1_1;
+    const spd2 = AUDIO_SPEEDS.paso1_2;
+    const dur1 = 16.84 / spd1;
+    const dur2 = 117.26 / spd2;
     const tableStartTime = 0.4 + dur1 + 1.2; // Transición fluida con colchón para la locución
 
     tl.call(() => setActiveSceneDOM('scene2'), null, 0)
@@ -533,7 +556,7 @@ function buildScene2(cam) {
         .add(typeHeadingText("#scene2 .title-hero", "Identificación y Valoración de Riesgos", 0.03, false), 0.4)
 
         // AUDIO 1: PASO 1_1.WAV AL APARECER EL TÍTULO
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 1_1.wav', GLOBAL_AUDIO_SPEED, 0, 'paso1_1'), null, 0.4)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 1_1.wav', spd1, 0, 'paso1_1'), null, 0.4)
 
         .from("#scene2 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
@@ -592,7 +615,7 @@ function buildScene2(cam) {
         }, tableStartTime - 0.2)
 
         // AUDIO 2: PASO 1_2TABLA.WAV AL APARECER LA TABLA
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 1_2Tabla.wav', GLOBAL_AUDIO_SPEED, 0, 'paso1_2'), null, tableStartTime)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 1_2Tabla.wav', spd2, 0, 'paso1_2'), null, tableStartTime)
 
         // Desplazamiento progresivo continuo y cadencioso de las filas de la tabla durante toda la locución de la tabla
         .to("#risks-rows-track", {
@@ -623,8 +646,9 @@ function buildScene2(cam) {
 // ==========================================
 function buildScene3(cam) {
     const tl = gsap.timeline();
-    const dur = 130.76 / GLOBAL_AUDIO_SPEED;
-    const at = (rawSec) => 0.4 + (rawSec / GLOBAL_AUDIO_SPEED);
+    const spd = AUDIO_SPEEDS.paso2;
+    const dur = 130.76 / spd;
+    const at = (rawSec) => 0.4 + (rawSec / spd);
 
     tl.call(() => setActiveSceneDOM('scene3'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -637,7 +661,7 @@ function buildScene3(cam) {
         .add(typeHeadingText("#scene3 .title-hero", "Identificación de Controles Esperados", 0.028, false), 0.4)
 
         // AUDIO PASO 2: VOZ EN OFF
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 2.wav', GLOBAL_AUDIO_SPEED, 0, 'paso2'), null, 0.4)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 2.wav', spd, 0, 'paso2'), null, 0.4)
 
         .from("#scene3 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
@@ -754,8 +778,24 @@ function buildScene3(cam) {
 // ==========================================
 function buildScene4(cam) {
     const tl = gsap.timeline();
-    const dur = 133.96 / GLOBAL_AUDIO_SPEED;
-    const at = (rawSec) => 0.4 + (rawSec / GLOBAL_AUDIO_SPEED);
+    const spd = AUDIO_SPEEDS.paso3;
+    const rawPart1Dur = 73.20;    // Se detiene exactamente en 1:13 del audio original (silencio)
+    const rawPart2Start = 116.20;  // Se reanuda exactamente en 1:56 del audio original
+    const rawPart2Dur = 17.76;    // 133.96s - 116.20s (hasta el final)
+    const part1Dur = rawPart1Dur / spd;
+    const pauseDur = 0.5;
+    const part2StartTime = 0.4 + part1Dur + pauseDur;
+    const part2Dur = rawPart2Dur / spd;
+    const totalDur = part2StartTime + part2Dur;
+
+    // Helper maestro: Mapea cualquier segundo del audio original al tiempo exacto de animación
+    const at = (rawSec) => {
+        if (rawSec <= rawPart1Dur) {
+            return 0.4 + (rawSec / spd);
+        } else {
+            return part2StartTime + (Math.max(0, rawSec - rawPart2Start) / spd);
+        }
+    };
 
     tl.call(() => setActiveSceneDOM('scene4'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -769,8 +809,8 @@ function buildScene4(cam) {
         // Título escrito letra por letra con SFX.tick
         .add(typeHeadingText("#scene4 .title-hero", "Solicitud de Evidencias e Instrumentos", 0.026, false), 0.4)
 
-        // AUDIO PASO 3: VOZ EN OFF
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 3.wav', GLOBAL_AUDIO_SPEED, 0, 'paso3'), null, 0.4)
+        // AUDIO PASO 3 (PARTE 1: DESDE 0:00 HASTA 1:13 ORIGINAL)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 3.wav', spd, 0, 'paso3_part1'), null, 0.4)
 
         .from("#scene4 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
@@ -818,9 +858,7 @@ function buildScene4(cam) {
         .to(["#row-ev-1", "#row-ev-5"], {
             backgroundColor: "rgba(88, 166, 255, 0.24)",
             boxShadow: "0 0 18px rgba(88, 166, 255, 0.45)",
-            duration: 0.4,
-            yoyo: true,
-            repeat: 1
+            duration: 0.4
         }, at(27.0))
         // Scroll hacia E14 y E17 cuando se mencionan en la locución
         .to("#evidence-rows-grid", {
@@ -833,17 +871,15 @@ function buildScene4(cam) {
         .to(["#row-ev-14", "#row-ev-17"], {
             backgroundColor: "rgba(88, 166, 255, 0.24)",
             boxShadow: "0 0 18px rgba(88, 166, 255, 0.45)",
-            duration: 0.4,
-            yoyo: true,
-            repeat: 1
+            duration: 0.4
         }, at(40.5))
 
         // ==============================================================
-        // 2. SEGUNDO ACTO: INSPECCIÓN DOCUMENTAL - GESTIÓN INTERNA (E2, E3, E6, E7, E8, E9, E19)
+        // 2. SEGUNDO ACTO: INSPECCIÓN DOCUMENTAL (SELECCIÓN COMPLETA DE TODAS LAS FILAS)
         // ==============================================================
         .to("#pill-indagacion", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.35 }, at(52.5))
         .to(["#row-ev-14", "#row-ev-17", "#row-ev-1", "#row-ev-5"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, at(52.5))
-        // Desplazamiento dinámico para centrar el bloque de gestión interna
+        // Desplazamiento dinámico para centrar el bloque de inspección documental
         .to("#evidence-rows-grid", {
             y: () => getScrollTargetY('row-ev-2', -80, 20),
             duration: 2.0,
@@ -857,81 +893,61 @@ function buildScene4(cam) {
             boxShadow: "0 0 28px rgba(210, 153, 34, 0.6)",
             duration: 0.4
         }, at(55.0))
-        .to(["#row-ev-2", "#row-ev-3", "#row-ev-6", "#row-ev-7", "#row-ev-8", "#row-ev-9", "#row-ev-19"], {
+        // Resalta TODAS las filas de Inspección Documental de forma simultánea y continua
+        .to(".row-tech-inspeccion", {
             backgroundColor: "rgba(210, 153, 34, 0.22)",
             boxShadow: "0 0 16px rgba(210, 153, 34, 0.45)",
-            duration: 0.4,
-            yoyo: true,
-            repeat: 1
+            duration: 0.45
         }, at(55.0))
 
         // ==============================================================
-        // 3. TERCER ACTO: INSPECCIÓN DOCUMENTAL - MARCO LEGAL OBLIGATORIO (E10, E11, E12, E13)
+        // AUDIO PASO 3 (PARTE 2: REANUDA EN 1:56 ORIGINAL HASTA EL FINAL)
         // ==============================================================
-        .to("#evidence-rows-grid", {
-            y: () => getScrollTargetY('row-ev-10', -300, 20),
-            duration: 2.2,
-            ease: "power1.inOut"
-        }, at(85.5))
-        .call(() => SFX.slide(), null, at(85.8))
-        .call(() => SFX.ting(), null, at(88.0))
-        .to(["#row-ev-10", "#row-ev-11", "#row-ev-12", "#row-ev-13"], {
-            backgroundColor: "rgba(210, 153, 34, 0.26)",
-            boxShadow: "0 0 18px rgba(210, 153, 34, 0.5)",
-            duration: 0.45,
-            yoyo: true,
-            repeat: 1
-        }, at(88.0))
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 3.wav', spd, rawPart2Start, 'paso3_part2'), null, part2StartTime)
 
         // ==============================================================
-        // 4. CUARTO ACTO: OBSERVACIÓN DIRECTA PRESENCIAL (E4, E18)
+        // 3. TERCER ACTO: OBSERVACIÓN DIRECTA PRESENCIAL (E4, E18)
         // ==============================================================
-        .to("#pill-inspeccion", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.35 }, at(108.0))
-        .to("#scene4 .row-tech-inspeccion", { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, at(108.0))
+        .to("#pill-inspeccion", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.35 }, part2StartTime - 0.2)
+        .to(".row-tech-inspeccion", { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, part2StartTime - 0.2)
         // Retorno hacia E4
         .to("#evidence-rows-grid", {
             y: () => getScrollTargetY('row-ev-4', -120, 20),
-            duration: 2.0,
+            duration: 1.4,
             ease: "power1.inOut"
-        }, at(108.5))
-        .call(() => SFX.slide(), null, at(108.8))
-        .call(() => SFX.ting(), null, at(111.0))
+        }, part2StartTime)
+        .call(() => SFX.slide(), null, part2StartTime)
+        .call(() => SFX.ting(), null, at(117.5))
         .to("#pill-observacion", {
             scale: 1.08,
             borderColor: "var(--accent-purple)",
             boxShadow: "0 0 28px rgba(188, 140, 255, 0.6)",
             duration: 0.4
-        }, at(111.0))
+        }, at(117.5))
         .to("#row-ev-4", {
             backgroundColor: "rgba(188, 140, 255, 0.26)",
             boxShadow: "0 0 20px rgba(188, 140, 255, 0.5)",
-            duration: 0.45,
-            yoyo: true,
-            repeat: 1
-        }, at(111.0))
+            duration: 0.45
+        }, at(117.5))
         // Scroll hacia E18 cuando se menciona la inspección ocular del 1 de octubre
         .to("#evidence-rows-grid", {
             y: () => getScrollTargetY('row-ev-18', -450, 20),
-            duration: 2.2,
+            duration: 1.8,
             ease: "power1.inOut"
         }, at(121.0))
         .call(() => SFX.slide(), null, at(121.2))
-        .call(() => SFX.ting(), null, at(123.5))
+        .call(() => SFX.ting(), null, at(123.0))
         .to("#row-ev-18", {
             backgroundColor: "rgba(188, 140, 255, 0.28)",
             boxShadow: "0 0 22px rgba(188, 140, 255, 0.55)",
-            duration: 0.45,
-            yoyo: true,
-            repeat: 1
-        }, at(123.5))
+            duration: 0.45
+        }, at(123.0))
 
-        // ==============================================================
-        // CIERRE Y RETORNO PANORÁMICO TRAS CULMINAR LA LOCUCIÓN
-        // ==============================================================
+        // Cierre y retorno panorámico tras culminar la locución de Paso 3
         .to(["#row-ev-4", "#row-ev-18"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.5 }, at(133.0))
         .to(".tech-pill", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.5 }, at(133.0))
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur + 0.2)
-        .to("#scene4", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.0);
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, totalDur + 0.2)
+        .to("#scene4", { opacity: 0, duration: 0.6 }, totalDur + 1.0);
 
     return tl;
 }
@@ -941,8 +957,9 @@ function buildScene4(cam) {
 // ==============================================================
 function buildScene5(cam) {
     const tl = gsap.timeline();
-    const dur = 64.85 / GLOBAL_AUDIO_SPEED; // Locución concluye a 64.75s, corte en silencio exacto
-    const at = (rawSec) => 0.4 + (rawSec / GLOBAL_AUDIO_SPEED);
+    const spd = AUDIO_SPEEDS.paso4_e5;
+    const dur = 64.85 / spd; // Locución concluye a 64.75s, corte en silencio exacto
+    const at = (rawSec) => 0.4 + (rawSec / spd);
 
     tl.call(() => setActiveSceneDOM('scene5'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -956,7 +973,7 @@ function buildScene5(cam) {
         .add(typeHeadingText("#scene5 .title-hero", "Diseño y Ejecución de Pruebas de Cumplimiento", 0.024, false), 0.4)
 
         // AUDIO PASO 4 (BLOQUE 1: COMPONENTES A, B, C)
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 4.wav', GLOBAL_AUDIO_SPEED, 0, 'paso4_e5'), null, 0.4)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 4.wav', spd, 0, 'paso4_e5'), null, 0.4)
 
         .from("#scene5 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
@@ -1051,8 +1068,9 @@ function buildScene5(cam) {
 // ==============================================================
 function buildScene6(cam) {
     const tl = gsap.timeline();
-    const dur = 35.43 / GLOBAL_AUDIO_SPEED; // Desde 64.88s hasta el final (100.31s)
-    const at = (elapsedRaw) => 0.4 + (elapsedRaw / GLOBAL_AUDIO_SPEED);
+    const spd = AUDIO_SPEEDS.paso4_e6;
+    const dur = 35.43 / spd; // Desde 64.88s hasta el final (100.31s)
+    const at = (elapsedRaw) => 0.4 + (elapsedRaw / spd);
 
     tl.call(() => setActiveSceneDOM('scene6'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -1067,7 +1085,7 @@ function buildScene6(cam) {
         .add(typeHeadingText("#scene6 .title-hero", "Diseño y Ejecución de Pruebas de Cumplimiento", 0.024, false), 0.4)
 
         // AUDIO PASO 4 (BLOQUE 2: COMPONENTES D, E - DESDE 64.88s RAW)
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 4.wav', GLOBAL_AUDIO_SPEED, 64.88, 'paso4_e6'), null, 0.4)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 4.wav', spd, 64.88, 'paso4_e6'), null, 0.4)
 
         .from("#scene6 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
@@ -1143,8 +1161,9 @@ function buildScene6(cam) {
 // ==============================================================
 function buildScene7(cam) {
     const tl = gsap.timeline();
-    const dur = 100.95 / GLOBAL_AUDIO_SPEED; // Locución concluye a 100.85s, corte en silencio exacto
-    const at = (rawSec) => 0.4 + (rawSec / GLOBAL_AUDIO_SPEED);
+    const spd = AUDIO_SPEEDS.paso5_e7;
+    const dur = 100.95 / spd; // Locución concluye a 100.85s, corte en silencio exacto
+    const at = (rawSec) => 0.4 + (rawSec / spd);
 
     tl.call(() => setActiveSceneDOM('scene7'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -1156,6 +1175,10 @@ function buildScene7(cam) {
         .from("#scene7 .section-tag", { y: -20, opacity: 0, duration: 0.5 }, 0.3)
         // Título escrito letra por letra con SFX.tick (sin ting en título)
         .add(typeHeadingText("#scene7 .title-hero", "Determinación de Desviaciones y Hallazgos", 0.024, false), 0.4)
+
+        // AUDIO PASO 5 (BLOQUE 1: DESVIACIONES A Y B - FÍSICA Y RESPALDOS)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 5.wav', spd, 0, 'paso5_e7'), null, 0.4)
+
         .from("#scene7 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
         // Entrada de las pastillas estadísticas de resumen (2 Componentes, 5 Hallazgos, Riesgo Muy Alto)
@@ -1237,8 +1260,9 @@ function buildScene7(cam) {
 // ==============================================================
 function buildScene8(cam) {
     const tl = gsap.timeline();
-    const dur = 87.10 / GLOBAL_AUDIO_SPEED; // Desde 100.95s hasta el final (188.05s)
-    const at = (elapsedRaw) => 0.4 + (elapsedRaw / GLOBAL_AUDIO_SPEED);
+    const spd = AUDIO_SPEEDS.paso5_e8;
+    const dur = 87.10 / spd; // Desde 100.95s hasta el final (188.05s)
+    const at = (elapsedRaw) => 0.4 + (elapsedRaw / spd);
 
     tl.call(() => setActiveSceneDOM('scene8'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -1252,7 +1276,7 @@ function buildScene8(cam) {
         .add(typeHeadingText("#scene8 .title-hero", "Determinación de Desviaciones y Hallazgos", 0.024, false), 0.4)
 
         // AUDIO PASO 5 (BLOQUE 2: DESVIACIONES C, D, E - DESDE 100.95s RAW)
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 5.wav', GLOBAL_AUDIO_SPEED, 100.95, 'paso5_e8'), null, 0.4)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 5.wav', spd, 100.95, 'paso5_e8'), null, 0.4)
 
         .from("#scene8 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
@@ -1364,8 +1388,9 @@ function setConcl3DCard(index) {
 // ==============================================================
 function buildScene9(cam) {
     const tl = gsap.timeline();
-    const dur = 99.18 / GLOBAL_AUDIO_SPEED;
-    const at = (rawSec) => 0.4 + (rawSec / GLOBAL_AUDIO_SPEED);
+    const spd = AUDIO_SPEEDS.paso6_e9;
+    const dur = 99.18 / spd;
+    const at = (rawSec) => 0.4 + (rawSec / spd);
 
     tl.call(() => setActiveSceneDOM('scene9'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -1388,7 +1413,7 @@ function buildScene9(cam) {
         .add(typeHeadingText("#scene9 .title-hero", "Conclusiones y Dictamen de Control Interno", 0.024, false), 0.35)
 
         // AUDIO PASO 6: CONCLUSIONES Y DICTAMEN DE AUDITORÍA
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 6.wav', GLOBAL_AUDIO_SPEED, 0, 'paso6_e9'), null, 0.4)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 6.wav', spd, 0, 'paso6_e9'), null, 0.4)
 
         .from("#scene9 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8, ease: "power2.out" }, 1.5)
 
