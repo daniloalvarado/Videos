@@ -28,14 +28,140 @@ function playAudioFile(relativePath) {
 }
 
 // --- SISTEMA MAESTRO DE VOZ EN OFF (VOICEOVER CONTROLLER) ---
+const VOICEOVER_TRACKS = [
+    {
+        id: "paso1_1",
+        file: "./AUDIOS PASO 1-6/Paso 1_1.wav",
+        sceneLabel: "scene2_start",
+        sceneIndex: 2,
+        offsetInScene: 0.4,
+        speed: 1.14,
+        duration: 16.84 / 1.14 // ~14.77s
+    },
+    {
+        id: "paso1_2",
+        file: "./AUDIOS PASO 1-6/Paso 1_2Tabla.wav",
+        sceneLabel: "scene2_start",
+        sceneIndex: 2,
+        offsetInScene: 15.8,
+        speed: 1.14,
+        duration: 117.26 / 1.14 // ~102.86s
+    },
+    {
+        id: "paso2",
+        file: "./AUDIOS PASO 1-6/Paso 2.wav",
+        sceneLabel: "scene3_start",
+        sceneIndex: 3,
+        offsetInScene: 0.4,
+        speed: 1.14,
+        duration: 130.76 / 1.14 // ~114.70s
+    },
+    {
+        id: "paso3",
+        file: "./AUDIOS PASO 1-6/Paso 3.wav",
+        sceneLabel: "scene4_start",
+        sceneIndex: 4,
+        offsetInScene: 0.4,
+        speed: 1.14,
+        duration: 133.96 / 1.14 // ~117.51s
+    }
+];
+
 class VoiceoverController {
     constructor() {
         this.audio = null;
         this.currentSrc = null;
+        this.currentTrackId = null;
         this.defaultSpeed = 1.14; // Velocidad ligeramente acelerada (+14%) como solicitó el usuario
     }
 
+    getTrackAtTime(timelineTime) {
+        if (!masterTimeline) return null;
+        for (const tr of VOICEOVER_TRACKS) {
+            const sceneStart = masterTimeline.labels[tr.sceneLabel];
+            if (sceneStart === undefined) continue;
+            const start = sceneStart + tr.offsetInScene;
+            const end = start + tr.duration;
+            if (timelineTime >= start && timelineTime < end) {
+                return {
+                    track: tr,
+                    startTimelineTime: start,
+                    endTimelineTime: end,
+                    audioTime: (timelineTime - start) * (tr.speed || this.defaultSpeed)
+                };
+            }
+        }
+        return null;
+    }
+
+    syncWithTimeline(timelineTime, shouldPlay = true) {
+        const info = this.getTrackAtTime(timelineTime);
+        if (!info) {
+            this.stop();
+            return;
+        }
+
+        const { track, audioTime } = info;
+        const speed = track.speed || this.defaultSpeed;
+
+        if (this.audio && this.currentTrackId === track.id) {
+            // Ya es el mismo archivo de audio
+            if (Math.abs(this.audio.currentTime - audioTime) > 0.35) {
+                try {
+                    this.audio.currentTime = audioTime;
+                } catch (e) {}
+            }
+            this.audio.playbackRate = speed;
+            this.audio.defaultPlaybackRate = speed;
+            this.audio.preservesPitch = true;
+            if (shouldPlay) {
+                if (this.audio.paused) {
+                    this.audio.play().catch(() => {});
+                }
+            } else {
+                if (!this.audio.paused) {
+                    this.audio.pause();
+                }
+            }
+        } else {
+            // Cargar nuevo track
+            this.stop();
+            try {
+                const safePath = encodeURI(track.file);
+                const a = new Audio(safePath);
+                a.volume = 0.95;
+                a.playbackRate = speed;
+                a.defaultPlaybackRate = speed;
+                a.preservesPitch = true;
+                this.audio = a;
+                this.currentSrc = track.file;
+                this.currentTrackId = track.id;
+
+                const applySeekAndPlay = () => {
+                    try {
+                        if (audioTime > 0) a.currentTime = audioTime;
+                    } catch (e) {}
+                    if (shouldPlay) {
+                        a.play().catch(err => console.warn("Voz pospuesta:", err));
+                    }
+                };
+
+                if (a.readyState >= 1) {
+                    applySeekAndPlay();
+                } else {
+                    a.addEventListener('loadedmetadata', applySeekAndPlay, { once: true });
+                }
+            } catch (e) {
+                console.error("Error al sincronizar audio:", e);
+            }
+        }
+    }
+
     play(filePath, speed = 1.14, startTime = 0) {
+        // Si ya está reproduciéndose este mismo archivo cerca del tiempo solicitado, continuar
+        if (this.audio && this.currentSrc === filePath && Math.abs(this.audio.currentTime - startTime) < 0.6) {
+            return;
+        }
         this.stop();
         try {
             const safePath = encodeURI(filePath);
@@ -49,6 +175,9 @@ class VoiceoverController {
             }
             this.audio = a;
             this.currentSrc = filePath;
+            const matching = VOICEOVER_TRACKS.find(t => t.file === filePath);
+            if (matching) this.currentTrackId = matching.id;
+
             a.play().catch(err => {
                 console.warn("Reproducción de voz en off pospuesta:", err);
             });
@@ -64,7 +193,9 @@ class VoiceoverController {
     }
 
     resume() {
-        if (this.audio && this.audio.paused) {
+        if (masterTimeline) {
+            this.syncWithTimeline(masterTimeline.time(), true);
+        } else if (this.audio && this.audio.paused) {
             this.audio.play().catch(() => {});
         }
     }
@@ -77,6 +208,7 @@ class VoiceoverController {
             } catch (e) {}
             this.audio = null;
             this.currentSrc = null;
+            this.currentTrackId = null;
         }
     }
 }
@@ -443,18 +575,100 @@ function buildScene3(cam) {
         .call(() => SFX.whoosh(), null, 0)
         .set(cam, { scale: 1.0, x: 0, y: 0 }, 0)
         .set("#controls-rows-track", { y: 0 }, 0)
+        .set(".controls-row-item", { clearProps: "all", backgroundColor: "transparent", boxShadow: "none" }, 0)
         .to("#scene3", { opacity: 1, duration: 0.5 }, 0.1)
         .from("#scene3 .section-tag", { y: -20, opacity: 0, duration: 0.5 }, 0.3)
         // Título escrito letra por letra con SFX.tick
-        .add(typeHeadingText("#scene3 .title-hero", "Identificación de Controles Esperados", 0.03, false), 0.4)
+        .add(typeHeadingText("#scene3 .title-hero", "Identificación de Controles Esperados", 0.028, false), 0.4)
+
+        // AUDIO PASO 2: VOZ EN OFF ACELERADA A 1.14x (duración neta: 114.70s)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 2.wav', 1.14), null, 0.4)
+
         .from("#scene3 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
-        // OneTake: Cámara desciende y hace zoom directamente en el cuadro de Controles Esperados
-        .to(cam, { scale: 1.05, x: 0, y: -30, duration: 1.6, ease: "power2.inOut" }, 2.2)
+        // OneTake: Entrada de la tabla de controles esperados con resplandor suave
+        .to(cam, { scale: 1.04, x: 0, y: -20, duration: 1.6, ease: "power2.inOut" }, 2.2)
         .call(() => SFX.slide(), null, 2.4)
         .from("#controls-table-box", { opacity: 0, y: 40, duration: 0.8, ease: "power2.out" }, 2.2)
 
-        // Desplazamiento progresivo de filas: van subiendo paulatinamente
+        // ==============================================================
+        // COMPONENTE A: CONTROLES AMBIENTALES Y SEGURIDAD FÍSICA (R02, R20, R12)
+        // Narración: 16.5s a 38.0s
+        // ==============================================================
+        .call(() => SFX.ting(), null, 16.8)
+        .to(".row-ctrl-comp-a", {
+            backgroundColor: "rgba(56, 139, 253, 0.20)",
+            boxShadow: "0 0 18px rgba(88, 166, 255, 0.45)",
+            duration: 0.45,
+            yoyo: true,
+            repeat: 1
+        }, 16.8)
+
+        // ==============================================================
+        // COMPONENTE B: RESPALDO Y RECUPERACIÓN (R01, R07, R17)
+        // Narración: 38.0s a 62.0s
+        // ==============================================================
+        .to(".row-ctrl-comp-a", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 37.5)
+        .to("#controls-rows-track", {
+            y: () => getScrollTargetY('row-ctrl-r01', -200, 20),
+            duration: 2.2,
+            ease: "power1.inOut"
+        }, 37.8)
+        .call(() => SFX.slide(), null, 38.0)
+        .call(() => SFX.ting(), null, 40.2)
+        .to(".row-ctrl-comp-b", {
+            backgroundColor: "rgba(210, 153, 34, 0.22)",
+            boxShadow: "0 0 18px rgba(210, 153, 34, 0.45)",
+            duration: 0.45,
+            yoyo: true,
+            repeat: 1
+        }, 40.2)
+
+        // ==============================================================
+        // COMPONENTE C: SOFTWARE, GESTIÓN DE PARCHES Y SEGURIDAD LÓGICA (R26, R27)
+        // Narración: 62.0s a 82.0s
+        // ==============================================================
+        .to(".row-ctrl-comp-b", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 61.5)
+        .to("#controls-rows-track", {
+            y: () => getScrollTargetY('row-ctrl-r26', -380, 20),
+            duration: 2.2,
+            ease: "power1.inOut"
+        }, 61.8)
+        .call(() => SFX.slide(), null, 62.0)
+        .call(() => SFX.ting(), null, 64.2)
+        .to(".row-ctrl-comp-c", {
+            backgroundColor: "rgba(248, 81, 73, 0.22)",
+            boxShadow: "0 0 18px rgba(248, 81, 73, 0.45)",
+            duration: 0.45,
+            yoyo: true,
+            repeat: 1
+        }, 64.2)
+
+        // ==============================================================
+        // COMPONENTE D: REDES Y TELECOMUNICACIONES (R16)
+        // Narración: 82.0s a 95.0s
+        // ==============================================================
+        .to(".row-ctrl-comp-c", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 81.5)
+        .to("#controls-rows-track", {
+            y: () => getScrollTargetY('row-ctrl-r16', -540, 20),
+            duration: 2.0,
+            ease: "power1.inOut"
+        }, 81.8)
+        .call(() => SFX.slide(), null, 82.0)
+        .call(() => SFX.ting(), null, 84.0)
+        .to("#row-ctrl-r16", {
+            backgroundColor: "rgba(57, 197, 207, 0.25)",
+            boxShadow: "0 0 20px rgba(57, 197, 207, 0.5)",
+            duration: 0.45,
+            yoyo: true,
+            repeat: 1
+        }, 84.0)
+
+        // ==============================================================
+        // COMPONENTE E: OPERACIONES DE TI Y GESTIÓN DE INCIDENTES (R09, R24, R28)
+        // Narración: 95.0s a 114.7s
+        // ==============================================================
+        .to("#row-ctrl-r16", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 94.5)
         .to("#controls-rows-track", {
             y: () => {
                 const track = document.getElementById('controls-rows-track');
@@ -462,13 +676,26 @@ function buildScene3(cam) {
                 const vh = viewport ? (viewport.clientHeight || viewport.offsetHeight) : 640;
                 return track && track.scrollHeight > vh ? -(track.scrollHeight - vh + 15) : -450;
             },
-            duration: 10.0,
+            duration: 2.4,
             ease: "power1.inOut"
-        }, 3.4)
+        }, 94.8)
+        .call(() => SFX.slide(), null, 95.0)
+        .call(() => SFX.ting(), null, 97.2)
+        .to(".row-ctrl-comp-e", {
+            backgroundColor: "rgba(63, 185, 80, 0.22)",
+            boxShadow: "0 0 18px rgba(63, 185, 80, 0.45)",
+            duration: 0.45,
+            yoyo: true,
+            repeat: 1
+        }, 97.2)
 
-        // OneTake: Retorno fluido de cámara a encuadre panorámico completo
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.8, ease: "power2.inOut" }, 14.5)
-        .to("#scene3", { opacity: 0, duration: 0.6 }, "+=2.0");
+        // ==============================================================
+        // CIERRE Y RETORNO PANORÁMICO TRAS CULMINAR LA LOCUCIÓN (~115.1s)
+        // ==============================================================
+        .to(".row-ctrl-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.5 }, 114.5)
+        .call(() => Voiceover.stop(), null, 115.2)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, 115.0)
+        .to("#scene3", { opacity: 0, duration: 0.6 }, 116.6);
 
     return tl;
 }
@@ -488,8 +715,12 @@ function buildScene4(cam) {
         .set("#evidence-scan-beam", { opacity: 0, top: "0%" }, 0)
         .to("#scene4", { opacity: 1, duration: 0.5 }, 0.1)
         .from("#scene4 .section-tag", { y: -20, opacity: 0, duration: 0.5 }, 0.3)
-        // Título escrito letra por letra con SFX.tick (sin ting en título)
+        // Título escrito letra por letra con SFX.tick
         .add(typeHeadingText("#scene4 .title-hero", "Solicitud de Evidencias e Instrumentos", 0.026, false), 0.4)
+
+        // AUDIO PASO 3: VOZ EN OFF ACELERADA A 1.14x (duración neta: 117.51s)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 3.wav', 1.14), null, 0.4)
+
         .from("#scene4 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
         // Entrada en cascada de los 3 Pills de Técnicas (Indagación, Observación, Inspección)
@@ -503,131 +734,158 @@ function buildScene4(cam) {
             onStart: () => SFX.pop()
         }, 2.0)
 
-        // Entrada de la Tabla de Evidencias con desplazamiento en perspectiva
+        // Entrada de la Tabla de Evidencias
         .from("#evidence-table-box", { opacity: 0, y: 35, duration: 0.7, ease: "power2.out" }, 2.5)
 
-        // Cascada forense de las 17 filas de evidencias (alineación estrictamente recta y uniforme en una sola columna)
+        // Cascada de las filas de evidencias
         .from(".evidence-row-item", {
             y: 12,
             opacity: 0,
             duration: 0.35,
-            stagger: 0.03,
+            stagger: 0.025,
             ease: "power2.out",
             clearProps: "transform"
         }, 2.7)
 
-        // Haz Láser de Escaneo Forense que recorre la tabla de arriba a abajo
+        // Haz Láser de Escaneo Forense que barre la tabla durante la introducción
         .call(() => SFX.slide(), null, 3.2)
         .to("#evidence-scan-beam", { opacity: 1, duration: 0.1 }, 3.2)
-        .to("#evidence-scan-beam", {
-            top: "100%",
-            duration: 1.8,
-            ease: "power1.inOut"
-        }, 3.3)
-        .to("#evidence-scan-beam", { opacity: 0, duration: 0.2 }, 5.1)
+        .to("#evidence-scan-beam", { top: "100%", duration: 2.2, ease: "power1.inOut" }, 3.3)
+        .to("#evidence-scan-beam", { opacity: 0, duration: 0.2 }, 5.5)
 
         // ==============================================================
-        // 1. FOCO EN OBSERVACIÓN DIRECTA (E4 - Ficha de Observación Directa In Situ)
+        // 1. PRIMER ACTO DE LOCUCIÓN: INDAGACIÓN (E1, E5, E14, E17)
+        // Narración: 23.5s a 47.0s
         // ==============================================================
-        // Cámara se desplaza y encuadra primero
-        .to(cam, { scale: 1.08, x: 0, y: -25, duration: 0.8, ease: "power2.inOut" }, 5.2)
-        // Justo al asentarse la cámara (6.0s), suena el ting y resalta la técnica y fila
-        .call(() => SFX.ting(), null, 6.0)
-        .to("#pill-observacion", {
+        .to(cam, { scale: 1.05, x: 0, y: -20, duration: 1.2, ease: "power2.inOut" }, 22.8)
+        .call(() => SFX.ting(), null, 23.8)
+        .to("#pill-indagacion", {
             scale: 1.08,
-            borderColor: "var(--accent-purple)",
-            boxShadow: "0 0 25px rgba(188, 140, 255, 0.5)",
-            duration: 0.35
-        }, 6.0)
-        .to("#row-ev-4", {
-            backgroundColor: "rgba(188, 140, 255, 0.22)",
-            boxShadow: "0 0 16px rgba(188, 140, 255, 0.4)",
-            duration: 0.35,
+            borderColor: "var(--accent-blue)",
+            boxShadow: "0 0 28px rgba(88, 166, 255, 0.6)",
+            duration: 0.4
+        }, 23.8)
+        .to(["#row-ev-1", "#row-ev-5"], {
+            backgroundColor: "rgba(88, 166, 255, 0.24)",
+            boxShadow: "0 0 18px rgba(88, 166, 255, 0.45)",
+            duration: 0.4,
             yoyo: true,
-            repeat: 2
-        }, 6.0)
-
-        // ==============================================================
-        // 2. RECORRIDO PROGRESIVO Y FOCO PRINCIPAL EN INSPECCIÓN DOCUMENTAL
-        // ==============================================================
-        // Retiro del foco de observación (se apagan el pill de observación y su fila)
-        .to("#pill-observacion", {
-            scale: 1.0,
-            borderColor: "rgba(255, 255, 255, 0.12)",
-            boxShadow: "none",
-            duration: 0.35
-        }, 8.0)
-        .to("#row-ev-4", {
-            backgroundColor: "transparent",
-            boxShadow: "none",
-            duration: 0.35
-        }, 8.0)
-        // La tabla se desplaza dinámicamente para centrar el bloque de inspección documental (E6+) en el viewport
+            repeat: 1
+        }, 24.2)
+        // Scroll hacia E14 y E17 cuando se mencionan en la locución
         .to("#evidence-rows-grid", {
-            y: () => getScrollTargetY('row-ev-6', -380, 25),
-            duration: 2.3,
+            y: () => getScrollTargetY('row-ev-14', -350, 20),
+            duration: 2.2,
             ease: "power1.inOut"
-        }, 8.2)
-        .call(() => SFX.slide(), null, 8.3)
+        }, 34.0)
+        .call(() => SFX.slide(), null, 34.2)
+        .call(() => SFX.ting(), null, 36.4)
+        .to(["#row-ev-14", "#row-ev-17"], {
+            backgroundColor: "rgba(88, 166, 255, 0.24)",
+            boxShadow: "0 0 18px rgba(88, 166, 255, 0.45)",
+            duration: 0.4,
+            yoyo: true,
+            repeat: 1
+        }, 36.4)
 
-        // Activación del ENFOQUE DESTACADO EN INSPECCIÓN DOCUMENTAL (la cámara encuadra)
-        .to(cam, { scale: 1.04, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 10.5)
-        // Justo al asentarse la cámara y el scroll (11.3s), suena el ting y resaltan TODAS las evidencias de inspección documental
-        .call(() => SFX.ting(), null, 11.3)
+        // ==============================================================
+        // 2. SEGUNDO ACTO: INSPECCIÓN DOCUMENTAL - GESTIÓN INTERNA (E2, E8, E3, E6, E7, E9, E19)
+        // Narración: 47.0s a 76.0s
+        // ==============================================================
+        .to("#pill-indagacion", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.35 }, 46.5)
+        .to(["#row-ev-14", "#row-ev-17", "#row-ev-1", "#row-ev-5"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, 46.5)
+        // Desplazamiento dinámico para centrar el bloque de gestión interna
+        .to("#evidence-rows-grid", {
+            y: () => getScrollTargetY('row-ev-2', -80, 20),
+            duration: 2.0,
+            ease: "power1.inOut"
+        }, 46.8)
+        .call(() => SFX.slide(), null, 47.0)
+        .call(() => SFX.ting(), null, 49.0)
         .to("#pill-inspeccion", {
             scale: 1.08,
             borderColor: "var(--accent-amber)",
             boxShadow: "0 0 28px rgba(210, 153, 34, 0.6)",
-            duration: 0.35
-        }, 11.3)
-        .to("#scene4 .row-tech-inspeccion", {
+            duration: 0.4
+        }, 49.0)
+        .to(["#row-ev-2", "#row-ev-3", "#row-ev-6", "#row-ev-7", "#row-ev-8", "#row-ev-9"], {
             backgroundColor: "rgba(210, 153, 34, 0.22)",
             boxShadow: "0 0 16px rgba(210, 153, 34, 0.45)",
-            duration: 0.35,
+            duration: 0.4,
             yoyo: true,
-            repeat: 2
-        }, 11.3)
+            repeat: 1
+        }, 49.0)
 
         // ==============================================================
-        // 3. RECORRIDO Y FOCO EXCLUSIVO EN INDAGACIÓN (E14 Y E17 ÚNICAMENTE)
+        // 3. TERCER ACTO: INSPECCIÓN DOCUMENTAL - MARCO LEGAL OBLIGATORIO (E10, E11, E12, E13)
+        // Narración: 76.0s a 96.0s
         // ==============================================================
-        // Retiro del foco de inspección (se apaga el pill y TODAS las filas de inspección documental)
-        .to("#pill-inspeccion", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.35 }, 14.5)
-        .to("#scene4 .row-tech-inspeccion", { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, 14.5)
-        // Recorrido dinámico que desplaza la tabla exactamente hasta centrar E14 y E17 en el viewport
         .to("#evidence-rows-grid", {
-            y: () => getScrollTargetY('row-ev-14', -340, 20),
-            duration: 2.5,
+            y: () => getScrollTargetY('row-ev-10', -300, 20),
+            duration: 2.2,
             ease: "power1.inOut"
-        }, 14.7)
-        .call(() => SFX.slide(), null, 14.8)
-
-        // La cámara encuadra
-        .to(cam, { scale: 1.04, x: 0, y: -20, duration: 0.8, ease: "power2.inOut" }, 17.2)
-        // Justo al asentarse (18.0s), suena el ting y resalta ÚNICAMENTE Indagación (Pill e instrumentos E14 y E17 plenamente visibles)
-        .call(() => SFX.ting(), null, 18.0)
-        .to("#pill-indagacion", {
-            scale: 1.08,
-            borderColor: "var(--accent-blue)",
-            boxShadow: "0 0 25px rgba(88, 166, 255, 0.5)",
-            duration: 0.35
-        }, 18.0)
-        .to(["#row-ev-14", "#row-ev-17"], {
-            backgroundColor: "rgba(88, 166, 255, 0.24)",
-            boxShadow: "0 0 18px rgba(88, 166, 255, 0.4)",
-            duration: 0.35,
+        }, 75.8)
+        .call(() => SFX.slide(), null, 76.0)
+        .call(() => SFX.ting(), null, 78.2)
+        .to(["#row-ev-10", "#row-ev-11", "#row-ev-12", "#row-ev-13"], {
+            backgroundColor: "rgba(210, 153, 34, 0.26)",
+            boxShadow: "0 0 18px rgba(210, 153, 34, 0.5)",
+            duration: 0.45,
             yoyo: true,
-            repeat: 2
-        }, 18.0)
+            repeat: 1
+        }, 78.2)
 
         // ==============================================================
-        // 4. RETORNO PANORÁMICO Y CIERRE
+        // 4. CUARTO ACTO: OBSERVACIÓN DIRECTA PRESENCIAL (E4, E18)
+        // Narración: 96.0s a 117.5s
         // ==============================================================
-        .to(["#row-ev-14", "#row-ev-17"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, 21.0)
-        .to(".tech-pill", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.4 }, 21.0)
-        .to("#evidence-rows-grid", { y: 0, duration: 1.4, ease: "power2.inOut" }, 21.0)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, 21.0)
-        .to("#scene4", { opacity: 0, duration: 0.6 }, "+=2.0");
+        .to("#pill-inspeccion", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.35 }, 95.8)
+        .to("#scene4 .row-tech-inspeccion", { backgroundColor: "transparent", boxShadow: "none", duration: 0.35 }, 95.8)
+        // Retorno hacia E4
+        .to("#evidence-rows-grid", {
+            y: () => getScrollTargetY('row-ev-4', -120, 20),
+            duration: 2.0,
+            ease: "power1.inOut"
+        }, 96.2)
+        .call(() => SFX.slide(), null, 96.4)
+        .call(() => SFX.ting(), null, 98.4)
+        .to("#pill-observacion", {
+            scale: 1.08,
+            borderColor: "var(--accent-purple)",
+            boxShadow: "0 0 28px rgba(188, 140, 255, 0.6)",
+            duration: 0.4
+        }, 98.4)
+        .to("#row-ev-4", {
+            backgroundColor: "rgba(188, 140, 255, 0.26)",
+            boxShadow: "0 0 20px rgba(188, 140, 255, 0.5)",
+            duration: 0.45,
+            yoyo: true,
+            repeat: 1
+        }, 98.4)
+        // Scroll hacia E18 cuando se menciona la inspección ocular del 1 de octubre
+        .to("#evidence-rows-grid", {
+            y: () => getScrollTargetY('row-ev-18', -450, 20),
+            duration: 2.2,
+            ease: "power1.inOut"
+        }, 107.0)
+        .call(() => SFX.slide(), null, 107.2)
+        .call(() => SFX.ting(), null, 109.4)
+        .to("#row-ev-18", {
+            backgroundColor: "rgba(188, 140, 255, 0.28)",
+            boxShadow: "0 0 22px rgba(188, 140, 255, 0.55)",
+            duration: 0.45,
+            yoyo: true,
+            repeat: 1
+        }, 109.4)
+
+        // ==============================================================
+        // CIERRE Y RETORNO PANORÁMICO TRAS CULMINAR LA LOCUCIÓN (~117.9s)
+        // ==============================================================
+        .to(["#row-ev-4", "#row-ev-18"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.5 }, 117.2)
+        .to(".tech-pill", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.5 }, 117.2)
+        .call(() => Voiceover.stop(), null, 118.0)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, 117.8)
+        .to("#scene4", { opacity: 0, duration: 0.6 }, 119.4);
 
     return tl;
 }
@@ -1283,8 +1541,8 @@ function runWipeTransition() {
 }
 
 // Manejador del DOM para visibilidad de escenas
-function setActiveSceneDOM(sceneId) {
-    Voiceover.stop();
+function setActiveSceneDOM(sceneId, stopAudio = true) {
+    if (stopAudio) Voiceover.stop();
     document.querySelectorAll('.scene').forEach(sc => {
         sc.classList.remove('active-scene');
         sc.style.opacity = '0';
@@ -1319,6 +1577,33 @@ function updateScrubberUI() {
         timeDisp.textContent = `${formatTime(currentSecs)} / ${formatTime(totalSecs)}`;
     }
 
+    // Actualizar dinámicamente la escena visual activa según la posición del cursor de tiempo
+    let activeIndex = 1;
+    for (let i = sceneLabels.length - 1; i >= 0; i--) {
+        const lblTime = masterTimeline.labels[sceneLabels[i]];
+        if (lblTime !== undefined && currentSecs >= lblTime - 0.08) {
+            activeIndex = i + 1;
+            break;
+        }
+    }
+    if (activeIndex !== currentSceneIndex) {
+        currentSceneIndex = activeIndex;
+        document.querySelectorAll('.scene').forEach(sc => {
+            sc.classList.remove('active-scene');
+            sc.style.opacity = '0';
+            sc.style.visibility = 'hidden';
+        });
+        const activeEl = document.getElementById(`scene${activeIndex}`);
+        if (activeEl) {
+            activeEl.classList.add('active-scene');
+            activeEl.style.visibility = 'visible';
+            activeEl.style.opacity = '1';
+        }
+        document.querySelectorAll('.scene-btn').forEach((btn, idx) => {
+            btn.classList.toggle('current', idx === (activeIndex - 1));
+        });
+    }
+
     // BUCLE DE LA ESCENA ACTUAL (Repetir automáticamente al terminar la escena en curso)
     if (isLoopingScene && !masterTimeline.paused()) {
         const nextLabel = sceneLabels[currentSceneIndex]; // currentSceneIndex es 1..9 (1-based)
@@ -1346,30 +1631,33 @@ function formatTime(seconds) {
 
 // --- 5. INTERFAZ DE USUARIO Y EVENTOS DE REPRODUCCIÓN ---
 
-// Scrubber Slider
+// Scrubber Slider: Restablece y sincroniza el audio instantáneamente hacia donde se desplaza la barra
 const scrubber = document.getElementById('scrubber-slider');
 if (scrubber) {
     scrubber.addEventListener('input', (e) => {
         if (!masterTimeline) initMasterTimeline();
-        Voiceover.stop();
-        masterTimeline.progress(parseFloat(e.target.value));
+        const progress = parseFloat(e.target.value);
+        const targetTime = progress * masterTimeline.duration();
+        masterTimeline.seek(targetTime);
+        Voiceover.syncWithTimeline(targetTime, !masterTimeline.paused());
     });
 }
 
-// Salto directo a Escena (1 a 9)
+// Salto directo a Escena (1 a 9) con sincronización de audio inmediata
 window.jumpToScene = function (sceneNumber) {
     initAudioSystem();
-    Voiceover.stop();
     if (!masterTimeline) initMasterTimeline();
 
     const label = sceneLabels[sceneNumber - 1];
     if (label && masterTimeline.labels[label] !== undefined) {
+        const targetTime = masterTimeline.labels[label];
         masterTimeline.pause();
-        masterTimeline.seek(label);
+        masterTimeline.seek(targetTime);
+        setActiveSceneDOM(`scene${sceneNumber}`, false);
         masterTimeline.play();
-        setActiveSceneDOM(`scene${sceneNumber}`);
         const icon = document.getElementById('play-icon');
         if (icon) icon.textContent = '⏸';
+        Voiceover.syncWithTimeline(targetTime, true);
     }
 };
 
@@ -1386,6 +1674,7 @@ window.startMasterPlayback = function () {
     if (showBtn) showBtn.style.display = 'flex';
 
     masterTimeline.play();
+    Voiceover.syncWithTimeline(masterTimeline.time(), true);
 };
 
 // Botón Play / Pausa
@@ -1470,13 +1759,15 @@ window.addEventListener('keydown', (e) => {
         if (lBtn) lBtn.click();
     } else if (e.code === 'ArrowLeft') {
         if (masterTimeline) {
-            Voiceover.stop();
-            masterTimeline.seek(Math.max(0, masterTimeline.time() - 2));
+            const targetTime = Math.max(0, masterTimeline.time() - 2);
+            masterTimeline.seek(targetTime);
+            Voiceover.syncWithTimeline(targetTime, !masterTimeline.paused());
         }
     } else if (e.code === 'ArrowRight') {
         if (masterTimeline) {
-            Voiceover.stop();
-            masterTimeline.seek(Math.min(masterTimeline.duration(), masterTimeline.time() + 2));
+            const targetTime = Math.min(masterTimeline.duration(), masterTimeline.time() + 2);
+            masterTimeline.seek(targetTime);
+            Voiceover.syncWithTimeline(targetTime, !masterTimeline.paused());
         }
     }
 });
