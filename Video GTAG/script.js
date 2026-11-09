@@ -62,8 +62,8 @@ const AUDIO_SPEEDS = {
 6  | Escena 6    | Paso 4.wav (Bloque 2) | Pruebas Cumplimiento (D, E)    | 64.88s       | 32.32s   | AUDIO_SPEEDS.paso4_e6 (corte exacto en 97.20s)
 7  | Escena 7    | Paso 5.wav (Bloque 1) | Hallazgos/Desviaciones (A, B)  | 0.00s        | 92.20s   | AUDIO_SPEEDS.paso5_e7 (corte en silencio 91.55-92.90s)
 8  | Escena 8    | Paso 5.wav (Bloque 2) | Hallazgos/Desviaciones (C,D,E) | 92.50s       | 95.55s   | AUDIO_SPEEDS.paso5_e8 (hasta final 188.05s)
-9a | Escena 9    | Paso 6.wav (Parte 1)  | Dictamen Deficiente y Concl.   | 0.00s        | 23.15s   | AUDIO_SPEEDS.paso6_e9 (detiene en segundo 23)
-9b | Escena 9    | Paso 6.wav (Parte 2)  | Plan de Acción Correctivo      | 89.00s       | 10.18s   | AUDIO_SPEEDS.paso6_e9 (reanuda en 1:29)
+9a | Escena 9    | Paso 6.wav (Parte 1)  | Dictamen Deficiente y Concl.   | 0.00s        | 24.75s   | AUDIO_SPEEDS.paso6_e9 (concluye frase completa)
+9b | Escena 9    | Paso 6.wav (Parte 2)  | Plan de Acción Correctivo      | 89.00s       | 10.25s   | AUDIO_SPEEDS.paso6_e9 (reanuda en 1:29 hasta el final)
 ===============================================================================
 */
 
@@ -177,7 +177,7 @@ const VOICEOVER_TRACKS = [
         sceneIndex: 9,
         offsetInScene: 0.4,
         rawAudioStart: 0,
-        rawDuration: 23.15, // Bloque 1: Se detiene exactamente en el segundo 23 (23.15s) del audio original
+        rawDuration: 24.75, // Bloque 1: Concluye la frase completa en el silencio natural (24.75s a 25.80s) sin cortar la palabra
         get speed() { return AUDIO_SPEEDS.paso6_e9; },
         get duration() { return this.rawDuration / this.speed; }
     },
@@ -187,10 +187,10 @@ const VOICEOVER_TRACKS = [
         sceneLabel: "scene9_start",
         sceneIndex: 9,
         get offsetInScene() {
-            return 0.4 + (23.15 / AUDIO_SPEEDS.paso6_e9) + 0.4;
+            return 0.4 + (24.75 / AUDIO_SPEEDS.paso6_e9) + 0.4;
         },
-        rawAudioStart: 89.00, // Bloque 2: Se reanuda en el segundo 1:29 (89.00s) del audio original hasta el final
-        rawDuration: 10.18,    // 99.18s total - 89.00s = 10.18s
+        rawAudioStart: 89.00, // Bloque 2: Se reanuda en el segundo 1:29 (89.00s) y reproduce de corrido hasta el final
+        rawDuration: 10.25,
         get speed() { return AUDIO_SPEEDS.paso6_e9; },
         get duration() { return this.rawDuration / this.speed; }
     }
@@ -247,7 +247,7 @@ class VoiceoverController {
             this.audio.playbackRate = speed;
             this.audio.defaultPlaybackRate = speed;
             this.audio.preservesPitch = true;
-            if (track && track.rawDuration) {
+            if (track && track.rawDuration && track.id !== "paso6_part2") {
                 const rawLimit = (track.rawAudioStart || 0) + track.rawDuration;
                 this.audio.ontimeupdate = () => {
                     if (this.audio && this.audio.currentTime >= rawLimit) {
@@ -274,7 +274,7 @@ class VoiceoverController {
                 a.playbackRate = speed;
                 a.defaultPlaybackRate = speed;
                 a.preservesPitch = true;
-                if (track && track.rawDuration) {
+                if (track && track.rawDuration && track.id !== "paso6_part2") {
                     const rawLimit = (track.rawAudioStart || 0) + track.rawDuration;
                     a.ontimeupdate = () => {
                         if (a.currentTime >= rawLimit) {
@@ -325,7 +325,7 @@ class VoiceoverController {
             this.currentTrackId = trkId;
 
             const trk = VOICEOVER_TRACKS.find(t => t.id === trkId);
-            if (trk && trk.rawDuration) {
+            if (trk && trk.rawDuration && trk.id !== "paso6_part2") {
                 const rawLimit = (trk.rawAudioStart || 0) + trk.rawDuration;
                 a.ontimeupdate = () => {
                     if (a.currentTime >= rawLimit) {
@@ -1441,9 +1441,9 @@ function setConcl3DCard(index) {
 function buildScene9(cam) {
     const tl = gsap.timeline();
     const spd = AUDIO_SPEEDS.paso6_e9;
-    const part1Dur = 23.15 / spd; // Bloque 1: 0.00s a 23.15s (termina exactamente en el segundo 23)
+    const part1Dur = 24.75 / spd; // Bloque 1: 0.00s a 24.75s (concluye la locución completa de "Se concluye que:" sin cortar palabras)
     const part2StartTime = 0.4 + part1Dur + 0.4;
-    const part2Dur = 10.18 / spd; // Bloque 2: 89.00s a 99.18s (reinicia en 1:29)
+    const part2Dur = 10.25 / spd; // Bloque 2: 89.00s hasta el final del audio (99.18s)
     const dur = part1Dur + 0.4 + part2Dur;
 
     tl.call(() => setActiveSceneDOM('scene9'), null, 0)
@@ -1451,28 +1451,30 @@ function buildScene9(cam) {
         .call(() => setConcl3DCard(0), null, 0)
         .set(cam, { scale: 1.0, x: 0, y: 0 }, 0)
         // Reset inicial explícito para garantizar efecto de aparición limpio sin parpadeos
-        .set("#scene9", { opacity: 0 }, 0)
-        .set("#dictum-hero-box", { opacity: 0, y: -25, scale: 0.94 }, 0)
-        .set("#concl-elastic-viewport", { opacity: 0, y: 35 }, 0)
-        .set("#concl-3d-dots", { opacity: 0, y: 15 }, 0)
+        .set(["#scene9", "#dictum-hero-box", "#concl-elastic-viewport", ".concl-3d-card", "#concl-3d-dots"], { opacity: 0, visibility: "hidden" }, 0)
+        .set("#dictum-hero-box", { y: -25, scale: 0.94 }, 0)
+        .set("#concl-elastic-viewport", { y: 35 }, 0)
+        .set("#concl-3d-dots", { y: 15 }, 0)
         // Las tres tarjetas nacen unidas en el centro exacto (x: 513 y -513 para coincidir con Card 1)
-        .set("#concl-3d-card-0", { x: 513, scale: 0.94, opacity: 0, zIndex: 5 }, 0)
-        .set("#concl-3d-card-1", { x: 0, scale: 0.94, opacity: 0, zIndex: 10 }, 0)
-        .set("#concl-3d-card-2", { x: -513, scale: 0.94, opacity: 0, zIndex: 5 }, 0)
+        .set("#concl-3d-card-0", { x: 513, scale: 0.94, zIndex: 5 }, 0)
+        .set("#concl-3d-card-1", { x: 0, scale: 0.94, zIndex: 10 }, 0)
+        .set("#concl-3d-card-2", { x: -513, scale: 0.94, zIndex: 5 }, 0)
         .set(["#ligament-left", "#ligament-right"], { opacity: 0, strokeWidth: 14 }, 0)
 
         // 1. Aparición del Escenario y Encabezado
+        .set("#scene9", { visibility: "visible" }, 0.1)
         .to("#scene9", { opacity: 1, duration: 0.5 }, 0.1)
         .from("#scene9 .section-tag", { y: -20, opacity: 0, duration: 0.5, ease: "power2.out" }, 0.25)
         .add(typeHeadingText("#scene9 .title-hero", "Conclusiones y Dictamen de Control Interno", 0.024, false), 0.35)
 
-        // AUDIO PASO 6 - BLOQUE 1 (HASTA EL SEGUNDO 23)
+        // AUDIO PASO 6 - BLOQUE 1 (HASTA EL SEGUNDO 24.75s)
         .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 6.wav', spd, 0, 'paso6_part1'), null, 0.4)
         .call(() => Voiceover.stop(), null, 0.4 + part1Dur)
 
         .from("#scene9 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8, ease: "power2.out" }, 1.5)
 
         // 2. Efecto de Aparición del Dictamen Global (DEFICIENTE)
+        .set("#dictum-hero-box", { visibility: "visible" }, 1.8)
         .to("#dictum-hero-box", {
             opacity: 1,
             y: 0,
@@ -1483,6 +1485,7 @@ function buildScene9(cam) {
         .call(() => SFX.slide(), null, 1.8)
 
         // 3. APARICIÓN DE LA MASA MONOLÍTICA CENTRAL (Los 3 expedientes unidos en el centro)
+        .set(["#concl-elastic-viewport", "#concl-3d-card-0", "#concl-3d-card-1", "#concl-3d-card-2", "#concl-3d-dots"], { visibility: "visible" }, 2.3)
         .to("#concl-elastic-viewport", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 2.3)
         .to(["#concl-3d-card-0", "#concl-3d-card-1", "#concl-3d-card-2"], { opacity: 1, duration: 0.6 }, 2.3)
         .to("#concl-3d-dots", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 2.5)
@@ -1538,11 +1541,9 @@ function buildScene9(cam) {
         }, part2StartTime)
         .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, part2StartTime + 0.5)
 
-        // Fin de la locución Bloque 2
-        .call(() => Voiceover.stop(), null, 0.4 + dur)
-
         // Al culminar, la escena se mantiene fija y visible sin fundir a negro para lectura final
-        .to("#scene9", { opacity: 1, duration: 2.0 }, 0.4 + dur);
+        // El audio del Bloque 2 concluye de forma natural hasta su reverberación final
+        .to("#scene9", { opacity: 1, duration: 3.5 }, 0.4 + dur);
 
     return tl;
 }
