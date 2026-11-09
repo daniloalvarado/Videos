@@ -28,11 +28,35 @@ function playAudioFile(relativePath) {
 }
 
 // =========================================================================
-// VELOCIDAD GLOBAL DE AUDIO (MODIFICABLE POR EL USUARIO)
-// Cambia este valor para aumentar o disminuir la velocidad de todos los audios:
-// Ejemplos: 1.0 (normal), 1.14 (+14% recomendada), 1.20 (+20%), 1.25 (+25%)
+// 🎚️ VELOCIDAD GLOBAL DE AUDIO (MODIFICABLE POR EL USUARIO)
+// Cambia este único valor numérico para acelerar o ralentizar TODO el video
+// y todos los audios y animaciones se sincronizan automáticamente:
+// Ejemplos:
+//   1.00 -> Velocidad original normal
+//   1.14 -> Velocidad fluida recomendada (+14%)
+//   1.20 -> Velocidad dinámica (+20%)
+//   1.25 -> Velocidad rápida (+25%)
 // =========================================================================
-const GLOBAL_AUDIO_SPEED = 1.14;
+const GLOBAL_AUDIO_SPEED = 1.25;
+
+/*
+===============================================================================
+📋 MAPEO MAESTRO DE AUDIOS POR ESCENA Y PUNTOS DE CORTE EXACTOS (RMS):
+-------------------------------------------------------------------------------
+#  | ESCENA      | ARCHIVO DE AUDIO      | SEGMENTO / CONTENIDO           | INICIO AUDIO | DUR. RAW
+---+-------------+-----------------------+--------------------------------+--------------+----------
+1  | Escena 1    | (Sin voz - Portada)   | Efectos SFX y tipografía       | -            | -
+2a | Escena 2    | Paso 1_1.wav          | Intro 32 Riesgos + Matriz 5x5  | 0.00s        | 16.84s
+2b | Escena 2    | Paso 1_2Tabla.wav     | Tabla 12 Riesgos Priorizados   | 0.00s        | 117.26s
+3  | Escena 3    | Paso 2.wav            | Controles Esperados (Comp A-E) | 0.00s        | 130.76s
+4  | Escena 4    | Paso 3.wav            | Solicitud de Evidencias E1-E19 | 0.00s        | 133.96s
+5  | Escena 5    | Paso 4.wav (Bloque 1) | Pruebas Cumplimiento (A, B, C) | 0.00s        | 64.85s  (corte en silencio 64.80-64.88s)
+6  | Escena 6    | Paso 4.wav (Bloque 2) | Pruebas Cumplimiento (D, E)    | 64.88s       | 35.43s  (hasta final 100.31s)
+7  | Escena 7    | Paso 5.wav (Bloque 1) | Hallazgos/Desviaciones (A, B)  | 0.00s        | 100.95s (corte en silencio 100.88-101.02s)
+8  | Escena 8    | Paso 5.wav (Bloque 2) | Hallazgos/Desviaciones (C,D,E) | 100.95s      | 87.10s  (hasta final 188.05s)
+9  | Escena 9    | Paso 6.wav            | Dictamen y Conclusiones Finales| 0.00s        | 99.18s
+===============================================================================
+*/
 
 // --- SISTEMA MAESTRO DE VOZ EN OFF (VOICEOVER CONTROLLER) ---
 const VOICEOVER_TRACKS = [
@@ -52,7 +76,7 @@ const VOICEOVER_TRACKS = [
         file: "./AUDIOS PASO 1-6/Paso 1_2Tabla.wav",
         sceneLabel: "scene2_start",
         sceneIndex: 2,
-        offsetInScene: 15.8,
+        get offsetInScene() { return 0.4 + (16.84 / GLOBAL_AUDIO_SPEED) + 1.2; },
         rawAudioStart: 0,
         rawDuration: 117.26,
         get speed() { return GLOBAL_AUDIO_SPEED; },
@@ -87,7 +111,7 @@ const VOICEOVER_TRACKS = [
         sceneIndex: 5,
         offsetInScene: 0.4,
         rawAudioStart: 0,
-        rawDuration: 64.2, // Bloque 1: Intro + Componentes A, B, C
+        rawDuration: 64.85, // Bloque 1: Intro + Componentes A, B, C (Silencio exacto entre 64.80s y 64.88s)
         get speed() { return GLOBAL_AUDIO_SPEED; },
         get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
     },
@@ -97,8 +121,8 @@ const VOICEOVER_TRACKS = [
         sceneLabel: "scene6_start",
         sceneIndex: 6,
         offsetInScene: 0.4,
-        rawAudioStart: 65.0, // Bloque 2: Componentes D y E
-        rawDuration: 35.31,
+        rawAudioStart: 64.88, // Bloque 2: Componentes D y E (arranca en el silencio de 64.88s; locución inicia en 64.95s)
+        rawDuration: 35.43,   // 100.31s total - 64.88s
         get speed() { return GLOBAL_AUDIO_SPEED; },
         get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
     },
@@ -109,7 +133,7 @@ const VOICEOVER_TRACKS = [
         sceneIndex: 7,
         offsetInScene: 0.4,
         rawAudioStart: 0,
-        rawDuration: 100.25, // Bloque 1: Intro + Desviaciones A y B
+        rawDuration: 100.95, // Bloque 1: Intro + Desviaciones A y B (Silencio exacto entre 100.88s y 101.02s)
         get speed() { return GLOBAL_AUDIO_SPEED; },
         get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
     },
@@ -119,8 +143,8 @@ const VOICEOVER_TRACKS = [
         sceneLabel: "scene8_start",
         sceneIndex: 8,
         offsetInScene: 0.4,
-        rawAudioStart: 101.5, // Bloque 2: Desviaciones C, D y E
-        rawDuration: 86.55,
+        rawAudioStart: 100.95, // Bloque 2: Desviaciones C, D y E (arranca en pausa de 100.95s; locución inicia en 101.05s)
+        rawDuration: 87.10,    // 188.05s total - 100.95s
         get speed() { return GLOBAL_AUDIO_SPEED; },
         get duration() { return this.rawDuration / GLOBAL_AUDIO_SPEED; }
     },
@@ -154,14 +178,14 @@ class VoiceoverController {
             const sceneStart = masterTimeline.labels[tr.sceneLabel];
             if (sceneStart === undefined) continue;
             const start = sceneStart + tr.offsetInScene;
-            const end = start + tr.duration;
+            const end = start + tr.duration + 0.6; // Margen de gracia para permitir terminación natural
             if (timelineTime >= start && timelineTime < end) {
                 const spd = tr.speed || GLOBAL_AUDIO_SPEED;
                 return {
                     track: tr,
                     startTimelineTime: start,
                     endTimelineTime: end,
-                    audioTime: (tr.rawAudioStart || 0) + (timelineTime - start) * spd
+                    audioTime: Math.min((tr.rawAudioStart || 0) + tr.rawDuration, (tr.rawAudioStart || 0) + (timelineTime - start) * spd)
                 };
             }
         }
@@ -485,7 +509,7 @@ function buildScene2(cam) {
     const tl = gsap.timeline();
     const dur1 = 16.84 / GLOBAL_AUDIO_SPEED;
     const dur2 = 117.26 / GLOBAL_AUDIO_SPEED;
-    const tableStartTime = 0.4 + dur1 + 0.6; // ~15.8s at 1.14x
+    const tableStartTime = 0.4 + dur1 + 1.2; // Transición fluida con colchón para la locución
 
     tl.call(() => setActiveSceneDOM('scene2'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -496,7 +520,7 @@ function buildScene2(cam) {
         .set("#scene2 .matrix-container", { opacity: 1, y: 0, filter: "none", pointerEvents: "auto" }, 0)
         .set("#scene2 .risk-kpi-panel", { opacity: 0, x: -60 }, 0)
         .set("#matrix-graph-panel", { opacity: 0, scale: 0.88 }, 0)
-        .set("#risks-table-box", { opacity: 0, y: 40, scale: 0.98, filter: "none", pointerEvents: "none" }, 0)
+        .set("#risks-table-box", { opacity: 0, y: 40, scale: 0.98, filter: "none", pointerEvents: "none", visibility: "hidden" }, 0)
         .set("#blob-mother", { scale: 1, cx: 190, cy: 45, opacity: 1 }, 0)
         .set("#blob-filtered", { cx: 190, cy: 45, scale: 0.75, opacity: 1 }, 0)
         .set("#blob-critical", { cx: 190, cy: 45, scale: 0.75, opacity: 1 }, 0)
@@ -557,6 +581,7 @@ function buildScene2(cam) {
         // 3. TERCER ELEMENTO: Tabla de 12 Riesgos Priorizados (reordenada por componentes)
         .to("#scene2 .matrix-container", { opacity: 0, y: -25, duration: 0.65, ease: "power2.inOut", pointerEvents: "none" }, tableStartTime - 0.8)
         .to(cam, { scale: 1.0, x: 0, y: 0, duration: 0.9, ease: "power2.inOut" }, tableStartTime - 0.8)
+        .set("#risks-table-box", { visibility: "visible" }, tableStartTime - 0.25)
         .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.85, ease: "power2.out", pointerEvents: "auto" }, tableStartTime - 0.2)
         .call(() => SFX.slide(), null, tableStartTime - 0.2)
         .fromTo("#risks-table-box", {
@@ -581,15 +606,14 @@ function buildScene2(cam) {
             ease: "power1.inOut"
         }, tableStartTime + 2.0)
 
-        // Cierre fluido directo al terminar la locución de la tabla (CARRUSEL 3D ELIMINADO COMO SOLICITÓ EL USUARIO)
-        .call(() => Voiceover.stop(), null, tableStartTime + dur2)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.0, ease: "power2.inOut" }, tableStartTime + dur2)
+        // Cierre fluido y natural: sin corte brusco de voz, permitiendo que la última palabra respire
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.0, ease: "power2.inOut" }, tableStartTime + dur2 + 0.3)
         .to(["#scene2 .scene-header-box", "#scene2 #risks-table-box"], {
             opacity: 0,
             duration: 0.7,
             ease: "power2.out"
-        }, tableStartTime + dur2)
-        .to("#scene2", { opacity: 0, duration: 0.8 }, tableStartTime + dur2 + 0.6);
+        }, tableStartTime + dur2 + 0.8)
+        .to("#scene2", { opacity: 0, duration: 0.8 }, tableStartTime + dur2 + 1.4);
 
     return tl;
 }
@@ -719,9 +743,8 @@ function buildScene3(cam) {
         // CIERRE Y RETORNO PANORÁMICO TRAS CULMINAR LA LOCUCIÓN
         // ==============================================================
         .to(".row-ctrl-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.5 }, at(130.0))
-        .call(() => Voiceover.stop(), null, 0.4 + dur)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, 0.4 + dur - 0.2)
-        .to("#scene3", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.2);
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur + 0.2)
+        .to("#scene3", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.0);
 
     return tl;
 }
@@ -907,9 +930,8 @@ function buildScene4(cam) {
         // ==============================================================
         .to(["#row-ev-4", "#row-ev-18"], { backgroundColor: "transparent", boxShadow: "none", duration: 0.5 }, at(133.0))
         .to(".tech-pill", { scale: 1.0, borderColor: "rgba(255, 255, 255, 0.12)", boxShadow: "none", duration: 0.5 }, at(133.0))
-        .call(() => Voiceover.stop(), null, 0.4 + dur)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, 0.4 + dur - 0.2)
-        .to("#scene4", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.4);
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur + 0.2)
+        .to("#scene4", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.0);
 
     return tl;
 }
@@ -919,7 +941,7 @@ function buildScene4(cam) {
 // ==============================================================
 function buildScene5(cam) {
     const tl = gsap.timeline();
-    const dur = 64.2 / GLOBAL_AUDIO_SPEED;
+    const dur = 64.85 / GLOBAL_AUDIO_SPEED; // Locución concluye a 64.75s, corte en silencio exacto
     const at = (rawSec) => 0.4 + (rawSec / GLOBAL_AUDIO_SPEED);
 
     tl.call(() => setActiveSceneDOM('scene5'), null, 0)
@@ -1018,9 +1040,8 @@ function buildScene5(cam) {
         // ==============================================================
         .to("#scene5 .test-row-comp-c", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(63.5))
         .to("#tests-rows-grid-5", { y: 0, duration: 1.2, ease: "power2.inOut" }, at(63.5))
-        .call(() => Voiceover.stop(), null, 0.4 + dur)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur - 0.2)
-        .to("#scene5", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.2);
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur + 0.2)
+        .to("#scene5", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.0);
 
     return tl;
 }
@@ -1030,7 +1051,7 @@ function buildScene5(cam) {
 // ==============================================================
 function buildScene6(cam) {
     const tl = gsap.timeline();
-    const dur = 35.31 / GLOBAL_AUDIO_SPEED;
+    const dur = 35.43 / GLOBAL_AUDIO_SPEED; // Desde 64.88s hasta el final (100.31s)
     const at = (elapsedRaw) => 0.4 + (elapsedRaw / GLOBAL_AUDIO_SPEED);
 
     tl.call(() => setActiveSceneDOM('scene6'), null, 0)
@@ -1045,8 +1066,8 @@ function buildScene6(cam) {
         // Título escrito letra por letra con SFX.tick
         .add(typeHeadingText("#scene6 .title-hero", "Diseño y Ejecución de Pruebas de Cumplimiento", 0.024, false), 0.4)
 
-        // AUDIO PASO 4 (BLOQUE 2: COMPONENTES D, E - DESDE 65.0s RAW)
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 4.wav', GLOBAL_AUDIO_SPEED, 65.0, 'paso4_e6'), null, 0.4)
+        // AUDIO PASO 4 (BLOQUE 2: COMPONENTES D, E - DESDE 64.88s RAW)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 4.wav', GLOBAL_AUDIO_SPEED, 64.88, 'paso4_e6'), null, 0.4)
 
         .from("#scene6 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
@@ -1111,9 +1132,8 @@ function buildScene6(cam) {
         // ==============================================================
         .to("#scene6 .test-row-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(34.5))
         .to("#tests-rows-grid-6", { y: 0, duration: 1.0, ease: "power2.inOut" }, at(34.5))
-        .call(() => Voiceover.stop(), null, 0.4 + dur)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur - 0.2)
-        .to("#scene6", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.2);
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur + 0.2)
+        .to("#scene6", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.0);
 
     return tl;
 }
@@ -1123,7 +1143,7 @@ function buildScene6(cam) {
 // ==============================================================
 function buildScene7(cam) {
     const tl = gsap.timeline();
-    const dur = 100.25 / GLOBAL_AUDIO_SPEED;
+    const dur = 100.95 / GLOBAL_AUDIO_SPEED; // Locución concluye a 100.85s, corte en silencio exacto
     const at = (rawSec) => 0.4 + (rawSec / GLOBAL_AUDIO_SPEED);
 
     tl.call(() => setActiveSceneDOM('scene7'), null, 0)
@@ -1206,9 +1226,8 @@ function buildScene7(cam) {
         // RETORNO PANORÁMICO Y CIERRE TRAS CULMINAR EL BLOQUE 1
         .to("#scene7 .dev-row-comp-b", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(99.0))
         .to("#dev-rows-grid-7", { y: 0, duration: 1.2, ease: "power2.inOut" }, at(99.0))
-        .call(() => Voiceover.stop(), null, 0.4 + dur)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur - 0.2)
-        .to("#scene7", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.2);
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur + 0.2)
+        .to("#scene7", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.0);
 
     return tl;
 }
@@ -1218,7 +1237,7 @@ function buildScene7(cam) {
 // ==============================================================
 function buildScene8(cam) {
     const tl = gsap.timeline();
-    const dur = 86.55 / GLOBAL_AUDIO_SPEED;
+    const dur = 87.10 / GLOBAL_AUDIO_SPEED; // Desde 100.95s hasta el final (188.05s)
     const at = (elapsedRaw) => 0.4 + (elapsedRaw / GLOBAL_AUDIO_SPEED);
 
     tl.call(() => setActiveSceneDOM('scene8'), null, 0)
@@ -1232,8 +1251,8 @@ function buildScene8(cam) {
         // Título escrito letra por letra con SFX.tick (sin ting en título)
         .add(typeHeadingText("#scene8 .title-hero", "Determinación de Desviaciones y Hallazgos", 0.024, false), 0.4)
 
-        // AUDIO PASO 5 (BLOQUE 2: DESVIACIONES C, D, E - DESDE 101.5s RAW)
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 5.wav', GLOBAL_AUDIO_SPEED, 101.5, 'paso5_e8'), null, 0.4)
+        // AUDIO PASO 5 (BLOQUE 2: DESVIACIONES C, D, E - DESDE 100.95s RAW)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 5.wav', GLOBAL_AUDIO_SPEED, 100.95, 'paso5_e8'), null, 0.4)
 
         .from("#scene8 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
@@ -1320,9 +1339,8 @@ function buildScene8(cam) {
         // RETORNO PANORÁMICO Y CIERRE TRAS CULMINAR EL BLOQUE 2
         .to("#scene8 .dev-row-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(85.5))
         .to("#dev-rows-grid-8", { y: 0, duration: 1.2, ease: "power2.inOut" }, at(85.5))
-        .call(() => Voiceover.stop(), null, 0.4 + dur)
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur - 0.2)
-        .to("#scene8", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.2);
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur + 0.2)
+        .to("#scene8", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.0);
 
     return tl;
 }
@@ -1453,7 +1471,6 @@ function buildScene9(cam) {
             duration: 0.6,
             ease: "power2.out"
         }, at(90.0))
-        .call(() => Voiceover.stop(), null, 0.4 + dur)
         .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, at(90.5))
         // Al culminar, la escena se mantiene fija y visible sin fundir a negro para lectura final
         .to("#scene9", { opacity: 1, duration: 2.0 }, 0.4 + dur);
