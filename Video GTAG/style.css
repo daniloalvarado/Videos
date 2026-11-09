@@ -575,6 +575,8 @@ body {
 }
 
 .risk-kpi-panel {
+    opacity: 0;
+    visibility: hidden;
     background: rgba(18, 24, 38, 0.60);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -683,6 +685,8 @@ body {
    MATRIZ 5X5 DE IMPACTO Y PROBABILIDAD (EJE Y, EJE X Y LEYENDA DERECHA)
    ========================================================================== */
 .matrix-graph-panel {
+    opacity: 0;
+    visibility: hidden;
     background: rgba(18, 24, 38, 0.60);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);

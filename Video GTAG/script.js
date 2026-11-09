@@ -40,10 +40,10 @@ const AUDIO_SPEEDS = {
     paso2: 1.25,        // Escena 3: Controles Esperados Componentes A-E (Paso 2.wav)
     paso3: 1.25,        // Escena 4: Solicitud de Evidencias E1-E19 (Paso 3.wav: 0s-73.2s y 116.2s-133.96s)
     paso4_e5: 1.25,     // Escena 5: Pruebas de Cumplimiento A, B, C (Paso 4.wav: 0s a 64.85s)
-    paso4_e6: 1.25,     // Escena 6: Pruebas de Cumplimiento D, E (Paso 4.wav: 64.88s a 100.31s)
-    paso5_e7: 1.25,     // Escena 7: Hallazgos y Desviaciones A, B (Paso 5.wav: 0s a 100.95s)
-    paso5_e8: 1.25,     // Escena 8: Hallazgos y Desviaciones C, D, E (Paso 5.wav: 100.95s a 188.05s)
-    paso6_e9: 1.25      // Escena 9: Conclusiones y Dictamen de Auditoría (Paso 6.wav)
+    paso4_e6: 1.25,     // Escena 6: Pruebas de Cumplimiento D, E (Paso 4.wav: 64.88s a 97.20s - corte exacto R28)
+    paso5_e7: 1.25,     // Escena 7: Hallazgos y Desviaciones A, B (Paso 5.wav: 0s a 92.20s - elimina sobra)
+    paso5_e8: 1.25,     // Escena 8: Hallazgos y Desviaciones C, D, E (Paso 5.wav: 92.50s a 188.05s)
+    paso6_e9: 1.25      // Escena 9: Conclusiones y Dictamen de Auditoría (Paso 6.wav: 0s-23.15s y 89s-99.18s)
 };
 
 /*
@@ -59,10 +59,11 @@ const AUDIO_SPEEDS = {
 4a | Escena 4    | Paso 3.wav (Parte 1)  | Indagación + Gestión Interna   | 0.00s        | 73.20s   | AUDIO_SPEEDS.paso3 (detiene en 1:13)
 4b | Escena 4    | Paso 3.wav (Parte 2)  | Observación Directa Presencial | 116.20s      | 17.76s   | AUDIO_SPEEDS.paso3 (reanuda en 1:56)
 5  | Escena 5    | Paso 4.wav (Bloque 1) | Pruebas Cumplimiento (A, B, C) | 0.00s        | 64.85s   | AUDIO_SPEEDS.paso4_e5 (corte en silencio 64.80-64.88s)
-6  | Escena 6    | Paso 4.wav (Bloque 2) | Pruebas Cumplimiento (D, E)    | 64.88s       | 35.43s   | AUDIO_SPEEDS.paso4_e6 (hasta final 100.31s)
-7  | Escena 7    | Paso 5.wav (Bloque 1) | Hallazgos/Desviaciones (A, B)  | 0.00s        | 100.95s  | AUDIO_SPEEDS.paso5_e7 (corte en silencio 100.88-101.02s)
-8  | Escena 8    | Paso 5.wav (Bloque 2) | Hallazgos/Desviaciones (C,D,E) | 100.95s      | 87.10s   | AUDIO_SPEEDS.paso5_e8 (hasta final 188.05s)
-9  | Escena 9    | Paso 6.wav            | Dictamen y Conclusiones Finales| 0.00s        | 99.18s   | AUDIO_SPEEDS.paso6_e9
+6  | Escena 6    | Paso 4.wav (Bloque 2) | Pruebas Cumplimiento (D, E)    | 64.88s       | 32.32s   | AUDIO_SPEEDS.paso4_e6 (corte exacto en 97.20s)
+7  | Escena 7    | Paso 5.wav (Bloque 1) | Hallazgos/Desviaciones (A, B)  | 0.00s        | 92.20s   | AUDIO_SPEEDS.paso5_e7 (corte en silencio 91.55-92.90s)
+8  | Escena 8    | Paso 5.wav (Bloque 2) | Hallazgos/Desviaciones (C,D,E) | 92.50s       | 95.55s   | AUDIO_SPEEDS.paso5_e8 (hasta final 188.05s)
+9a | Escena 9    | Paso 6.wav (Parte 1)  | Dictamen Deficiente y Concl.   | 0.00s        | 23.15s   | AUDIO_SPEEDS.paso6_e9 (detiene en segundo 23)
+9b | Escena 9    | Paso 6.wav (Parte 2)  | Plan de Acción Correctivo      | 89.00s       | 10.18s   | AUDIO_SPEEDS.paso6_e9 (reanuda en 1:29)
 ===============================================================================
 */
 
@@ -143,7 +144,7 @@ const VOICEOVER_TRACKS = [
         sceneIndex: 6,
         offsetInScene: 0.4,
         rawAudioStart: 64.88, // Bloque 2: Componentes D y E (arranca en el silencio de 64.88s; locución inicia en 64.95s)
-        rawDuration: 35.43,   // 100.31s total - 64.88s
+        rawDuration: 32.32,   // Concluye exactamente con R28 en 97.20s (97.20s - 64.88s = 32.32s; omite adelanto a siguiente escena)
         get speed() { return AUDIO_SPEEDS.paso4_e6; },
         get duration() { return this.rawDuration / this.speed; }
     },
@@ -154,7 +155,7 @@ const VOICEOVER_TRACKS = [
         sceneIndex: 7,
         offsetInScene: 0.4,
         rawAudioStart: 0,
-        rawDuration: 100.95, // Bloque 1: Intro + Desviaciones A y B (Silencio exacto entre 100.88s y 101.02s)
+        rawDuration: 92.20, // Bloque 1: Intro + Desviaciones A y B (Silencio exacto entre 91.55s y 92.90s; elimina los 8s de sobra)
         get speed() { return AUDIO_SPEEDS.paso5_e7; },
         get duration() { return this.rawDuration / this.speed; }
     },
@@ -164,19 +165,32 @@ const VOICEOVER_TRACKS = [
         sceneLabel: "scene8_start",
         sceneIndex: 8,
         offsetInScene: 0.4,
-        rawAudioStart: 100.95, // Bloque 2: Desviaciones C, D y E (arranca en pausa de 100.95s; locución inicia en 101.05s)
-        rawDuration: 87.10,    // 188.05s total - 100.95s
+        rawAudioStart: 92.50, // Bloque 2: Desviaciones C, D y E (arranca en 92.50s con la locución introductoria a C, D y E)
+        rawDuration: 95.55,    // 188.05s total - 92.50s = 95.55s
         get speed() { return AUDIO_SPEEDS.paso5_e8; },
         get duration() { return this.rawDuration / this.speed; }
     },
     {
-        id: "paso6_e9",
+        id: "paso6_part1",
         file: "./AUDIOS PASO 1-6/Paso 6.wav",
         sceneLabel: "scene9_start",
         sceneIndex: 9,
         offsetInScene: 0.4,
         rawAudioStart: 0,
-        rawDuration: 99.18, // Dictamen y Conclusiones completas
+        rawDuration: 23.15, // Bloque 1: Se detiene exactamente en el segundo 23 (23.15s) del audio original
+        get speed() { return AUDIO_SPEEDS.paso6_e9; },
+        get duration() { return this.rawDuration / this.speed; }
+    },
+    {
+        id: "paso6_part2",
+        file: "./AUDIOS PASO 1-6/Paso 6.wav",
+        sceneLabel: "scene9_start",
+        sceneIndex: 9,
+        get offsetInScene() {
+            return 0.4 + (23.15 / AUDIO_SPEEDS.paso6_e9) + 0.4;
+        },
+        rawAudioStart: 89.00, // Bloque 2: Se reanuda en el segundo 1:29 (89.00s) del audio original hasta el final
+        rawDuration: 10.18,    // 99.18s total - 89.00s = 10.18s
         get speed() { return AUDIO_SPEEDS.paso6_e9; },
         get duration() { return this.rawDuration / this.speed; }
     }
@@ -233,6 +247,14 @@ class VoiceoverController {
             this.audio.playbackRate = speed;
             this.audio.defaultPlaybackRate = speed;
             this.audio.preservesPitch = true;
+            if (track && track.rawDuration) {
+                const rawLimit = (track.rawAudioStart || 0) + track.rawDuration;
+                this.audio.ontimeupdate = () => {
+                    if (this.audio && this.audio.currentTime >= rawLimit) {
+                        this.audio.pause();
+                    }
+                };
+            }
             if (shouldPlay) {
                 if (this.audio.paused) {
                     this.audio.play().catch(() => {});
@@ -252,6 +274,14 @@ class VoiceoverController {
                 a.playbackRate = speed;
                 a.defaultPlaybackRate = speed;
                 a.preservesPitch = true;
+                if (track && track.rawDuration) {
+                    const rawLimit = (track.rawAudioStart || 0) + track.rawDuration;
+                    a.ontimeupdate = () => {
+                        if (a.currentTime >= rawLimit) {
+                            a.pause();
+                        }
+                    };
+                }
                 this.audio = a;
                 this.currentSrc = track.file;
                 this.currentTrackId = track.id;
@@ -289,9 +319,20 @@ class VoiceoverController {
             a.playbackRate = speed;
             a.defaultPlaybackRate = speed;
             a.preservesPitch = true;
+            const trkId = trackId || (VOICEOVER_TRACKS.find(t => t.file === filePath)?.id || null);
             this.audio = a;
             this.currentSrc = filePath;
-            this.currentTrackId = trackId || (VOICEOVER_TRACKS.find(t => t.file === filePath)?.id || null);
+            this.currentTrackId = trkId;
+
+            const trk = VOICEOVER_TRACKS.find(t => t.id === trkId);
+            if (trk && trk.rawDuration) {
+                const rawLimit = (trk.rawAudioStart || 0) + trk.rawDuration;
+                a.ontimeupdate = () => {
+                    if (a.currentTime >= rawLimit) {
+                        a.pause();
+                    }
+                };
+            }
 
             const applySeekAndPlay = () => {
                 try {
@@ -329,6 +370,7 @@ class VoiceoverController {
     stop() {
         if (this.audio) {
             try {
+                this.audio.ontimeupdate = null;
                 this.audio.pause();
                 this.audio.currentTime = 0;
             } catch (e) {}
@@ -541,8 +583,9 @@ function buildScene2(cam) {
         .set("#risks-rows-track", { y: 0 }, 0)
         .set("#scene2 .scene-header-box", { opacity: 1 }, 0)
         .set("#scene2 .matrix-container", { opacity: 1, y: 0, filter: "none", pointerEvents: "auto" }, 0)
-        .set("#scene2 .risk-kpi-panel", { opacity: 0, x: -60 }, 0)
-        .set("#matrix-graph-panel", { opacity: 0, scale: 0.88 }, 0)
+        .set(["#scene2 .risk-kpi-panel", "#matrix-graph-panel"], { opacity: 0, visibility: "hidden" }, 0)
+        .set("#scene2 .risk-kpi-panel", { x: -60 }, 0)
+        .set("#matrix-graph-panel", { scale: 0.88 }, 0)
         .set("#risks-table-box", { opacity: 0, y: 40, scale: 0.98, filter: "none", pointerEvents: "none", visibility: "hidden" }, 0)
         .set("#blob-mother", { scale: 1, cx: 190, cy: 45, opacity: 1 }, 0)
         .set("#blob-filtered", { cx: 190, cy: 45, scale: 0.75, opacity: 1 }, 0)
@@ -562,6 +605,7 @@ function buildScene2(cam) {
 
         // 1. PRIMER ELEMENTO: Panel de KPIs a la izquierda (aparición con desplazamiento)
         .to(cam, { scale: 1.25, x: 340, y: 70, duration: 1.3, ease: "power2.inOut" }, 2.0)
+        .set("#scene2 .risk-kpi-panel", { visibility: "visible" }, 2.0)
         .to("#scene2 .risk-kpi-panel", { opacity: 1, x: 0, duration: 0.8, ease: "back.out(1.2)" }, 2.0)
         .call(() => {
             const kpi = { total: 0, low: 0, high: 0 };
@@ -596,6 +640,7 @@ function buildScene2(cam) {
 
         // 2. SEGUNDO ELEMENTO: Matriz 5x5 a la derecha (aparición con zoom)
         .to(cam, { scale: 1.25, x: -340, y: 70, duration: 1.3, ease: "power2.inOut" }, 5.0)
+        .set("#matrix-graph-panel", { visibility: "visible" }, 5.0)
         .to("#matrix-graph-panel", { opacity: 1, scale: 1.0, duration: 0.8, ease: "back.out(1.2)" }, 5.0)
         .call(() => SFX.ting(), null, 5.8)
         .to("#matrix-graph-panel .cell-high", { scale: 1.15, duration: 0.3, yoyo: true, repeat: 3, transformOrigin: "center center" }, 5.8)
@@ -603,6 +648,7 @@ function buildScene2(cam) {
         // Pausa de contemplación de la matriz: se mantiene visible hasta tableStartTime - 0.8s
         // 3. TERCER ELEMENTO: Tabla de 12 Riesgos Priorizados (reordenada por componentes)
         .to("#scene2 .matrix-container", { opacity: 0, y: -25, duration: 0.65, ease: "power2.inOut", pointerEvents: "none" }, tableStartTime - 0.8)
+        .set(["#scene2 .risk-kpi-panel", "#matrix-graph-panel"], { visibility: "hidden" }, tableStartTime - 0.15)
         .to(cam, { scale: 1.0, x: 0, y: 0, duration: 0.9, ease: "power2.inOut" }, tableStartTime - 0.8)
         .set("#risks-table-box", { visibility: "visible" }, tableStartTime - 0.25)
         .to("#risks-table-box", { opacity: 1, y: 0, scale: 1.0, duration: 0.85, ease: "power2.out", pointerEvents: "auto" }, tableStartTime - 0.2)
@@ -1069,7 +1115,7 @@ function buildScene5(cam) {
 function buildScene6(cam) {
     const tl = gsap.timeline();
     const spd = AUDIO_SPEEDS.paso4_e6;
-    const dur = 35.43 / spd; // Desde 64.88s hasta el final (100.31s)
+    const dur = 32.32 / spd; // Desde 64.88s hasta 97.20s (termina exactamente con R28; omite adelanto a siguiente escena)
     const at = (elapsedRaw) => 0.4 + (elapsedRaw / spd);
 
     tl.call(() => setActiveSceneDOM('scene6'), null, 0)
@@ -1084,7 +1130,7 @@ function buildScene6(cam) {
         // Título escrito letra por letra con SFX.tick
         .add(typeHeadingText("#scene6 .title-hero", "Diseño y Ejecución de Pruebas de Cumplimiento", 0.024, false), 0.4)
 
-        // AUDIO PASO 4 (BLOQUE 2: COMPONENTES D, E - DESDE 64.88s RAW)
+        // AUDIO PASO 4 (BLOQUE 2: COMPONENTES D, E - DESDE 64.88s RAW HASTA 97.20s)
         .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 4.wav', spd, 64.88, 'paso4_e6'), null, 0.4)
 
         .from("#scene6 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
@@ -1148,8 +1194,9 @@ function buildScene6(cam) {
         // ==============================================================
         // 3. RETORNO PANORÁMICO Y CIERRE TRAS CULMINAR EL BLOQUE 2
         // ==============================================================
-        .to("#scene6 .test-row-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(34.5))
-        .to("#tests-rows-grid-6", { y: 0, duration: 1.0, ease: "power2.inOut" }, at(34.5))
+        .to("#scene6 .test-row-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(31.5))
+        .to("#tests-rows-grid-6", { y: 0, duration: 1.0, ease: "power2.inOut" }, at(31.5))
+        .call(() => Voiceover.stop(), null, 0.4 + dur)
         .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur + 0.2)
         .to("#scene6", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.0);
 
@@ -1162,7 +1209,7 @@ function buildScene6(cam) {
 function buildScene7(cam) {
     const tl = gsap.timeline();
     const spd = AUDIO_SPEEDS.paso5_e7;
-    const dur = 100.95 / spd; // Locución concluye a 100.85s, corte en silencio exacto
+    const dur = 92.20 / spd; // Locución de Comp A y B concluye a 91.55s, corte en silencio exacto (elimina 8s de sobra)
     const at = (rawSec) => 0.4 + (rawSec / spd);
 
     tl.call(() => setActiveSceneDOM('scene7'), null, 0)
@@ -1176,7 +1223,7 @@ function buildScene7(cam) {
         // Título escrito letra por letra con SFX.tick (sin ting en título)
         .add(typeHeadingText("#scene7 .title-hero", "Determinación de Desviaciones y Hallazgos", 0.024, false), 0.4)
 
-        // AUDIO PASO 5 (BLOQUE 1: DESVIACIONES A Y B - FÍSICA Y RESPALDOS)
+        // AUDIO PASO 5 (BLOQUE 1: DESVIACIONES A Y B - FÍSICA Y RESPALDOS HASTA 92.20s)
         .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 5.wav', spd, 0, 'paso5_e7'), null, 0.4)
 
         .from("#scene7 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
@@ -1247,8 +1294,9 @@ function buildScene7(cam) {
         }, at(55.0))
 
         // RETORNO PANORÁMICO Y CIERRE TRAS CULMINAR EL BLOQUE 1
-        .to("#scene7 .dev-row-comp-b", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(99.0))
-        .to("#dev-rows-grid-7", { y: 0, duration: 1.2, ease: "power2.inOut" }, at(99.0))
+        .to("#scene7 .dev-row-comp-b", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(90.5))
+        .to("#dev-rows-grid-7", { y: 0, duration: 1.2, ease: "power2.inOut" }, at(90.5))
+        .call(() => Voiceover.stop(), null, 0.4 + dur)
         .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur + 0.2)
         .to("#scene7", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.0);
 
@@ -1261,7 +1309,7 @@ function buildScene7(cam) {
 function buildScene8(cam) {
     const tl = gsap.timeline();
     const spd = AUDIO_SPEEDS.paso5_e8;
-    const dur = 87.10 / spd; // Desde 100.95s hasta el final (188.05s)
+    const dur = 95.55 / spd; // Desde 92.50s hasta el final (188.05s)
     const at = (elapsedRaw) => 0.4 + (elapsedRaw / spd);
 
     tl.call(() => setActiveSceneDOM('scene8'), null, 0)
@@ -1275,8 +1323,8 @@ function buildScene8(cam) {
         // Título escrito letra por letra con SFX.tick (sin ting en título)
         .add(typeHeadingText("#scene8 .title-hero", "Determinación de Desviaciones y Hallazgos", 0.024, false), 0.4)
 
-        // AUDIO PASO 5 (BLOQUE 2: DESVIACIONES C, D, E - DESDE 100.95s RAW)
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 5.wav', spd, 100.95, 'paso5_e8'), null, 0.4)
+        // AUDIO PASO 5 (BLOQUE 2: DESVIACIONES C, D, E - DESDE 92.50s RAW)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 5.wav', spd, 92.50, 'paso5_e8'), null, 0.4)
 
         .from("#scene8 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8 }, 1.8)
 
@@ -1316,53 +1364,57 @@ function buildScene8(cam) {
         )
 
         // FOCO 1: COMPONENTE C - SOFTWARE, PARCHES Y SEGURIDAD LÓGICA (R26, R27)
-        .to(cam, { scale: 1.05, x: 0, y: -20, duration: 1.0, ease: "power2.inOut" }, at(2.0))
-        .call(() => SFX.ting(), null, at(2.5))
+        // Locución inicia tras intro en 101.60s (elapsed = 9.10s)
+        .to(cam, { scale: 1.05, x: 0, y: -20, duration: 1.0, ease: "power2.inOut" }, at(9.0))
+        .call(() => SFX.ting(), null, at(9.5))
         .to("#scene8 .dev-row-comp-c", {
             backgroundColor: "rgba(88, 166, 255, 0.24)",
             boxShadow: "0 0 22px rgba(88, 166, 255, 0.45)",
             duration: 0.4,
             ease: "power2.out"
-        }, at(2.5))
+        }, at(9.5))
 
         // FOCO 2: COMPONENTE D - REDES Y TELECOMUNICACIONES (R16)
-        .to("#scene8 .dev-row-comp-c", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(25.8))
+        // Locución inicia en 131.10s (elapsed = 38.60s)
+        .to("#scene8 .dev-row-comp-c", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(38.2))
         .to("#dev-rows-grid-8", {
             y: () => getScrollTargetY('row-dev-8', -220, 20),
             duration: 1.2,
             ease: "power2.inOut"
-        }, at(26.0))
-        .to(cam, { scale: 1.05, x: 0, y: -30, duration: 1.2, ease: "power2.inOut" }, at(26.0))
-        .call(() => SFX.slide(), null, at(26.2))
-        .call(() => SFX.ting(), null, at(27.5))
+        }, at(38.5))
+        .to(cam, { scale: 1.05, x: 0, y: -30, duration: 1.2, ease: "power2.inOut" }, at(38.5))
+        .call(() => SFX.slide(), null, at(38.7))
+        .call(() => SFX.ting(), null, at(39.5))
         .to("#scene8 .dev-row-comp-d", {
             backgroundColor: "rgba(248, 81, 73, 0.22)",
             boxShadow: "0 0 22px rgba(248, 81, 73, 0.45)",
             duration: 0.4,
             ease: "power2.out"
-        }, at(27.5))
+        }, at(39.5))
 
         // FOCO 3: COMPONENTE E - OPERACIONES TI, CAÍDAS SGF Y DEPENDENCIA HUMANA (R09, R24, R28)
-        .to("#scene8 .dev-row-comp-d", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(52.8))
+        // Locución inicia en 155.00s (elapsed = 62.50s)
+        .to("#scene8 .dev-row-comp-d", { backgroundColor: "transparent", boxShadow: "none", duration: 0.4 }, at(62.0))
         .to("#dev-rows-grid-8", {
             y: () => getScrollTargetY('row-dev-9', -380, 20),
             duration: 1.2,
             ease: "power2.inOut"
-        }, at(53.0))
-        .to(cam, { scale: 1.05, x: 0, y: -25, duration: 1.2, ease: "power2.inOut" }, at(53.0))
-        .call(() => SFX.slide(), null, at(53.2))
-        .call(() => SFX.ting(), null, at(54.5))
+        }, at(62.3))
+        .to(cam, { scale: 1.05, x: 0, y: -25, duration: 1.2, ease: "power2.inOut" }, at(62.3))
+        .call(() => SFX.slide(), null, at(62.5))
+        .call(() => SFX.ting(), null, at(63.5))
         .to("#scene8 .dev-row-comp-e", {
             backgroundColor: "rgba(57, 197, 207, 0.24)",
             boxShadow: "0 0 22px rgba(57, 197, 207, 0.45)",
             duration: 0.4,
             stagger: 0.12,
             ease: "power2.out"
-        }, at(54.5))
+        }, at(63.5))
 
         // RETORNO PANORÁMICO Y CIERRE TRAS CULMINAR EL BLOQUE 2
-        .to("#scene8 .dev-row-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(85.5))
-        .to("#dev-rows-grid-8", { y: 0, duration: 1.2, ease: "power2.inOut" }, at(85.5))
+        .to("#scene8 .dev-row-comp-e", { backgroundColor: "transparent", boxShadow: "none", duration: 0.6 }, at(94.5))
+        .to("#dev-rows-grid-8", { y: 0, duration: 1.2, ease: "power2.inOut" }, at(94.5))
+        .call(() => Voiceover.stop(), null, 0.4 + dur)
         .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.2, ease: "power2.inOut" }, 0.4 + dur + 0.2)
         .to("#scene8", { opacity: 0, duration: 0.6 }, 0.4 + dur + 1.0);
 
@@ -1389,8 +1441,10 @@ function setConcl3DCard(index) {
 function buildScene9(cam) {
     const tl = gsap.timeline();
     const spd = AUDIO_SPEEDS.paso6_e9;
-    const dur = 99.18 / spd;
-    const at = (rawSec) => 0.4 + (rawSec / spd);
+    const part1Dur = 23.15 / spd; // Bloque 1: 0.00s a 23.15s (termina exactamente en el segundo 23)
+    const part2StartTime = 0.4 + part1Dur + 0.4;
+    const part2Dur = 10.18 / spd; // Bloque 2: 89.00s a 99.18s (reinicia en 1:29)
+    const dur = part1Dur + 0.4 + part2Dur;
 
     tl.call(() => setActiveSceneDOM('scene9'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -1412,8 +1466,9 @@ function buildScene9(cam) {
         .from("#scene9 .section-tag", { y: -20, opacity: 0, duration: 0.5, ease: "power2.out" }, 0.25)
         .add(typeHeadingText("#scene9 .title-hero", "Conclusiones y Dictamen de Control Interno", 0.024, false), 0.35)
 
-        // AUDIO PASO 6: CONCLUSIONES Y DICTAMEN DE AUDITORÍA
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 6.wav', spd, 0, 'paso6_e9'), null, 0.4)
+        // AUDIO PASO 6 - BLOQUE 1 (HASTA EL SEGUNDO 23)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 6.wav', spd, 0, 'paso6_part1'), null, 0.4)
+        .call(() => Voiceover.stop(), null, 0.4 + part1Dur)
 
         .from("#scene9 .subtitle-hero", { opacity: 0, y: 15, duration: 0.8, ease: "power2.out" }, 1.5)
 
@@ -1463,40 +1518,29 @@ function buildScene9(cam) {
         .call(() => SFX.pop(), null, 3.65)
         .to(["#ligament-left", "#ligament-right"], { opacity: 0, strokeWidth: 0, duration: 0.3 }, 3.65)
 
-        // 5. FOCO EN EJE I - GOBERNANZA Y OPERACIONES TI
-        .call(() => setConcl3DCard(0), null, at(23.5))
-        .call(() => SFX.ting(), null, at(23.5))
-        .to("#concl-3d-card-0", { scale: 1.04, opacity: 1.0, zIndex: 20, duration: 0.4, ease: "power2.out" }, at(23.5))
-        .to(["#concl-3d-card-1", "#concl-3d-card-2"], { scale: 0.98, opacity: 0.65, zIndex: 5, duration: 0.4 }, at(23.5))
+        // AUDIO PASO 6 - BLOQUE 2 (REANUDA EN 1:29 = 89.00s HASTA EL FINAL)
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/Paso 6.wav', spd, 89.00, 'paso6_part2'), null, part2StartTime)
 
-        // 6. FOCO EN EJE II - SEGURIDAD FÍSICA Y CENTRO DE CÓMPUTO
-        .call(() => setConcl3DCard(1), null, at(46.0))
-        .call(() => SFX.ting(), null, at(46.0))
-        .to("#concl-3d-card-1", { scale: 1.04, opacity: 1.0, zIndex: 20, duration: 0.4, ease: "power2.out" }, at(46.0))
-        .to(["#concl-3d-card-0", "#concl-3d-card-2"], { scale: 0.98, opacity: 0.65, zIndex: 5, duration: 0.4 }, at(46.0))
-
-        // 7. FOCO EN EJE III - RESPALDO Y SEGURIDAD LÓGICA
-        .call(() => setConcl3DCard(2), null, at(68.5))
-        .call(() => SFX.ting(), null, at(68.5))
-        .to("#concl-3d-card-2", { scale: 1.04, opacity: 1.0, zIndex: 20, duration: 0.4, ease: "power2.out" }, at(68.5))
-        .to(["#concl-3d-card-0", "#concl-3d-card-1"], { scale: 0.98, opacity: 0.65, zIndex: 5, duration: 0.4 }, at(68.5))
-
-        // 8. VEREDICTO FINAL UNIFICADO: Las 3 conclusiones brillan al 100% como módulos consolidados
+        // 5. VEREDICTO FINAL UNIFICADO: Las 3 conclusiones brillan sincronizadas con el plan de acción correctivo
         .call(() => {
             for (let i = 0; i < 3; i++) {
                 document.getElementById(`concl-3d-card-${i}`)?.classList.add('is-active');
                 document.getElementById(`concl-dot-${i}`)?.classList.add('active');
             }
-        }, null, at(90.0))
-        .call(() => SFX.ting(), null, at(90.0))
+        }, null, part2StartTime)
+        .call(() => SFX.ting(), null, part2StartTime)
         .to(["#concl-3d-card-0", "#concl-3d-card-1", "#concl-3d-card-2"], {
-            scale: 1.0,
+            scale: 1.02,
             opacity: 1.0,
-            zIndex: 10,
+            boxShadow: "0 0 35px rgba(248, 81, 73, 0.45)",
             duration: 0.6,
             ease: "power2.out"
-        }, at(90.0))
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, at(90.5))
+        }, part2StartTime)
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, part2StartTime + 0.5)
+
+        // Fin de la locución Bloque 2
+        .call(() => Voiceover.stop(), null, 0.4 + dur)
+
         // Al culminar, la escena se mantiene fija y visible sin fundir a negro para lectura final
         .to("#scene9", { opacity: 1, duration: 2.0 }, 0.4 + dur);
 
