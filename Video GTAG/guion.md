@@ -1,16 +1,61 @@
 -----------------------------------------------------------------------------------------------
-PASO 1
+PASO 1: EVALUACIÓN Y PRIORIZACIÓN DE RIESGOS DE TI (GTAG SECCIÓN 10)
 
-En una auditoría de infraestructura y operaciones de TI, el primer paso nunca es probar controles a ciegas. Siguiendo la guía GTAG y la Norma Global 13.2, el trabajo inicia identificando las amenazas y vulnerabilidades que ponen en riesgo la disponibilidad, integridad y confidencialidad de los servicios tecnológicos de la organización
+En una auditoría de infraestructura y operaciones de TI, el primer paso nunca es probar controles a ciegas. Siguiendo las directrices de la guía GTAG (Sección 10) y la Norma Global de Auditoría Interna 13.2, el encargo comienza identificando y valorando rigurosamente las amenazas y vulnerabilidades que ponen en riesgo la disponibilidad, integridad y confidencialidad de los servicios tecnológicos de la organización.
 
+---
 
-Al examinar la tabla en detalle, identificamos el impacto directo de cada riesgo:
+### ACTO 1: UNIVERSO AUDITABLE Y DESPRENDIMIENTO CELULAR DE RIESGOS (Masa Líquida Viscosa)
+En el panel de control inicial, definimos el universo auditable: un total de **32 riesgos tecnológicos** identificados en la sede central de Iquitos del Distrito Fiscal de Loreto. 
 
-* En **Respaldo y Recuperación**, encontramos tres riesgos calificados como Altos: **R01**, por la falta de pruebas de restauración que impide garantizar la recuperación de bases de datos; **R07**, por no tener copias fuera del local actualizadas ante un desastre en sede central; y **R17**, por el peligro de sustracción de medios físicos sin custodia.
-* En el componente **Centro de Datos**, el riesgo **R12**, de nivel Alto, advierte sobre fallas en los servidores debido a problemas de climatización y humedad.
-* En **Infraestructura Física**, se ubican dos amenazas críticas: el riesgo **R02**, calificado como Alto por el ingreso no autorizado al cuarto de cómputo; y el **R20**, calificado como Muy Alto por la manipulación accidental o daño de servidores debido al ingreso de personal a imprimir.
-* En conectividad y plataformas, el componente **Dispositivos de Red** presenta el riesgo **R16**, de nivel Muy Alto, por la caída o saturación de enlaces hacia las sedes provinciales. En **Gestión de Parches**, el **R26**, calificado como Alto, expone estaciones con sistemas operativos sin soporte; mientras que en **Software y Antivirus**, el **R27** alcanza nivel Muy Alto ante el peligro inminente de propagación de malware en la red.
-* Finalmente, en **Operaciones de TI**, se concentran tres factores clave: el riesgo **R09**, de nivel Alto, por tickets de soporte desatendidos o no medidos; el **R24**, de nivel Muy Alto, por la paralización del Sistema de Gestión Fiscal ante fallas de componentes dependientes; y el **R28**, calificado como Alto, por la dependencia crítica y falta de relevo ante la ausencia del coordinador de TI
+Para cuantificar su severidad, aplicamos la fórmula técnica de valoración: **Probabilidad multiplicada por Impacto**. 
+
+A través de un proceso de separación y desprendimiento celular —representado visualmente por la división elástica de una masa líquida viscosa (*metaball gooey filter*)— se produce el filtrado crítico del universo:
+* **20 riesgos** de niveles Bajo y Medio quedan descartados del alcance prioritario, permitiendo enfocar los recursos de auditoría donde el impacto es real.
+* **12 riesgos críticos**, correspondientes a los niveles Alto y Muy Alto, se desprenden y decantan como el núcleo central que debe ser evaluado y auditado de manera exhaustiva.
+
+---
+
+### ACTO 2: MATRIZ 5×5 DE PROBABILIDAD E IMPACTO (Mapeo Bidimensional)
+Para comprender la criticidad de estos eventos, la cámara enfoca y amplía la **Matriz 5×5 de Probabilidad e Impacto**:
+* En el **eje vertical (Y)** medimos la **Probabilidad de ocurrencia**, en una escala del 1 (muy improbable) al 5 (frecuente o casi seguro).
+* En el **eje horizontal (X)** cuantificamos el **Impacto operativo e institucional**, en una escala del 1 (insignificante) al 5 (catastrófico para la función fiscal).
+
+Al cruzar ambas variables, la matriz distribuye los riesgos en cinco zonas de calor claramente diferenciadas: **Muy Bajo (1–4)** en verde suave, **Bajo (5–9)** en amarillo, **Medio (10–14)** en ámbar, **Alto (15–19)** en anaranjado y **Muy Alto (20–25)** en rojo carmesí.
+
+En pantalla observamos el destello y pulsación de las celdas críticas: los valores **15, 16, 20 y 25**, donde convergen las amenazas que pueden paralizar las investigaciones fiscales, provocar la pérdida irreversible de carpetas electrónicas o dejar incomunicadas a las sedes provinciales.
+
+---
+
+### ACTO 3: TABLA DE LOS 12 RIESGOS PRIORIZADOS (Detalle por Componente)
+Al abrirse la tabla a pantalla completa, examinamos el impacto directo y la trazabilidad de los doce riesgos priorizados:
+
+* En **Respaldo y Recuperación**, identificamos tres riesgos Altos: **R01**, por la falta de pruebas de restauración que impide garantizar la recuperación de bases de datos; **R07**, por no tener copias fuera del local (*off-site*) actualizadas ante un siniestro en sede central; y **R17**, por el peligro de sustracción de medios magnéticos físicos sin custodia bajo llave.
+* En **Centro de Datos**, el riesgo **R12**, de nivel Alto, advierte sobre fallas térmicas y daño en servidores debido a problemas de climatización y humedad en la selva.
+* En **Infraestructura Física**, se ubican dos amenazas críticas: el riesgo **R02**, de nivel Alto, por el ingreso no autorizado al cuarto de cómputo; y el **R20**, calificado como **Muy Alto**, por la manipulación accidental, desconexión o daño de servidores debido al ingreso de personal administrativo a imprimir.
+* En conectividad y plataformas, el componente **Dispositivos de Red** presenta el riesgo **R16**, calificado como **Muy Alto**, por la caída o saturación de enlaces hacia las fiscalías provinciales. En **Gestión de Parches**, el **R26**, de nivel Alto, expone estaciones con sistemas operativos obsoletos y sin soporte; mientras que en **Software y Antivirus**, el **R27** alcanza nivel **Muy Alto** ante el peligro inminente de propagación masiva de malware en la red institucional.
+* Finalmente, en **Operaciones de TI**, se concentran tres factores clave: el riesgo **R09**, de nivel Alto, por tickets de soporte desatendidos o no medidos; el **R24**, de nivel **Muy Alto**, por la paralización del Sistema de Gestión Fiscal (SGF) ante fallas de componentes dependientes; y el **R28**, calificado como Alto, por la severa dependencia operativa y falta de personal de relevo ante la ausencia del único coordinador de TI.
+
+---
+
+### ACTO 4: EVIDENCIA EN CAMPO (Carrusel 3D - 4 Dominios Críticos con Imágenes)
+Para contrastar la teoría con la realidad operativa, la presentación eleva un **Carrusel 3D con imágenes fotográficas capturadas in situ** en la sede central de Iquitos, agrupadas en cuatro frentes críticos:
+
+1. **Tarjeta 1: Cuarto de Servidores y Climatización (Riesgos R02, R12, R20 - Imagen `saladeservidores.jpg`)**
+   * *Dominio:* Seguridad Física y Ambiental.
+   * *Evidencia visual:* La imagen revela el cuarto de cómputo donde la cerradura permanece sin llave durante la jornada, permitiendo el ingreso indiscriminado de personal ajeno para imprimir documentos, con cableado expuesto, sin extintores vigentes ni sistema de climatización monitoreado frente a la temperatura y humedad extremas de Iquitos.
+
+2. **Tarjeta 2: Bases de Datos Fiscales y Custodia (Riesgos R01, R07, R17 - Imagen `gestordebasededatos.jpg`)**
+   * *Dominio:* Respaldo y Recuperación.
+   * *Evidencia visual:* La captura expone la consola de administración de bases de datos. Si bien se generan respaldos locales, nunca se han ejecutado pruebas de restauración con el Administrador de Base de Datos (DBA), los discos externos carecen de custodia bajo llave y no se remiten copias fuera del local (*off-site*), arriesgando la pérdida definitiva de miles de carpetas fiscales ante un fallo de disco o desastre.
+
+3. **Tarjeta 3: Endpoints y Protección Antivirus (Riesgos R26, R27 - Imagen `antivirus.jpg`)**
+   * *Dominio:* Software, Gestión de Parches y Seguridad Lógica.
+   * *Evidencia visual:* La fotografía evidencia estaciones de trabajo operando con Windows 10 desactualizado y sin soporte oficial del fabricante, consolas de antivirus inactivas o con firmas desfasadas, y la ausencia de políticas automáticas de bloqueo por inactividad, dejando los puestos de los fiscales expuestos a ataques de ransomware y filtración de expedientes.
+
+4. **Tarjeta 4: Mesa de Ayuda y Continuidad del SGF (Riesgos R09, R24, R28 - Imagen `mesadeayuda.png`)**
+   * *Dominio:* Operaciones de TI y Gestión de Incidentes.
+   * *Evidencia visual:* La interfaz muestra la plataforma de soporte técnico. Se evidencia la falta de registro de solicitudes verbales o informales, la ausencia de métricas de tiempos de respuesta ante caídas del Sistema de Gestión Fiscal (SGF) y el riesgo institucional que representa la concentración de contraseñas y procedimientos en una sola persona, sin manuales ni personal de contingencia asignado.
 
 
 --------------------------------------
@@ -105,43 +150,3 @@ Las desviaciones expuestas requieren que la administración del Distrito Fiscal 
 
 
 
-A. Inspiradas en Svg-String (Hilos conductores, rutas y cables de red)
-
-La "Línea de Trazabilidad Forense" (Data Trail):
-
-Concepto: Un filamento luminoso (como un pulso de luz por fibra óptica) viaja serpenteando por la pantalla.
-Dónde usarlo: En la Escena 3 y 4. El pulso sale del Control Esperado, viaja dibujando una línea de circuito técnico por el fondo y llega exactamente a la Evidencia (E1 a E19) que lo valida, demostrando visualmente que cada conclusión de auditoría está conectada a una prueba real.
-
-El "Cable Ethernet Conectivo" en Carruseles:
-
-Concepto: En lugar de que las tarjetas del carrusel floten sueltas, un cable de red realista conecta la parte inferior de cada tarjeta. Conforme el carrusel gira, el cable se tensa, oscila con inercia física y transfiere un destello de datos de una tarjeta a otra.
-
-Topología de Red Viviente (Sede Iquitos):
-
-Concepto: Para la Escena 6 (Dispositivos de Red), líneas sutiles tipo circuito conectan la Sede Central con las sedes remotas. Un pulso verde viaja continuo, pero al mencionar los problemas de lentitud y falta de redundancia, la línea se fragmenta momentáneamente en pulsos intermitentes de advertencia.
-B. Inspiradas en Viscose-carousel (Metamorfosis líquida, estiramiento y desprendimiento)
-
-Desprendimiento Celular de Riesgos (Masa Líquida a Filtro):
-
-Concepto: En la Escena 2, los 32 riesgos iniciales empiezan como una sola masa monolítica o burbuja compacta. Al pasar el filtro de la matriz, la masa sufre tensión elástica: se estira como mercurio líquido y se separa en dos gotas; los 20 riesgos descartados se encogen y desvanecen, mientras los 12 riesgos priorizados se rompen con un rebote elástico hacia el frente.
-
-Apertura de Expedientes por Tensión Elástica:
-
-Concepto: Para las tarjetas de conclusiones en la Escena 9, las tres tarjetas nacen unidas en el centro. Al avanzar la locución, se separan hacia izquierda y derecha estirando un cuello adhesivo que finalmente se suelta suavemente, dando la sensación de módulos desacoplados con peso y consistencia física.
-C. Otras Alternativas Cinematográficas para Videos de Auditoría / TI
-
-Efecto Escáner HUD / Barrido Forense (Laser Inspection Beam):
-
-Concepto: Una línea horizontal de barrido láser semitransparente con partículas tenues recorre las tablas de evidencias y servidores. Conforme el láser pasa sobre un elemento crítico (como la falta de respaldo o el cuarto de servidores), ese elemento "reacciona" iluminándose con un destello de diagnóstico forense.
-
-Desdoblamiento Tipo Acordeón / Carpeta de Archivo (Accordion Unfold):
-
-Concepto: En lugar de que las desviaciones (Escenas 7 y 8) aparezcan simplemente con desvanecimiento, cada tarjeta se desdobla en 3D como un informe técnico en papel membretado o expediente administrativo que se abre en dos pliegues hacia el espectador.
-
-Enfoque Selectivo de Cámara Cinematográfica (Tilt-Shift / Rack Focus):
-
-Concepto: Cuando se enfatiza una evidencia particular (por ejemplo, E4 - Ficha de observación directa), todo el fondo y las demás filas entran en un desenfoque gaussiano suave (profundidad de campo de cámara réflex), trayendo el elemento mencionado 20px al frente con un halo de luz, eliminando cualquier distracción del resto de la pantalla.
-
-Matriz de Puntos Holográfica (Matrix Dot-Matrix Reveal):
-
-Concepto: Para números de métricas, porcentajes o niveles de exposición, los números se forman a partir de una rejilla de micro-puntos de luz que convergen magnéticamente para armar el dígito final antes de solidificarse.
