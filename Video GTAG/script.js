@@ -88,7 +88,7 @@ const VOICEOVER_TRACKS = [
         sceneIndex: 1,
         offsetInScene: 1.0,
         rawAudioStart: 0,
-        rawDuration: 18.5, // 18.5s raw: cubre la locución completa (que culmina en 17.35s) con colchón natural
+        rawDuration: 17.5, // 17.5s raw: cubre la locución completa (que culmina en 17.35s) con remate natural
         get speed() { return AUDIO_SPEEDS.presentacion || 1.0; },
         get duration() { return this.rawDuration / this.speed; }
     },
@@ -562,6 +562,13 @@ function getScrollTargetY(elementId, fallbackY, padding = 15) {
 function buildScene1(cam) {
     const tl = gsap.timeline();
     const spd = AUDIO_SPEEDS.presentacion || 1.0;
+    const rawDur = 17.5; // Locución completa concluye en 17.35s + 0.15s remate
+    const audioStart = 1.0;
+    const audioPlaybackDur = rawDur / spd;
+    const audioEndTime = audioStart + audioPlaybackDur;
+    const fadeStartTime = audioEndTime + 0.15;
+    const camReturnStart = Math.max(4.5, audioEndTime - 1.8);
+    const driftDuration = Math.max(0.5, camReturnStart - 4.5);
 
     tl.call(() => setActiveSceneDOM('scene1'), null, 0)
         .call(() => SFX.whoosh(), null, 0)
@@ -569,8 +576,8 @@ function buildScene1(cam) {
         .to("#scene1", { opacity: 1, duration: 0.5 }, 0.1)
         .from("#scene1 .section-tag", { y: -25, opacity: 0, duration: 0.6, ease: "back.out(1.4)" }, 0.3)
 
-        // AUDIO PRESENTACIÓN: Inicia exactamente en el segundo 1.0
-        .call(() => Voiceover.play('./AUDIOS PASO 1-6/presentacion.mp4', spd, 0, 'presentacion'), null, 1.0)
+        // AUDIO PRESENTACIÓN: Inicia en audioStart (1.0s) escalado dinámicamente por velocidad
+        .call(() => Voiceover.play('./AUDIOS PASO 1-6/presentacion.mp4', spd, 0, 'presentacion'), null, audioStart)
 
         // OneTake: Cámara hace empuje dinámico hacia el título mientras se escribe letra por letra
         .to(cam, { scale: 1.06, x: 0, y: 0, duration: 2.2, ease: "power2.out" }, 0.5)
@@ -583,20 +590,20 @@ function buildScene1(cam) {
             y: 30,
             opacity: 0,
             duration: 0.6,
-            stagger: 0.22,
+            stagger: 0.2,
             ease: "back.out(1.2)",
             onStart: () => SFX.pop()
         }, 3.0)
 
-        // Deriva cinematográfica suave durante la explicación institucional de la auditoría GTAG
-        .to(cam, { scale: 1.04, x: 0, y: -10, duration: 9.5, ease: "sine.inOut" }, 5.5)
+        // Deriva cinematográfica dinámica calculada según la duración del audio
+        .to(cam, { scale: 1.04, x: 0, y: -10, duration: driftDuration, ease: "sine.inOut" }, 4.5)
 
-        // OneTake: Retorno fluido de cámara para encuadre general antes de la transición
-        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 2.0, ease: "power2.inOut" }, 16.5)
+        // OneTake: Retorno fluido de cámara justo antes de concluir la locución
+        .to(cam, { scale: 1.0, x: 0, y: 0, duration: 1.8, ease: "power2.inOut" }, camReturnStart)
 
-        // Detención del audio y fade out de Escena 1 (+1 segundo más para garantizar que la última palabra "GTAG" no se corte)
-        .call(() => Voiceover.stop(), null, 19.5)
-        .to("#scene1", { opacity: 0, duration: 0.6, ease: "power2.inOut" }, 19.0);
+        // Cierre y transición sincronizados al milisegundo con el remate del audio
+        .call(() => Voiceover.stop(), null, audioEndTime + 0.2)
+        .to("#scene1", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, fadeStartTime);
 
     return tl;
 }

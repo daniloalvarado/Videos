@@ -9,9 +9,9 @@
 ## Estructura Modular (9 Escenas: E1 - E9)
 
 ### Escena 1: Portada Institucional y Marco GTAG
-* **Duración:** 19.5 segundos (ampliado para permitir la reverberación y cierre natural sin cortar palabras)
+* **Duración:** Dinámica y 100% sincronizada con `AUDIO_SPEEDS.presentacion` (a 1.0x: ~18.6s | a 1.1x: ~17.0s | a 1.25x: ~15.1s).
 * **Archivo de Audio:** `presentacion.mp4` (`AUDIOS PASO 1-6/presentacion.mp4`)
-* **Sincronización Sonora:** Inicia en el segundo **1.0** y concluye en el segundo **19.5** (la locución termina limpiamente en 17.35s + 1.2s de remate y reverberación).
+* **Sincronización Dinámica:** Inicia en el segundo **1.0**. El cierre visual, retorno de cámara y transición se calculan en tiempo real según la velocidad configurada (`1.0 + (17.5 / spd) + 0.15s`), eliminando tiempos muertos de espera y enlazando de inmediato con la Escena 2.
 * **Fondo:** Sede Central Iquitos (Ministerio Público - Loreto) con desenfoque de profundidad (`blur: 10px`) y efecto vidrio esmerilado.
 * **Locución:**
   > *"En esta presentación les compartiremos cómo realizamos la auditoría de infraestructura y operaciones de TI en la sede central de Iquitos del Distrito Fiscal de Loreto, revisando paso a paso sus principales riesgos y controles bajo los estándares de la guía GTAG."*
