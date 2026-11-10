@@ -9,8 +9,12 @@
 ## Estructura Modular (9 Escenas: E1 - E9)
 
 ### Escena 1: Portada Institucional y Marco GTAG
-* **Duración:** ~8.5 segundos
+* **Duración:** 19.5 segundos (ampliado para permitir la reverberación y cierre natural sin cortar palabras)
+* **Archivo de Audio:** `presentacion.mp4` (`AUDIOS PASO 1-6/presentacion.mp4`)
+* **Sincronización Sonora:** Inicia en el segundo **1.0** y concluye en el segundo **19.5** (la locución termina limpiamente en 17.35s + 1.2s de remate y reverberación).
 * **Fondo:** Sede Central Iquitos (Ministerio Público - Loreto) con desenfoque de profundidad (`blur: 10px`) y efecto vidrio esmerilado.
+* **Locución:**
+  > *"En esta presentación les compartiremos cómo realizamos la auditoría de infraestructura y operaciones de TI en la sede central de Iquitos del Distrito Fiscal de Loreto, revisando paso a paso sus principales riesgos y controles bajo los estándares de la guía GTAG."*
 * **Tipografía Editorial:** **DM Serif Display** (Título principal) combinada con **Roboto** (Subtítulos, insignias y metadatos).
 * **Tipografía Cinética:**
   * Título institucional escrito letra por letra con efecto typewriter (`SFX.tick` sincronizado y campana final `SFX.ting`):
@@ -22,7 +26,7 @@
     * *Entidad Auditada:* Ministerio Público - Distrito Fiscal de Loreto
     * *Código:* AUD-MPL-GTAG-11-26
     * *Sede:* Sede Central Iquitos
-* **Transición:** Barrido dinámico Wipe (`SFX.whoosh`).
+* **Transición:** Barrido dinámico Wipe (`SFX.whoosh`) iniciando a los 17.6s hacia la Escena 2.
 
 ---
 
@@ -64,69 +68,79 @@
   * Título: `Identificación de Controles Esperados` (typewriter con `SFX.tick` y `SFX.ting`).
   * Subtítulo: `Parámetros de Evaluación GTAG: El parámetro técnico preventivo, detectivo y correctivo para mitigar los 12 riesgos priorizados.`
 * **Cámara OneTake y Animación de Tabla de Controles:**
-  1. La cámara desciende y hace **Zoom Cinematográfico** (`scale: 1.25, y: -70`) directo a la **Tabla de Controles Esperados**:
+  1. La cámara desciende y hace **Zoom Cinematográfico** (`scale: 1.04, y: -20`) directo a la **Tabla de Controles Esperados**:
      * Contenedor con vidrio esmerilado centrado simétricamente (`max-width: 1560px`).
-     * Columnas: *Componente GTAG* (Azul Tecnológico), *Riesgo* (Insignia R01-R28) y *Control Esperado* (Parámetro técnico detallado).
-  2. Las 12 filas van ascendiendo de forma progresiva (`y: -540`) a velocidad de lectura natural.
-  3. Las filas superiores se van desvaneciendo suavemente en el borde superior mediante la máscara de degradado vertical, mientras van emergiendo los controles subsiguientes (A. Físicos, B. Respaldo, C. Parches, D. Redes, E. Operaciones).
-  4. Reencuadre panorámico final institucional.
+     * Encabezados de todas las columnas centrados: *Componente GTAG*, *Riesgo* y *Control Esperado*.
+  2. **Calibración Sonora Sincronizada (1s antes para máxima cadencia vocal):**
+     * **R02 y R20:** 2:13.80 global (raw 21.02s) - Físico
+     * **R12:** 2:26.80 global (raw 37.27s) - Centro de Datos
+     * **R01:** scroll 2:32.78, highlight 2:34.80 global (raw 47.27s) - Respaldo
+     * **R07:** 2:41.80 global (raw 56.02s) - Respaldo off-site
+     * **R17:** 2:47.80 global (raw 63.52s) - Custodia bajo llave
+     * **R26:** scroll 2:51.98, highlight 2:53.80 global (raw 71.02s) - Software y Parches
+     * **R27:** 3:02.80 global (raw 82.27s) - Antivirus y Malware
+     * **R16:** scroll 3:08.78, highlight 3:10.80 global (raw 92.27s) - Redes
+     * **R09:** scroll 3:20.78, highlight 3:22.80 global (raw 107.27s) - Operaciones TI
+     * **R24:** 3:29.80 global (raw 116.02s) - Continuidad SGF
+     * **R28:** 3:35.80 global (raw 123.52s) - Personal de relevo
+     * Reset R28: 3:39.98 global (raw 128.75s)
+  3. Reencuadre panorámico final institucional.
 
 ---
 
 ### Escena 4: Paso 3 - Solicitud de Evidencias e Instrumentos (E1 - E19)
-* **Duración:** ~24 segundos
+* **Duración:** ~75 segundos en total (Parte 1: 0 a 73.20s raw + pausa 0.5s + Parte 2: 116.20s a 133.96s raw)
 * **Identificación:** APLICACIÓN PRÁCTICA • PASO 3 (Sustento Forense de Auditoría)
 * **Tipografía Cinética:**
   * Título: `Solicitud de Evidencias e Instrumentos` (typewriter con `SFX.tick` y `SFX.ting`).
   * Subtítulo: `17 Instrumentos y Fuentes de Información Requeridos para Evaluar la Operatividad de los Controles (Técnicas GTAG).`
 * **Diseño Visual de Badges y Contenedores:**
-  * 3 Cuadros superiores expandidos y simétricos (`Indagación: 4`, `Observación: 2`, `Inspección: 11`) con bordes perimetrales finos (sin barras gruesas a la izquierda) y amplio margen inferior (34px) de separación con la tabla.
-  * Tabla centralizada de 1560px con máscara suave en degradado y visor fluido.
-* **Cámara OneTake y Secuencia de Recorrido Forense:**
-  1. Entrada en pop escalonado de los 3 cuadros superiores (`SFX.pop`) y cascada alterna de las 17 filas de evidencias.
-  2. Barrido vertical mediante Haz Láser Forense (`#evidence-scan-beam`) con sonido `SFX.slide`.
-  3. **Fase 1 - Observación Directa:** Zoom cinematográfico (`scale: 1.08`), foco púrpura en el cuadro y pulso lumínico en las evidencias físicas (E4 y E18) con `SFX.ting`.
-  4. **Fase 2 - Recorrido y Enfoque en Inspección Documental:** La tabla recorre suavemente hacia las evidencias documentales centrales (E6 a E13). Foco en el cuadro de Inspección (`#pill-inspeccion`) con resplandor dorado ámbar (`SFX.ting`) y destello en las filas de PCO, Inventario, Leyes y Reglamentos (`.row-tech-inspeccion`).
-  5. **Fase 3 - Recorrido hasta el Final Absoluto:** La tabla continúa su desplazamiento hasta `y: -490px`, revelando con total claridad las evidencias de cierre (E14, E17, E18 y E19), activando `SFX.ting` y resplandor dual de verificación.
-  6. **Fase 4 - Reencuadre Panorámico:** Retorno al encuadre 1920x1080 maestro para la transición.
+  * 3 Pastillas superiores simétricas (`Indagación: 4`, `Observación: 2`, `Inspección: 11`).
+  * Tabla centralizada con visor interactivo y desplazamiento dinámico por scroll.
+* **Calibración Sincronizada con el Cronómetro Global:**
+  1. **4:20 global (raw 39.64s):** Foco en **Indagación** (`#pill-indagacion`, E1, E5) con resplandor azul y `SFX.ting`.
+  2. **4:28 global (raw 49.64s):** Desplazamiento fluido hacia **E14 y E17** con `SFX.slide`, resplandor azul y `SFX.ting`.
+  3. **4:38 global (raw 62.14s):** Foco en **Inspección Documental** (`#pill-inspeccion`), resplandor ámbar en todas las filas de la categoría (`.row-tech-inspeccion`) y recorrido continuo de la tabla visualizando desde E2 hasta E13.
+  4. **4:50 global (raw 119.52s):** Foco en **Observación Directa** (`#pill-observacion`), resaltando E4 y desplazando de arriba a abajo continuamente hacia E18 con `SFX.slide` y `SFX.ting`, culminando en vista panorámica completa.
 
 ---
 
 ### Escena 5: Paso 4 (Parte 1) - Diseño y Ejecución de Pruebas: Seguridad Física, Respaldo y Software (Componentes A, B, C)
-* **Duración:** ~17 segundos
+* **Duración:** ~53 segundos (audio acelerado 1.25x desde Paso 4.wav hasta 64.85s raw)
 * **Identificación:** APLICACIÓN PRÁCTICA • PASO 4 (PARTE 1)
 * **Tipografía Cinética:**
   * Título: `Diseño y Ejecución de Pruebas de Cumplimiento` (typewriter con `SFX.tick` y `SFX.ting`).
   * Subtítulo: `Evaluación de Efectividad Operativa en Infraestructura Física, Respaldos y Seguridad Lógica.`
-* **Contenido de Pruebas:**
-  * **Componente A (Seguridad Física):** R02 y R20 (cerradura, acceso físico y registro del cuarto) [E4, E18, E5, E17] | R12 (condiciones ambientales, climatización y extintores) [E4, E18, E5].
-  * **Componente B (Respaldo y Recuperación):** R01 y R07 (cronograma de copias PCO, off-site y pruebas de restauración) [E1, E5, E6] | R17 (custodia física bajo llave e inventario de medios) [E4, E5, E7].
-  * **Componente C (Software y Parches):** R26 (SO sin soporte Windows 10 y falta de cifrado) [E7, E14] | R27 (antimalware inactivo y firmas desactualizadas) [E18, E5].
+* **Contenido de Pruebas y Calibración Sincronizada:**
+  * **5:27 global (raw 29.18s):** Foco en **Componente A (Seguridad Física)**: R02 y R20 (cerradura, acceso físico y registro del cuarto) [E4, E18, E5, E17] | R12 (condiciones ambientales, climatización y extintores) [E4, E18, E5] con pulso violeta y `SFX.ting`.
+  * **5:36 global (raw 40.43s):** Desplazamiento fluido y foco en **Componente B (Respaldo y Recuperación)**: R01 y R07 (cronograma de copias PCO, off-site y pruebas de restauración) [E1, E5, E6] | R17 (custodia física bajo llave e inventario de medios) [E4, E5, E7] con pulso dorado y `SFX.ting`.
+  * **5:49 global (raw 56.68s):** Desplazamiento fluido y foco en **Componente C (Software y Parches)**: R26 (SO sin soporte Windows 10 y falta de cifrado) [E7, E14] | R27 (antimalware inactivo y firmas desactualizadas) [E18, E5] con pulso azul tecnológico y `SFX.ting`.
 * **Cámara OneTake y Secuencia:**
   1. Entrada de pastillas métricas (3 Componentes, 6 Pruebas) con `SFX.pop`.
   2. Despliegue de tabla y cascada de las 6 pruebas.
-  3. Foco 1 en Componente A (Cuarto de Servidores) con pulso violeta y `SFX.ting`.
-  4. Foco 2 en Componente B (Respaldos) con pulso dorado y `SFX.ting`.
-  5. Foco 3 en Componente C (Software) con pulso azul tecnológico y `SFX.ting`.
-  6. Retorno panorámico.
+  3. Foco 1 en Componente A (5:27) con pulso violeta y `SFX.ting`.
+  4. Foco 2 en Componente B (5:36) con pulso dorado y `SFX.ting`.
+  5. Foco 3 en Componente C (5:49) con pulso azul tecnológico y `SFX.ting`.
+  6. Retorno panorámico general.
 
 ---
 
 ### Escena 6: Paso 4 (Parte 2) - Diseño y Ejecución de Pruebas: Redes y Operaciones TI (Componentes D, E)
-* **Duración:** ~16 segundos
+* **Duración:** ~28 segundos (audio reproducido íntegro hasta el final natural 100.31s sin cortes)
 * **Identificación:** APLICACIÓN PRÁCTICA • PASO 4 (PARTE 2)
 * **Tipografía Cinética:**
   * Título: `Diseño y Ejecución de Pruebas de Cumplimiento` (typewriter con `SFX.tick` y `SFX.ting`).
   * Subtítulo: `Evaluación en Redes, Telecomunicaciones, Mesa de Ayuda y Continuidad Operativa de TI.`
-* **Contenido de Pruebas:**
-  * **Componente D (Redes y Telecomunicaciones):** R16 (solicitud de reportes de enlaces, constatando falta de monitoreo proactivo) [E5, E17].
-  * **Componente E (Operaciones TI):** R09 (revisión de mesa de ayuda, falta de tickets formales) [E1, E4, E5] | R24 (ausencia de diagnóstico local formal y falta de registro ante caídas del SGF) [E6, E5] | R28 (inspección de ROF y PCO, ausencia de personal técnico de respaldo) [E3, E6, E1, E5].
+* **Contenido de Pruebas y Calibración Sincronizada:**
+  * **6:03 global (elapsedRaw 6.71s / raw 71.59s):** Foco en **Componente D (Redes y Telecomunicaciones)**: R16 (solicitud de reportes de enlaces, constatando falta de monitoreo proactivo) [E5, E17] con pulso carmesí/cian y `SFX.ting`.
+  * **6:10 global (elapsedRaw 15.46s / raw 80.34s):** Desplazamiento fluido y foco en **Componente E (Operaciones TI)**: R09 (revisión de mesa de ayuda, falta de tickets formales) [E1, E4, E5] | R24 (ausencia de diagnóstico local formal y falta de registro ante caídas del SGF) [E6, E5] | R28 (inspección de ROF y PCO, ausencia de personal técnico de respaldo) [E3, E6, E1, E5] con pulso verde/azul y `SFX.ting`.
+  * **Cierre natural completo:** Concluye toda la locución de R28 sin cortes abruptos, permitiendo que la locución finalice de forma orgánica.
 * **Cámara OneTake y Secuencia:**
   1. Entrada de métricas (2 Componentes, 4 Pruebas Críticas).
   2. Cascada de filas.
-  3. Foco 1 en Redes (R16 - Enlaces provinciales caídos) con pulso carmesí y `SFX.ting`.
-  4. Foco 2 en Operaciones TI (R09, R24, R28) con pulso azul y `SFX.ting`.
-  5. Retorno panorámico general.
+  3. Foco 1 en Redes (6:03) con pulso cian y `SFX.ting`.
+  4. Foco 2 en Operaciones TI (6:10) con pulso verde esmeralda y `SFX.ting`.
+  5. Retorno panorámico y finalización completa del audio de Paso 4.
 
 ---
 
@@ -154,51 +168,50 @@
 ---
 
 ### Escena 8: Paso 5 (Parte 2) - Determinación de Desviaciones: Software, Redes y Operaciones TI (Componentes C, D, E)
-* **Duración:** ~17.5 segundos
+* **Duración:** ~76.4 segundos (audio reproducido desde 92.50s hasta el final 188.05s de Paso 5.wav a 1.25x)
 * **Identificación:** APLICACIÓN PRÁCTICA • PASO 5 (PARTE 2) [Insignia sólida carmesí]
 * **Tipografía Cinética:**
   * Título: `Determinación de Desviaciones y Hallazgos` en **DM Serif Display** (typewriter con `SFX.tick` y `SFX.ting`).
   * Subtítulo: `Incumplimientos en Software Lógico, Red Provincial y Operaciones de TI.` en **Roboto**.
-* **Contenido de Desviaciones (Hallazgos Críticos):**
-  * **Componente C (Software, Parches y Seguridad Lógica):**
-    * *R26:* Los sistemas no se configuran de forma segura y las estaciones con Windows 10 no reciben actualizaciones. El bloqueo automático por inactividad y el cifrado de información son nulos.
-    * *R27:* La protección antimalware no está activa y actualizada en todas las estaciones y no hay filtrado de tráfico web. La capacitación sobre seguridad de la información es ocasional y no hay distribución centralizada de la protección.
-  * **Componente D (Redes y Telecomunicaciones):**
-    * *R16:* No se elaboran informes de capacidad de los enlaces ni existe un proceso de recopilación de datos de disponibilidad. El monitoreo es puramente reactivo.
-  * **Componente E (Operaciones TI e Incidentes):**
-    * *R09:* No se registran todas las peticiones e incidentes, la clasificación solo se aplica a lo que ingresa por la plataforma y no se prioriza según tiempos de respuesta definidos.
-    * *R24:* El diagnóstico es informal y depende del coordinador. Las caídas y sus causas no se registran. El escalamiento al equipo nacional no tiene tiempos de respuesta definidos para asegurar el restablecimiento del servicio.
-    * *R28:* No hay personal técnico de respaldo ni documentación de procedimientos operativos estándar (manuales) suficiente para reducir la dependencia de una sola persona.
+* **Contenido de Desviaciones y Calibración Sincronizada:**
+  * **7:50 global (elapsedRaw 7.45s):** Foco en **Componente C (Software, Parches y Seguridad Lógica)**:
+    * *R26:* Sistemas sin soporte en Windows 10 y falta de cifrado.
+    * *R27:* Protección antimalware inactiva y firmas desactualizadas.
+    * Resplandor azul tecnológico con `SFX.ting`.
+  * **8:15 global (elapsedRaw 39.50s):** Desplazamiento fluido y foco en **Componente D (Redes y Telecomunicaciones)**:
+    * *R16:* Falta de monitoreo proactivo y saturación de enlaces a fiscalías provinciales.
+    * Resplandor carmesí con `SFX.slide` y `SFX.ting`.
+  * **8:30 global (elapsedRaw 57.45s):** Desplazamiento fluido y foco en **Componente E (Operaciones TI e Incidentes)**:
+    * *R09:* Falta de tickets formales y SLA en mesa de ayuda.
+    * *R24:* Ausencia de diagnóstico local formal ante caídas del SGF.
+    * *R28:* Severa dependencia humana y falta de personal técnico de respaldo.
+    * Resplandor cian/esmeralda con `SFX.slide` y `SFX.ting`.
 * **Cámara OneTake y Secuencia:**
   1. Entrada de pastillas métricas (3 Dominios Críticos, 6 Hallazgos Formales, Alta Vulnerabilidad) con `SFX.pop`.
   2. Cascada de las 6 desviaciones con llamada visual carmesí (`SFX.slide`).
-  3. Foco 1 en Software y Parches (R26, R27) con zoom y `SFX.ting`.
-  4. Foco 2 en Redes (R16) con zoom y `SFX.ting`.
-  5. Foco 3 en Operaciones de TI y Continuidad Operativa (R09, R24, R28) con zoom y `SFX.ting`.
+  3. Foco 1 en Software y Parches (7:50) con zoom y `SFX.ting`.
+  4. Foco 2 en Redes (8:15) con zoom y `SFX.ting`.
+  5. Foco 3 en Operaciones de TI y Continuidad Operativa (8:30) con zoom y `SFX.ting`.
   6. Reencuadre panorámico final.
 
 ---
 
 ### Escena 9: Paso 6 - Conclusiones, Dictamen de Auditoría y Carrusel 3D
-* **Duración:** ~19.5 segundos
+* **Duración:** ~33 segundos
 * **Identificación:** DICTAMEN FINAL & CONCLUSIONES DE AUDITORÍA • GTAG [Insignia sólida carmesí]
 * **Tipografía Cinética:**
   * Título: `Conclusiones y Dictamen de Control Interno` en **DM Serif Display** (typewriter con `SFX.tick` y `SFX.ting`).
   * Subtítulo: `Evaluación Integral del Entorno de Infraestructura y Operaciones de TI en Loreto.` en **Roboto**.
-* **Estructura y Puesta en Escena (Carrusel 3D):**
+* **Estructura y Puesta en Escena (Apertura Elástica de Expedientes):**
   1. **Banner Hero del Dictamen Global:**
      * Insignia destacada: `DICTAMEN DE CONTROL INTERNO: DEFICIENTE`.
      * Fundamento: *"A partir de la evaluación de los doce (12) riesgos significativos priorizados en la infraestructura y operaciones de TI del Distrito Fiscal de Loreto, el equipo auditor concluye que el entorno de control interno presenta deficiencias estructurales, lógicas y operativas que exponen a la entidad a potenciales interrupciones del servicio y vulneración de la información."*
-  2. **Carrusel 3D de 3 Ejes Conclusivos (120° de separación):**
-     * **Card 0 (0°): Gobernanza y Operaciones:** Gestión de TI reactiva, alta dependencia unipersonal del coordinador, falta de personal de respaldo y mesa de ayuda informal ante caídas del SGF *(Vulnerabilidad Operativa Alta)*.
-     * **Card 1 (120°): Seguridad Física y Ambiental:** Cuarto de servidores en estado de vulnerabilidad física, sin restricciones estrictas de acceso, sin extintores ni climatización monitoreada *(Riesgo Crítico en Centro de Cómputo)*.
-     * **Card 2 (240°): Respaldo y Seguridad Lógica:** Controles preventivos insuficientes, terminales con Windows 10 desactualizados, antimalware inactivo y copias de seguridad sin pruebas de restauración ni custodia off-site *(Riesgo Severo de Pérdida de Datos)*.
-* **Secuencia de Entrada & Sincronización Sonora Exacta (3 Posiciones Únicas):**
-  1. `0.0s`: Apertura de escena con `SFX.whoosh()`.
-  2. `0.35s - 1.4s`: Escritura tipográfica del título con `SFX.tick` y subtítulo con márgenes amplios y equilibrados.
-  3. `1.8s`: Entrada suave del banner del Dictamen con `SFX.slide()`.
-  4. `2.5s`: Entrada y elevación del Carrusel 3D con `SFX.whoosh()`.
-  5. `3.2s`: **Posición 1 (Frente: 0°):** Bloqueo en **Card 0 (Gobernanza TI)**, pulso lumínico e iluminación de dot 0 con **`SFX.ting()`** único.
-  6. `7.5s - 8.6s`: **Posición 2 (Frente: 120°):** Rotación con `SFX.whoosh()` y fijación en **Card 1 (Centro de Cómputo)** con **`SFX.ting()`** y dot 1.
-  7. `13.0s - 14.1s`: **Posición 3 (Frente: 240°):** Rotación con `SFX.whoosh()` y fijación en **Card 2 (Respaldo y Seguridad Lógica)** con **`SFX.ting()`** y dot 2.
-  8. `14.5s - 19.0s`: **Cierre Estable:** Se mantiene la vista fija en la tercera tarjeta, concluyendo de forma limpia y definitiva sin vueltas repetidas ni reaparición redundante de la primera tarjeta.
+  2. **Tres Expedientes Conclusivos:**
+     * **Card 0 (Izquierda): Gobernanza y Operaciones TI:** Gestión reactiva, dependencia unipersonal del coordinador, falta de relevo capacitado y mesa de ayuda informal ante caídas del SGF *(Vulnerabilidad Operativa Alta)*.
+     * **Card 1 (Centro): Seguridad Física y Ambiental:** Cuarto de servidores desprotegido, sin control estricto de accesos, sin extintor CO2 ni climatización monitoreada *(Riesgo Crítico en Centro de Cómputo)*.
+     * **Card 2 (Derecha): Respaldo y Seguridad Lógica:** Sin pruebas de restauración documentadas, sin custodia externa de backups, terminales desactualizadas con Windows 10 y antivirus inactivo *(Riesgo Severo de Pérdida de Datos)*.
+* **Sincronización Sonora y Puntos de Corte Exactos:**
+  1. `0.4s`: Inicio del **Bloque 1 de Voz** (`Paso 6.wav`).
+  2. **9:23 global (563.00s / 25.525s raw):** Finalización del Bloque 1 (-2 segundos respecto a 9:25). Graduable directamente mediante `SCENE9_AUDIO_CONFIG.part1RawDuration` en `script.js`.
+  3. `9:23.40 global`: Inicio del **Bloque 2 de Voz** (`89.00s` en adelante hasta el final) sincronizado con el resplandor de los 3 expedientes.
+  4. Cierre final institucional con vista panorámica fija.

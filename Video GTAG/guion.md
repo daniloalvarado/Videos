@@ -1,4 +1,9 @@
 -----------------------------------------------------------------------------------------------
+ESCENA 1: PORTADA INSTITUCIONAL Y MARCO GTAG
+
+En esta presentación les compartiremos cómo realizamos la auditoría de infraestructura y operaciones de TI en la sede central de Iquitos del Distrito Fiscal de Loreto, revisando paso a paso sus principales riesgos y controles bajo los estándares de la guía GTAG.
+
+-----------------------------------------------------------------------------------------------
 PASO 1: EVALUACIÓN Y PRIORIZACIÓN DE RIESGOS DE TI (GTAG SECCIÓN 10)
 
 En una auditoría de infraestructura y operaciones de TI, el primer paso nunca es probar controles a ciegas. Siguiendo las directrices de la guía GTAG (Sección 10) y la Norma Global de Auditoría Interna 13.2, el encargo comienza identificando y valorando rigurosamente las amenazas y vulnerabilidades que ponen en riesgo la disponibilidad, integridad y confidencialidad de los servicios tecnológicos de la organización.

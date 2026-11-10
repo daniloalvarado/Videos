@@ -16,7 +16,7 @@
     --text-primary: #f0f6fc;
     --text-secondary: #8b949e;
     --text-muted: #6e7681;
-    
+
     /* Acentos Temáticos */
     --accent-emerald: #3fb950;
     --accent-blue: #58a6ff;
@@ -34,12 +34,18 @@
        CONFIGURACIÓN DE TIPOGRAFÍA DE TABLAS (AJUSTABLE POR EL USUARIO)
        Modifica aquí los tamaños (en px) según tu agrado para todas las tablas:
        ========================================================================== */
-    --tbl-th-size: 20px;         /* Encabezados de columna (CÓD, DESCRIPCIÓN, COMPONENTE...) */
-    --tbl-meta-size: 20px;       /* Componentes GTAG, categorías y dominios */
-    --tbl-desc-size: 23.5px;     /* Texto de descripciones principales y hallazgos */
-    --tbl-badge-size: 16.5px;    /* Códigos de identificación (R01, C01, E01, P01, D01...) */
-    --tbl-level-size: 14px;      /* Badges de nivel o técnica (Alto, Muy Alto, Inspección...) */
-    --tbl-row-padding-y: 16px;   /* Relleno vertical de cada fila para mayor legibilidad */
+    --tbl-th-size: 20px;
+    /* Encabezados de columna (CÓD, DESCRIPCIÓN, COMPONENTE...) */
+    --tbl-meta-size: 20px;
+    /* Componentes GTAG, categorías y dominios */
+    --tbl-desc-size: 23.5px;
+    /* Texto de descripciones principales y hallazgos */
+    --tbl-badge-size: 16.5px;
+    /* Códigos de identificación (R01, C01, E01, P01, D01...) */
+    --tbl-level-size: 14px;
+    /* Badges de nivel o técnica (Alto, Muy Alto, Inspección...) */
+    --tbl-row-padding-y: 16px;
+    /* Relleno vertical de cada fila para mayor legibilidad */
 }
 
 /* --- RESET Y ESTRUCTURA BASE --- */
@@ -105,8 +111,17 @@ body {
 }
 
 @keyframes btnPulse {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(88, 166, 255, 0.3); }
-    50% { transform: scale(1.04); box-shadow: 0 0 45px rgba(88, 166, 255, 0.7); }
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+    }
+
+    50% {
+        transform: scale(1.04);
+        box-shadow: 0 0 45px rgba(88, 166, 255, 0.7);
+    }
 }
 
 /* --- CONTENEDOR MAESTRO (1920x1080) --- */
@@ -128,7 +143,7 @@ body {
     left: -40px;
     width: calc(100% + 80px);
     height: calc(100% + 80px);
-    background-image: 
+    background-image:
         radial-gradient(circle at 50% 30%, rgba(13, 17, 23, 0.45) 0%, rgba(10, 14, 20, 0.78) 100%),
         linear-gradient(180deg, rgba(13, 17, 23, 0.28) 0%, rgba(13, 17, 23, 0.68) 100%),
         url('./img/sede_loreto.jpg');
@@ -176,14 +191,17 @@ body {
 .scene::-webkit-scrollbar {
     width: 8px;
 }
+
 .scene::-webkit-scrollbar-track {
     background: rgba(13, 17, 23, 0.6);
     border-radius: 4px;
 }
+
 .scene::-webkit-scrollbar-thumb {
     background: rgba(88, 166, 255, 0.4);
     border-radius: 4px;
 }
+
 .scene::-webkit-scrollbar-thumb:hover {
     background: var(--accent-emerald);
 }
@@ -287,13 +305,34 @@ body {
     stroke: #ffffff !important;
 }
 
-.tag-emerald { background: rgba(63, 185, 80, 0.15); border: 1px solid var(--accent-emerald); color: var(--accent-emerald); }
-.tag-blue { background: rgba(88, 166, 255, 0.15); border: 1px solid var(--accent-blue); color: var(--accent-blue); }
-.tag-amber { background: rgba(210, 153, 34, 0.15); border: 1px solid var(--accent-amber); color: var(--accent-amber); }
-.tag-crimson { background: rgba(248, 81, 73, 0.15); border: 1px solid var(--accent-crimson); color: var(--accent-crimson); }
+.tag-emerald {
+    background: rgba(63, 185, 80, 0.15);
+    border: 1px solid var(--accent-emerald);
+    color: var(--accent-emerald);
+}
+
+.tag-blue {
+    background: rgba(88, 166, 255, 0.15);
+    border: 1px solid var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+.tag-amber {
+    background: rgba(210, 153, 34, 0.15);
+    border: 1px solid var(--accent-amber);
+    color: var(--accent-amber);
+}
+
+.tag-crimson {
+    background: rgba(248, 81, 73, 0.15);
+    border: 1px solid var(--accent-crimson);
+    color: var(--accent-crimson);
+}
 
 /* --- AVATARES DESACTIVADOS --- */
-.avatar-rig, .avatar-circle, .avatar-badge {
+.avatar-rig,
+.avatar-circle,
+.avatar-badge {
     display: none !important;
 }
 
@@ -350,8 +389,15 @@ body {
 }
 
 @keyframes stampPulse {
-    0%, 100% { transform: rotate(-4deg) scale(1); }
-    50% { transform: rotate(-3deg) scale(1.04); }
+
+    0%,
+    100% {
+        transform: rotate(-4deg) scale(1);
+    }
+
+    50% {
+        transform: rotate(-3deg) scale(1.04);
+    }
 }
 
 .paper-clip {
@@ -425,10 +471,25 @@ body {
     transition: opacity 0.05s ease;
 }
 
-.sub-highlight-green { color: var(--accent-emerald); font-weight: 800; }
-.sub-highlight-blue { color: var(--accent-blue); font-weight: 800; }
-.sub-highlight-amber { color: var(--accent-amber); font-weight: 800; }
-.sub-highlight-red { color: var(--accent-crimson); font-weight: 800; }
+.sub-highlight-green {
+    color: var(--accent-emerald);
+    font-weight: 800;
+}
+
+.sub-highlight-blue {
+    color: var(--accent-blue);
+    font-weight: 800;
+}
+
+.sub-highlight-amber {
+    color: var(--accent-amber);
+    font-weight: 800;
+}
+
+.sub-highlight-red {
+    color: var(--accent-crimson);
+    font-weight: 800;
+}
 
 /* ==========================================================================
    ESTILOS ESPECÍFICOS POR ESCENA (DISEÑO MODULAR)
@@ -471,7 +532,10 @@ body {
     font-size: 17px;
     color: var(--text-secondary);
 }
-#scene1 .meta-badge strong { color: var(--text-primary); }
+
+#scene1 .meta-badge strong {
+    color: var(--text-primary);
+}
 
 /* --- ESCENA 2: COMPONENTES GTAG --- */
 .grid-5-pillars {
@@ -547,7 +611,9 @@ body {
     margin-bottom: 14px !important;
 }
 
-#scene2, #scene3, #scene4 {
+#scene2,
+#scene3,
+#scene4 {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -677,9 +743,19 @@ body {
     font-weight: 700;
 }
 
-.subtag-filtered { color: var(--accent-amber); }
-.subtag-bridge { color: var(--text-secondary); font-size: 11px; }
-.subtag-critical { color: var(--accent-crimson); font-weight: 800; }
+.subtag-filtered {
+    color: var(--accent-amber);
+}
+
+.subtag-bridge {
+    color: var(--text-secondary);
+    font-size: 11px;
+}
+
+.subtag-critical {
+    color: var(--accent-crimson);
+    font-weight: 800;
+}
 
 /* ==========================================================================
    MATRIZ 5X5 DE IMPACTO Y PROBABILIDAD (EJE Y, EJE X Y LEYENDA DERECHA)
@@ -970,10 +1046,21 @@ body {
 }
 
 /* Posicionamiento radial en 3D (R = 350px) */
-.card-3d-0 { transform: rotateY(0deg) translateZ(350px); }
-.card-3d-1 { transform: rotateY(90deg) translateZ(350px); }
-.card-3d-2 { transform: rotateY(180deg) translateZ(350px); }
-.card-3d-3 { transform: rotateY(270deg) translateZ(350px); }
+.card-3d-0 {
+    transform: rotateY(0deg) translateZ(350px);
+}
+
+.card-3d-1 {
+    transform: rotateY(90deg) translateZ(350px);
+}
+
+.card-3d-2 {
+    transform: rotateY(180deg) translateZ(350px);
+}
+
+.card-3d-3 {
+    transform: rotateY(270deg) translateZ(350px);
+}
 
 .carousel-3d-card.is-active {
     border-color: #58a6ff;
@@ -1103,18 +1190,11 @@ body {
 }
 
 .table-header-bar .th-cod,
-.table-header-bar .th-level {
-    text-align: center;
-}
-
-.table-header-bar .th-desc {
-    text-align: left;
-    padding-left: 12px;
-}
-
+.table-header-bar .th-level,
+.table-header-bar .th-desc,
 .table-header-bar .th-gtag {
-    text-align: left;
-    padding-left: 16px;
+    text-align: center;
+    padding-left: 0;
 }
 
 .table-scroll-viewport {
@@ -1130,6 +1210,9 @@ body {
     display: flex;
     flex-direction: column;
     will-change: transform;
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .table-row-item {
@@ -1138,7 +1221,10 @@ body {
     padding: var(--tbl-row-padding-y) 28px;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    transition: background 0.2s ease;
+    transition: none !important;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 .table-row-item:nth-child(even) {
@@ -1151,10 +1237,60 @@ body {
 
 .table-row-item .risk-cod-badge {
     justify-self: center;
+    font-family: var(--font-sans);
+    font-size: 19px;
+    font-weight: 800;
+    color: #79c0ff;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    display: block;
+    width: 100%;
+    text-align: center;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.table-row-item .risk-cod-badge.badge-cod-muy-alto {
+    color: #ff8b85 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .table-row-item .risk-level-badge {
     justify-self: center;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    display: block;
+    width: 100%;
+    text-align: center;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.table-row-item .risk-level-badge.badge-level-alto {
+    color: #e3b341 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.table-row-item .risk-level-badge.badge-level-muy-alto {
+    color: #ff8b85 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .table-row-item .risk-desc-text {
@@ -1188,7 +1324,7 @@ body {
     color: var(--accent-crimson);
     border-color: var(--accent-crimson);
     background: rgba(248, 81, 73, 0.18);
-    box-shadow: 0 0 10px rgba(248, 81, 73, 0.3);
+    box-shadow: none;
 }
 
 .risk-desc-text {
@@ -1222,7 +1358,7 @@ body {
     background: rgba(248, 81, 73, 0.25);
     border: 1px solid var(--accent-crimson);
     color: #ff8b85;
-    box-shadow: 0 0 14px rgba(248, 81, 73, 0.35);
+    box-shadow: none;
 }
 
 .risk-gtag-component {
@@ -1265,8 +1401,8 @@ body {
 }
 
 .controls-header-bar .cth-component {
-    text-align: left;
-    padding-left: 6px;
+    text-align: center;
+    padding-left: 0;
 }
 
 .controls-header-bar .cth-risk {
@@ -1274,8 +1410,8 @@ body {
 }
 
 .controls-header-bar .cth-control {
-    text-align: left;
-    padding-left: 14px;
+    text-align: center;
+    padding-left: 0;
 }
 
 .controls-scroll-viewport {
@@ -1407,10 +1543,12 @@ body {
     animation: gentleFadeDot 2.4s ease-in-out infinite;
     animation-delay: 0s;
 }
+
 .voice-dot.dot-2 {
     animation: gentleFadeDot 2.4s ease-in-out infinite;
     animation-delay: 0.35s;
 }
+
 .voice-dot.dot-3 {
     animation: gentleFadeDot 2.4s ease-in-out infinite;
     animation-delay: 0.7s;
@@ -1432,24 +1570,39 @@ body {
 .doc-line {
     animation: gentleLineShimmer 3.2s ease-in-out infinite;
 }
-.doc-line.line-1 { animation-delay: 0s; }
-.doc-line.line-2 { animation-delay: 0.4s; }
-.doc-line.line-3 { animation-delay: 0.8s; }
+
+.doc-line.line-1 {
+    animation-delay: 0s;
+}
+
+.doc-line.line-2 {
+    animation-delay: 0.4s;
+}
+
+.doc-line.line-3 {
+    animation-delay: 0.8s;
+}
 
 @keyframes gentleFloat {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0);
     }
+
     50% {
         transform: translateY(-2.5px);
     }
 }
 
 @keyframes gentleFadeDot {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 0.35;
         transform: scale(0.9);
     }
+
     50% {
         opacity: 1;
         transform: scale(1.1);
@@ -1457,10 +1610,13 @@ body {
 }
 
 @keyframes gentlePupil {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: scale(1);
         opacity: 0.85;
     }
+
     50% {
         transform: scale(1.18);
         opacity: 1;
@@ -1468,9 +1624,12 @@ body {
 }
 
 @keyframes gentleLineShimmer {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 0.45;
     }
+
     50% {
         opacity: 1;
     }
@@ -1498,17 +1657,26 @@ body {
 .pill-indagacion {
     border-color: rgba(88, 166, 255, 0.45);
 }
-.pill-indagacion strong { color: var(--accent-blue); }
+
+.pill-indagacion strong {
+    color: var(--accent-blue);
+}
 
 .pill-observacion {
     border-color: rgba(188, 140, 255, 0.45);
 }
-.pill-observacion strong { color: var(--accent-purple); }
+
+.pill-observacion strong {
+    color: var(--accent-purple);
+}
 
 .pill-inspeccion {
     border-color: rgba(210, 153, 34, 0.45);
 }
-.pill-inspeccion strong { color: var(--accent-amber); }
+
+.pill-inspeccion strong {
+    color: var(--accent-amber);
+}
 
 /* TABLA DE EVIDENCIAS */
 .evidence-table-container {
@@ -1562,8 +1730,8 @@ body {
 }
 
 .evidence-header-bar .eth-desc {
-    text-align: left;
-    padding-left: 14px;
+    text-align: center;
+    padding-left: 0;
 }
 
 .evidence-header-bar .eth-tech {
@@ -1668,9 +1836,23 @@ body {
     letter-spacing: 0.8px;
 }
 
-.badge-preventivo { background: rgba(88, 166, 255, 0.2); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
-.badge-detectivo { background: rgba(210, 153, 34, 0.2); color: var(--accent-amber); border: 1px solid var(--accent-amber); }
-.badge-correctivo { background: rgba(88, 166, 255, 0.2); color: #79c0ff; border: 1px solid var(--accent-blue); }
+.badge-preventivo {
+    background: rgba(88, 166, 255, 0.2);
+    color: var(--accent-blue);
+    border: 1px solid var(--accent-blue);
+}
+
+.badge-detectivo {
+    background: rgba(210, 153, 34, 0.2);
+    color: var(--accent-amber);
+    border: 1px solid var(--accent-amber);
+}
+
+.badge-correctivo {
+    background: rgba(88, 166, 255, 0.2);
+    color: #79c0ff;
+    border: 1px solid var(--accent-blue);
+}
 
 .control-card h4 {
     font-family: var(--font-heading);
@@ -1875,7 +2057,10 @@ body {
     border-bottom: 1px solid #21262d;
     padding-bottom: 10px;
 }
-.auditor-row strong { color: var(--accent-blue); }
+
+.auditor-row strong {
+    color: var(--accent-blue);
+}
 
 /* --- CAPA DE TRANSICIÓN WIPE --- */
 #transition-wipe {
@@ -2065,9 +2250,17 @@ body {
     letter-spacing: 0.8px;
 }
 
-.val-blue { color: #79c0ff; }
-.val-cyan { color: #39c5cf; }
-.val-amber { color: #f1e05a; }
+.val-blue {
+    color: #79c0ff;
+}
+
+.val-cyan {
+    color: #39c5cf;
+}
+
+.val-amber {
+    color: #f1e05a;
+}
 
 /* Contenedor de la Tabla de Pruebas */
 .tests-table-container {
@@ -2102,10 +2295,22 @@ body {
     align-items: center;
 }
 
-.tests-header-bar .tth-comp { text-align: left; }
-.tests-header-bar .tth-risk { text-align: center; }
-.tests-header-bar .tth-proc { text-align: left; padding-left: 16px; }
-.tests-header-bar .tth-evid { text-align: center; }
+.tests-header-bar .tth-comp {
+    text-align: center;
+}
+
+.tests-header-bar .tth-risk {
+    text-align: center;
+}
+
+.tests-header-bar .tth-proc {
+    text-align: center;
+    padding-left: 0;
+}
+
+.tests-header-bar .tth-evid {
+    text-align: center;
+}
 
 .tests-scroll-viewport {
     height: 620px;
@@ -2334,8 +2539,15 @@ body {
 }
 
 @keyframes alertBlink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
 }
 
 .topology-svg-wrapper {
@@ -2376,7 +2588,9 @@ body {
 }
 
 @keyframes cablePulseAnim {
-    to { stroke-dashoffset: -40; }
+    to {
+        stroke-dashoffset: -40;
+    }
 }
 
 .cable-active.cable-danger {
@@ -2387,7 +2601,9 @@ body {
 }
 
 @keyframes cableDangerAnim {
-    to { stroke-dashoffset: -20; }
+    to {
+        stroke-dashoffset: -20;
+    }
 }
 
 /* Nodos y Halos Concéntricos de Alerta */
@@ -2511,9 +2727,17 @@ body {
     letter-spacing: 0.3px;
 }
 
-.val-crimson { color: #ff7b72; }
-.val-orange { color: #ffa657; }
-.val-purple { color: #d2a8ff; }
+.val-crimson {
+    color: #ff7b72;
+}
+
+.val-orange {
+    color: #ffa657;
+}
+
+.val-purple {
+    color: #d2a8ff;
+}
 
 /* Contenedor Principal de la Tabla de Desviaciones */
 .deviations-table-container {
@@ -2549,9 +2773,18 @@ body {
     align-items: center;
 }
 
-.deviations-header-bar .dth-comp { text-align: left; }
-.deviations-header-bar .dth-risk { text-align: center; }
-.deviations-header-bar .dth-finding { text-align: left; padding-left: 18px; }
+.deviations-header-bar .dth-comp {
+    text-align: center;
+}
+
+.deviations-header-bar .dth-risk {
+    text-align: center;
+}
+
+.deviations-header-bar .dth-finding {
+    text-align: center;
+    padding-left: 0;
+}
 
 .deviations-scroll-viewport {
     height: 620px;
@@ -2596,11 +2829,25 @@ body {
     transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
-.dev-row-comp-a::before { background: #d2a8ff; }
-.dev-row-comp-b::before { background: #f1e05a; }
-.dev-row-comp-c::before { background: #79c0ff; }
-.dev-row-comp-d::before { background: #f85149; }
-.dev-row-comp-e::before { background: #39c5cf; }
+.dev-row-comp-a::before {
+    background: #d2a8ff;
+}
+
+.dev-row-comp-b::before {
+    background: #f1e05a;
+}
+
+.dev-row-comp-c::before {
+    background: #79c0ff;
+}
+
+.dev-row-comp-d::before {
+    background: #f85149;
+}
+
+.dev-row-comp-e::before {
+    background: #39c5cf;
+}
 
 .deviation-row-item:nth-child(even) {
     background: rgba(255, 255, 255, 0.02);
@@ -2949,7 +3196,7 @@ body {
 
 .concl-3d-body p {
     font-family: var(--font-sans);
-    font-size: 18px;
+    font-size: 22px;
     line-height: 1.6;
     color: #e6edf3;
 }
@@ -3014,7 +3261,3 @@ body {
     background: #58a6ff;
     box-shadow: 0 0 12px #58a6ff;
 }
-
-
-
-
